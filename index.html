@@ -53,6 +53,14 @@ h2{font-size:15px;text-transform:uppercase;letter-spacing:1.2px;color:var(--mute
 #flash.go{animation:fl .9s ease-out}
 @keyframes fl{0%{opacity:.7}100%{opacity:0}}
 input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;border:1px solid var(--line);background:var(--inp);color:var(--text)}
+.prof{display:flex;align-items:center;gap:10px;padding:10px 14px;margin-bottom:12px}
+.av{font-size:30px;line-height:1}.tag{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--btn1);color:#fff}
+#reg{position:fixed;inset:0;background:rgba(5,3,15,.82);display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
+#reg .box{width:100%;max-width:380px;padding:20px;background:var(--bg2);border:1px solid var(--line);border-radius:18px}
+#avs{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin:10px 0}
+.avb{padding:6px 0;font-size:22px;flex:none}.avb.sel{outline:2px solid var(--c4)}
+.gr{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:3px 0}.gr button{flex:0 0 auto;padding:6px 12px}
+#fuse{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}#fuse button{padding:10px;font-size:13px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 </style>
 </head>
@@ -62,6 +70,7 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
 <h1>Кристальный алтарь</h1>
 <p class="sub">Бросай, качай удачу, собери всё — вплоть до Divine</p>
 
+<div class="glass prof" id="prof"></div>
 <div class="top">
   <div class="glass stat"><small>Монеты</small><b id="coins">0</b></div>
   <div class="glass stat"><small>Удача</small><b id="lucklv">0</b></div>
@@ -71,53 +80,75 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
 
 <div class="glass stage">
   <div class="orb" id="orb"><div class="ring"></div><div class="glow"></div><div class="inner" id="em">🔮</div></div>
-  <div id="nm">Сделай первый бросок</div><div id="rr" style="color:var(--mute)">+3 монеты каждую секунду</div>
+  <div id="nm">Сделай первый бросок</div><div id="rr" style="color:var(--mute)">Копи монеты и бросай</div>
   <div class="row"><button id="r1">Бросок · 10</button><button id="r10">×10 · 100</button></div>
-  <div class="row"><button class="alt" id="luck"></button></div>
-  <div id="log"></div>
+  <div class="row"><button class="alt" id="luck"></button><button class="alt" id="inc"></button></div>
+  <div id="pity" style="color:var(--mute);font-size:13px;margin-top:10px"></div><div id="log"></div>
 </div>
 
 <h2>Шансы с учётом удачи</h2>
 <div class="glass odds" id="odds"></div>
 
+<h2>Слияние (5 дубликатов → 1 предмет редкостью выше)</h2>
+<div class="glass" id="fuse"></div>
+
 <h2>Коллекция <span id="colcount"></span></h2>
 <div class="grid" id="col"></div>
 
-<div class="row" style="margin-top:22px"><button class="alt" id="reset">Сбросить прогресс</button><button class="alt" id="adm">Админ</button></div>
+<div class="row" style="margin-top:22px"><button class="alt" id="reset">Сбросить прогресс</button><button class="alt" id="adm" style="display:none">Админ</button></div>
 <div id="admp" class="glass stage" style="display:none;margin-top:12px;text-align:left">
   <b>Админ-панель</b>
+  <div id="own" style="display:none;margin:10px 0;padding:10px;border:1px dashed var(--line);border-radius:12px"><b style="font-size:14px">Выдать доступ к админке</b>
+   <div style="color:var(--mute);font-size:13px;margin-top:6px">Заходили на сайт:</div><div id="g_can" style="font-size:14px"></div>
+   <div style="color:var(--mute);font-size:13px;margin-top:8px">Есть доступ:</div><div id="g_list" style="font-size:14px"></div></div>
   <div class="row"><input id="a_coins" type="number" value="1000"><button id="a_give">Выдать монеты</button></div>
   <div class="row"><input id="a_luck" type="number" value="10"><button id="a_setluck">Уровень удачи</button></div>
   <div class="row"><select id="a_rar"></select><button id="a_item">Выдать предмет</button></div>
   <div class="row"><button class="alt" id="a_all">Открыть всю коллекцию</button></div>
 </div>
 </main>
+<div id="reg"><div class="box"><b style="font-size:20px">Создай профиль</b>
+ <div style="color:var(--mute);font-size:14px;margin:4px 0 10px">Придумай ник (если не занят) и выбери аватарку</div>
+ <input id="reg_nick" maxlength="16" placeholder="Никнейм"><div id="avs"></div>
+ <div id="reg_st" style="color:var(--c5);font-size:14px;min-height:20px"></div>
+ <div class="row"><button id="reg_ok">Играть</button></div></div></div>
 
 <script>
 const R=[
- {n:"Common",ru:"Обычный",w:70,v:2,c:"var(--c0)",items:["🪨 Камень","🍂 Лист","🥄 Ложка","🧦 Носок"]},
- {n:"Uncommon",ru:"Необычный",w:22,v:4,c:"var(--c1)",items:["🍀 Клевер","🗝️ Ключ","🕯️ Свеча","🧪 Зелье"]},
- {n:"Rare",ru:"Редкий",w:6.5,v:10,c:"var(--c2)",items:["💎 Сапфир","🛡️ Щит","📜 Свиток","🦉 Сова"]},
- {n:"Epic",ru:"Эпический",w:1.2,v:30,c:"var(--c3)",items:["🔮 Шар судьбы","🗡️ Клинок теней","🦄 Единорог"]},
- {n:"Legendary",ru:"Легендарный",w:.25,v:120,c:"var(--c4)",items:["👑 Корона королей","🐉 Дракон","⚡ Молния Зевса"]},
- {n:"Mythic",ru:"Мифический",w:.04,v:500,c:"var(--c5)",items:["🔥 Феникс","🌌 Осколок галактики","🐙 Кракен"]},
- {n:"Secret",ru:"Секретный",w:.006,v:2500,c:"var(--c6)",items:["🕳️ Чёрная дыра","🎭 Маска незнакомца","⌛ Забытое время"]},
- {n:"Divine",ru:"Божественный",w:.0008,v:12500,c:"var(--c7)",items:["☀️ Сердце солнца","👁️ Око вселенной","✨ Первая звезда"]}
+ {n:"Common",ru:"Обычный",w:0,v:2,c:"var(--c0)",items:["🪨 Камень","🍂 Лист","🥄 Ложка","🧦 Носок"]},
+ {n:"Uncommon",ru:"Необычный",w:28.5,v:4,c:"var(--c1)",items:["🍀 Клевер","🗝️ Ключ","🕯️ Свеча","🧪 Зелье"]},
+ {n:"Rare",ru:"Редкий",w:17.5,v:10,c:"var(--c2)",items:["💎 Сапфир","🛡️ Щит","📜 Свиток","🦉 Сова"]},
+ {n:"Epic",ru:"Эпический",w:8.5,v:30,c:"var(--c3)",items:["🔮 Шар судьбы","🗡️ Клинок теней","🦄 Единорог"]},
+ {n:"Legendary",ru:"Легендарный",w:1,v:120,c:"var(--c4)",items:["👑 Корона королей","🐉 Дракон","⚡ Молния Зевса"]},
+ {n:"Mythic",ru:"Мифический",w:.05,v:500,c:"var(--c5)",items:["🔥 Феникс","🌌 Осколок галактики","🐙 Кракен"]},
+ {n:"Secret",ru:"Секретный",w:.004,v:2500,c:"var(--c6)",items:["🕳️ Чёрная дыра","🎭 Маска незнакомца","⌛ Забытое время"]},
+ {n:"Divine",ru:"Божественный",w:.0004,v:12500,c:"var(--c7)",items:["☀️ Сердце солнца","👁️ Око вселенной","✨ Первая звезда"]}
 ];
+R[0].w=+(100-R.slice(1).reduce((a,r)=>a+r.w,0)).toFixed(4);
 const ALL=[];R.forEach((r,i)=>r.items.forEach(t=>ALL.push({i,t})));
 const $=id=>document.getElementById(id);
-const INCOME=3;
-let S={coins:30,luck:0,rolls:0,found:{},best:-1},busy=false;
+const INCOME=3,MAXLUCK=10,MAXINC=15;
+const inc=()=>INCOME+S.inc*2,incCost=()=>Math.floor(80*Math.pow(1.5,S.inc));
+const setsDone=()=>R.filter(r=>r.items.every(t=>S.found[t])).length;
+let S={coins:30,luck:0,rolls:0,found:{},best:-1,inc:0,pr:0,pe:0},busy=false;
 const KEY="gacha-v2";
 try{const s=localStorage.getItem(KEY)||localStorage.getItem("gacha-v1");if(s)S=Object.assign(S,JSON.parse(s))}catch(e){}
+S.luck=Math.min(S.luck,MAXLUCK);
 if(S.best<0)ALL.forEach(a=>{if(S.found[a.t]&&a.i>S.best)S.best=a.i});
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
 const fmt=n=>n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e4?(n/1e3).toFixed(1)+"K":Math.floor(n).toString();
 const luckCost=()=>Math.floor(60*Math.pow(1.6,S.luck));
 const weights=()=>{const m=1+S.luck*.07;return R.map((r,i)=>r.w*Math.pow(m,i))};
 const fmtP=p=>p>=1?p.toFixed(1)+"%":p>=.1?p.toFixed(2)+"%":"1 из "+fmt(Math.round(100/p));
-function pick(){const w=weights(),t=w.reduce((a,b)=>a+b,0);let x=Math.random()*t;
- for(let i=0;i<w.length;i++){if((x-=w[i])<0)return i}return 0}
+function pick(){const w=weights(),t=w.reduce((a,b)=>a+b,0);let x=Math.random()*t,i=0;
+ for(;i<w.length;i++){if((x-=w[i])<0)break}if(i>=w.length)i=0;
+ if(S.pe>=49&&i<3)i=3;else if(S.pr>=14&&i<2)i=2;
+ S.pr=i>=2?0:S.pr+1;S.pe=i>=3?0:S.pe+1;return i}
+const dupes=i=>R[i].items.reduce((a,t)=>a+Math.max(0,(S.found[t]||0)-1),0);
+function fuse(i){if(busy||dupes(i)<5)return;let need=5;
+ for(const t of R[i].items){while(need>0&&(S.found[t]||0)>1){S.found[t]--;need--}}
+ const its=R[i+1].items,t=its[Math.floor(Math.random()*its.length)];S.found[t]=(S.found[t]||0)+1;if(i+1>S.best)S.best=i+1;
+ show(i+1,t,"слияние");render();save()}
 function show(i,t,extra){
  const [e,...n]=t.split(" "),o=$("orb");
  o.style.setProperty("--rc",R[i].c);$("em").textContent=e;$("nm").textContent=n.join(" ");
@@ -134,37 +165,74 @@ function roll(n){
   if(i>best){best=i;bi=t}if(i>S.best)S.best=i;
   if(i>=3)lines.push(`<div style="color:${R[i].c}">${R[i].ru}: ${t}</div>`);
  }
- S.coins+=gain;render();save();
+ gain=Math.floor(gain*(1+.1*setsDone()));S.coins+=gain;render();save();
  const o=$("orb");o.classList.add("charge");$("nm").textContent="…";$("rr").textContent="";
  setTimeout(()=>{o.classList.remove("charge");show(best,bi,"+"+fmt(gain));
   if(lines.length)$("log").innerHTML=lines.join("")+$("log").innerHTML;
   busy=false;render()},n>1?650:450);
 }
 function render(){
- $("coins").textContent=fmt(S.coins);$("lucklv").textContent=S.luck;$("rolls").textContent=S.rolls;
+ $("coins").textContent=fmt(S.coins);$("rolls").textContent=S.rolls;
  const b=$("best");if(S.best>=0){b.textContent=R[S.best].n+" · "+R[S.best].ru;b.style.color=R[S.best].c}else{b.textContent="—";b.style.color=""}
  $("r1").disabled=busy||S.coins<10;$("r10").disabled=busy||S.coins<100;
- const lc=luckCost();$("luck").textContent=`Прокачать удачу до ${S.luck+1} · ${fmt(lc)}`;$("luck").disabled=S.coins<lc;
+ const lc=luckCost(),mx=S.luck>=MAXLUCK;$("luck").textContent=mx?"Удача на максимуме (10/10)":`Прокачать удачу до ${S.luck+1} · ${fmt(lc)}`;$("luck").disabled=mx||S.coins<lc;
+ $("inc").textContent=S.inc>=MAXINC?"Доход на максимуме":`Доход +${inc()}→${inc()+2}/с · ${fmt(incCost())}`;$("inc").disabled=S.inc>=MAXINC||S.coins<incCost();
+ $("pity").textContent=`Гарант: Rare+ через ${Math.max(1,15-S.pr)} бр. · Epic+ через ${Math.max(1,50-S.pe)} бр. · доход ${inc()}/с`;
+ $("fuse").innerHTML=R.slice(0,7).map((r,i)=>`<button class="alt" data-f="${i}" ${dupes(i)<5?"disabled":""} style="border-color:${r.c}">${r.n}: ${dupes(i)}/5 → ${R[i+1].n}</button>`).join("");$("lucklv").textContent=S.luck+(mx?" (MAX)":"");
  const w=weights(),t=w.reduce((a,b)=>a+b,0);
  $("odds").innerHTML=R.map((r,i)=>{const p=w[i]/t*100,bw=Math.max(2,Math.min(100,Math.log10(p*1e4+1)/6*100));
   return `<div class="od"><span style="color:${r.c};font-weight:700">${r.n}</span><span class="bar"><i style="width:${bw}%;background:${r.c}"></i></span><span>${fmtP(p)}</span></div>`}).join("");
- const got=ALL.filter(a=>S.found[a.t]).length;$("colcount").textContent=`${got}/${ALL.length}`;
+ const got=ALL.filter(a=>S.found[a.t]).length;$("colcount").textContent=`${got}/${ALL.length} · бонус монет +${setsDone()*10}%`;
  $("col").innerHTML=ALL.map(a=>{const n=S.found[a.t]||0,e=a.t.split(" ")[0];
   return `<div class="glass it ${n?"":"off"}" style="${n?"border-color:"+R[a.i].c:""}"><div class="e">${n?e:"❔"}</div>${n?a.t.slice(e.length+1):"???"}<div style="color:${R[a.i].c};font-size:12px">${R[a.i].ru}${n?" ×"+n:""}</div></div>`}).join("");
 }
+$("fuse").onclick=e=>{const b=e.target.closest("[data-f]");if(b&&!b.disabled)fuse(+b.dataset.f)};
+$("inc").onclick=()=>{const c=incCost();if(S.inc<MAXINC&&S.coins>=c){S.coins-=c;S.inc++;render();save()}};
 $("r1").onclick=()=>roll(1);$("r10").onclick=()=>roll(10);
-$("luck").onclick=()=>{const c=luckCost();if(S.coins>=c){S.coins-=c;S.luck++;render();save()}};
-$("reset").onclick=()=>{if(confirm("Удалить весь прогресс?")){S={coins:30,luck:0,rolls:0,found:{},best:-1};$("log").innerHTML="";save();render()}};
-const ADMIN_PASS="admin123";
+$("luck").onclick=()=>{const c=luckCost();if(S.luck<MAXLUCK&&S.coins>=c){S.coins-=c;S.luck++;render();save()}};
+$("reset").onclick=()=>{if(confirm("Удалить весь прогресс?")){S={coins:30,luck:0,rolls:0,found:{},best:-1,inc:0,pr:0,pe:0};$("log").innerHTML="";save();render()}};
+let db=null,isOwner=false,myId=null,granted=false,me=null,pickAv="😀";
+const AV=["😀","😎","🤖","👻","🐱","🦊","🐼","🐸","🦄","🐲","👑","🧙","🥷","🚀","🌟","💀"];
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 $("a_rar").innerHTML=R.map((r,i)=>`<option value="${i}">${r.n}</option>`).join("");
-$("adm").onclick=()=>{const p=$("admp");if(p.style.display!=="none"){p.style.display="none";return}
- if(prompt("Пароль админа")===ADMIN_PASS)p.style.display="block"};
+$("adm").onclick=()=>{const p=$("admp");p.style.display=p.style.display==="none"?"block":"none"};
+const nickKey=n=>Array.from(n.toLowerCase()).map(c=>c.codePointAt(0).toString(16)).join("-");
+function renderProf(){$("prof").innerHTML=me?`<span class="av">${esc(me.avatar)}</span><b>${esc(me.nick)}</b>${isOwner?'<span class="tag">владелец</span>':granted?'<span class="tag">админ</span>':''}`:`<span class="av">👤</span><b>Гость</b><span style="color:var(--mute);font-size:13px">войдите в Claude, чтобы создать профиль</span>`}
+function openReg(){$("reg").style.display="flex";$("avs").innerHTML=AV.map(a=>`<button class="alt avb${a===pickAv?" sel":""}" data-a="${a}">${a}</button>`).join("");
+ document.querySelectorAll(".avb").forEach(b=>b.onclick=()=>{pickAv=b.dataset.a;openReg()})}
+$("reg_ok").onclick=async()=>{const n=$("reg_nick").value.trim(),st=$("reg_st");
+ if(!/^[A-Za-z0-9_А-Яа-яЁё-]{3,16}$/.test(n)){st.textContent="3–16 символов: буквы, цифры, _ и -";return}
+ try{const k="nicks/"+nickKey(n),d=await db.doc(k).get();
+  if(d.exists&&d.data().uid!==myId){st.textContent="Этот ник уже занят";return}
+  await db.doc(k).set({uid:myId});me={nick:n,avatar:pickAv,seen:Date.now()};await db.doc("players/"+myId).set(me);
+  $("reg").style.display="none";renderProf();renderGrants()}catch(e){st.textContent="Не удалось сохранить, попробуйте ещё раз"}};
+async function renderGrants(){if(!db||!isOwner)return;try{
+ const ps=await db.collection("players").get(),ad=await db.collection("admins").get(),A=new Set(ad.docs.map(d=>d.id));let can="",has="";
+ ps.docs.forEach(d=>{if(d.id===myId||!d.exists)return;const x=d.data(),row=`<div class="gr"><span>${esc(x.avatar||"👤")} ${esc(x.nick||"?")}</span>`;
+  if(A.has(d.id))has+=row+`<button class="alt" data-rv="${esc(d.id)}">Забрать</button></div>`;else can+=row+`<button data-gv="${esc(d.id)}">Выдать</button></div>`});
+ $("g_can").innerHTML=can||"<i>пока никого</i>";$("g_list").innerHTML=has||"<i>никого</i>";
+ document.querySelectorAll("[data-gv]").forEach(b=>b.onclick=async()=>{try{await db.doc("admins/"+b.dataset.gv).set({granted:true})}catch(e){}renderGrants()});
+ document.querySelectorAll("[data-rv]").forEach(b=>b.onclick=async()=>{try{await db.doc("admins/"+b.dataset.rv).delete()}catch(e){}renderGrants()});
+ }catch(e){}}
+async function initAdmin(){try{
+ if(typeof claude==="undefined"){renderProf();return}
+ const u=await claude.use("user");if(!u){renderProf();return}
+ isOwner=await u.isOwner();myId=await u.id();db=await claude.use("db");
+ if(!db||!myId){renderProf();return}
+ const p=await db.doc("players/"+myId).get();
+ if(p.exists){me=p.data();await db.doc("players/"+myId).set({...me,seen:Date.now()})}
+ if(!isOwner)granted=(await db.doc("admins/"+myId).get()).exists;
+ renderProf();if(isOwner||granted)$("adm").style.display="";
+ if(isOwner){$("own").style.display="block";renderGrants()}
+ if(!me)openReg();
+}catch(e){renderProf()}}
+renderProf();initAdmin();
 $("a_give").onclick=()=>{S.coins+=Math.max(0,+$("a_coins").value||0);render();save()};
-$("a_setluck").onclick=()=>{S.luck=Math.max(0,Math.floor(+$("a_luck").value||0));render();save()};
+$("a_setluck").onclick=()=>{S.luck=Math.min(MAXLUCK,Math.max(0,Math.floor(+$("a_luck").value||0)));render();save()};
 $("a_item").onclick=()=>{const i=+$("a_rar").value,its=R[i].items,t=its[Math.floor(Math.random()*its.length)];
  S.found[t]=(S.found[t]||0)+1;show(i,t,"выдано админом");render();save()};
 $("a_all").onclick=()=>{ALL.forEach(a=>{if(!S.found[a.t])S.found[a.t]=1});render();save()};
-setInterval(()=>{S.coins+=INCOME;render();save()},1000);
+setInterval(()=>{S.coins+=inc();render();save()},1000);
 render();
 </script>
 </body>
