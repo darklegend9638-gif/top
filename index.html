@@ -66,17 +66,13 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
 .rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
 
-#menuBtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:12px;z-index:50;flex:none;width:44px;height:44px;padding:0;flex-direction:column;align-items:center;justify-content:center;gap:5px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-#menuBtn span{display:block;width:20px;height:2px;border-radius:2px;background:var(--text);transition:transform .3s ease,opacity .2s ease}
-#menuBtn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
-#menuBtn.open span:nth-child(2){opacity:0}
-#menuBtn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+#menuBtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:12px;z-index:50;flex:none;width:44px;height:44px;padding:0;display:flex;align-items:center;justify-content:center;font-size:26px;line-height:1;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
 #menu{position:fixed;top:calc(env(safe-area-inset-top,0px) + 62px);right:12px;z-index:50;min-width:240px;max-width:calc(100% - 24px);padding:8px;display:flex;flex-direction:column;gap:6px;background:var(--bg2);border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 40px rgba(0,0,0,.4);
 opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale(.96);transform-origin:top right;transition:opacity .25s ease,transform .25s cubic-bezier(.2,.8,.2,1),visibility .25s}
 #menu.open{opacity:1;visibility:visible;pointer-events:auto;transform:none}
 #menu button{flex:none;text-align:left;box-shadow:none;padding:12px 14px}
 #menu #reset{border-color:var(--c5)}
-@media (prefers-reduced-motion:reduce){#menu,#menuBtn span{transition:none}}
+@media (prefers-reduced-motion:reduce){#menu{transition:none}}
 
 #pwrap{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(5,3,15,.72);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease,visibility .25s}
 #pwrap.open{opacity:1;visibility:visible;pointer-events:auto}
@@ -90,7 +86,7 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
 </head>
 <body>
 <div id="flash"></div>
-<button class="alt" id="menuBtn" aria-label="Меню" aria-expanded="false" style="display:none"><span></span><span></span><span></span></button>
+<button class="alt" id="menuBtn" aria-label="Меню" aria-expanded="false" style="display:none">☰</button>
 <div id="menu">
  <button class="alt" id="setb" style="display:none">👤 Изменить профиль</button>
  <button class="alt" id="adm" style="display:none">🛠️ Админ панель</button>
@@ -325,7 +321,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel()});
 /* меню-бургер */
 (function(){
  const b=$("menuBtn"),m=$("menu");
- const set=o=>{m.classList.toggle("open",o);b.classList.toggle("open",o);b.setAttribute("aria-expanded",o)};
+ const set=o=>{m.classList.toggle("open",o);b.classList.toggle("open",o);b.textContent=o?"✕":"☰";b.setAttribute("aria-expanded",o)};
  b.onclick=e=>{e.stopPropagation();set(!m.classList.contains("open"))};
  document.addEventListener("click",e=>{if(!m.contains(e.target))set(false)});
  document.addEventListener("keydown",e=>{if(e.key==="Escape")set(false)});
