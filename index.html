@@ -93,6 +93,7 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
 <div id="flash"></div>
 <button class="alt" id="menuBtn" aria-label="Меню" aria-expanded="false" style="display:none">☰</button>
 <div id="menu">
+ <button class="alt" id="lang"></button>
  <button class="alt" id="setb" style="display:none">👤 Изменить профиль</button>
  <button class="alt" id="adm" style="display:none">🛠️ Админ панель</button>
  <button class="alt" id="reset" style="display:none">🗑️ Очистить весь прогресс</button>
@@ -149,7 +150,7 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
   <div class="row"><select id="a_rar"></select><button id="a_item">Выдать предмет</button></div>
   <div class="row"><button class="alt" id="a_all">Открыть всю коллекцию</button></div>
 </div></div>
-<div id="confirmModal" class="confirm-modal"><div class="modal-box"><div class="modal-title">⚠️ Обнуление прогресса</div><div class="modal-text">Вы уверены, что хотите обнулить прогресс всех игроков?<br>Это действие нельзя отменить.</div><div class="modal-actions"><button class="alt" id="confirmNo">Отмена</button><button id="confirmYes">Обнулить</button></div></div></div><div id="noticeModal" class="confirm-modal"><div class="modal-box"><div class="modal-title" id="noticeTitle">Готово</div><div class="modal-text" id="noticeText"></div><div class="modal-actions"><button id="noticeOk">Понятно</button></div></div></div><div id="reg"><div class="box"><b style="font-size:20px" id="reg_t">Создай профиль</b>
+<div id="confirmModal" class="confirm-modal"><div class="modal-box"><div class="modal-title">⚠️ Обнуление прогресса</div><div class="modal-text">Вы уверены, что хотите обнулить прогресс всех игроков?<br>Это действие нельзя отменить.</div><div class="modal-actions"><button class="alt" id="confirmNo">Отмена</button><button id="confirmYes">Обнулить</button></div></div></div><div id="noticeModal" class="confirm-modal"><div class="modal-box"><div class="modal-title" id="noticeTitle">Готово</div><div class="modal-text" id="noticeText"></div><div class="modal-actions"><button id="noticeOk">Понятно</button></div></div></div><div id="reg"><div class="box"><button class="alt" id="lang2" style="float:right;flex:none;padding:6px 12px;font-size:13px"></button><b style="font-size:20px" id="reg_t">Создай профиль</b>
  <div class="row" style="margin:8px 0"><button class="alt" id="t_reg">Регистрация</button><button class="alt" id="t_in">Вход</button></div>
  <input id="reg_nick" maxlength="16" placeholder="Никнейм" autocomplete="username" style="width:100%">
  <input id="reg_pw" type="password" maxlength="40" placeholder="Пароль (от 4 символов)" style="width:100%;margin-top:8px">
@@ -171,6 +172,48 @@ const R=[
 R[0].w=+(100-R.slice(1).reduce((a,r)=>a+r.w,0)).toFixed(4);
 const ALL=[];R.forEach((r,i)=>r.items.forEach(t=>ALL.push({i,t})));
 const $=id=>document.getElementById(id);
+
+let LANG="ru";try{LANG=localStorage.getItem("gacha-lang")||(/^(ru|uk|be|kk)/i.test(navigator.language||"ru")?"ru":"en")}catch(e){}
+const D={owner:["Владелец","Owner"],admin:["Админ","Admin"],logout:["Выйти","Log out"],guest:["Гость","Guest"],login:["Войти","Sign in"],signin:["Вход","Sign in"],
+createProf:["Создай профиль","Create profile"],create:["Создать","Create"],wait:["Подождите…","Please wait…"],
+nickrule:["Ник: 3–16 символов — буквы, цифры, _ и -","Nickname: 3–16 characters — letters, digits, _ and -"],
+pwmin:["Пароль: минимум 4 символа","Password: at least 4 characters"],pwmin2:["Новый пароль: минимум 4 символа","New password: at least 4 characters"],
+nickwait:["Ник можно сменить через {0} дн.","You can change your nickname in {0} d."],samenick:["Это ваш текущий ник","This is your current nickname"],
+nickok:["Ник изменён","Nickname changed"],avok:["Аватарка сохранена","Avatar saved"],pwok:["Пароль изменён","Password changed"],
+noconn:["Нет связи с сервером","No connection to the server"],retry:["Нет связи с сервером, повторяю…","No connection to the server, retrying…"],
+revoke:["Забрать","Revoke"],grant:["Выдать","Grant"],nobodyyet:["Пока никого","Nobody yet"],nobody:["Никого","Nobody"],
+luckmax:["Удача на максимуме ({0}/{0})","Luck maxed ({0}/{0})"],luckup:["Прокачать удачу до {0} · {1}","Upgrade luck to {0} · {1}"],
+incmax:["Доход на максимуме","Income maxed"],incup:["Доход {0}→{1}/с · {2}","Income {0}→{1}/s · {2}"],
+pity:["Гарант: Legendary через {0} бр. · Mythic через {1} бр. · Secret через {2} бр. · доход {3}/с","Pity: Legendary in {0} rolls · Mythic in {1} rolls · Secret in {2} rolls · income {3}/s"],
+maxd:["На максимуме удачи ({0}) шанс Divine: {1}% ({2})","At max luck ({0}) Divine chance: {1}% ({2})"],
+colcnt:["{0}/{1} · бонус монет +{2}%","{0}/{1} · coin bonus +{2}%"],oneIn:["1 из ","1 in "],fusion:["слияние","fusion"],byadm:["Выдано админом","Given by admin"],
+error:["Ошибка","Error"],done:["Готово","Done"],wiped:["Прогресс всех игроков успешно обнулён.","All players' progress has been wiped."]};
+const tr=(k,...a)=>{let s=D[k][LANG==="en"?1:0];a.forEach((v,i)=>s=s.split("{"+i+"}").join(v));return s};
+const EN=[["Stone","Leaf","Spoon","Sock"],["Clover","Key","Candle","Potion"],["Sapphire","Shield","Scroll","Owl"],["Orb of Fate","Shadow Blade","Unicorn"],["Crown of Kings","Dragon","Zeus's Lightning"],["Phoenix","Galaxy Shard","Kraken"],["Black Hole","Stranger's Mask","Forgotten Time"],["Heart of the Sun","Eye of the Universe","First Star"]];
+const IT={};R.forEach((r,i)=>r.items.forEach((t,j)=>IT[t]=EN[i][j]));
+const iname=t=>LANG==="en"&&IT[t]?IT[t]:t.slice(t.indexOf(" ")+1),iview=t=>t.split(" ")[0]+" "+iname(t);
+const rname=i=>LANG==="ru"?R[i].ru:R[i].n,rn=i=>LANG==="ru"?R[i].n+" · "+R[i].ru:R[i].n;
+const SRV={"Этот ник уже занят":"This nickname is already taken","Неверный ник или пароль":"Wrong nickname or password","Текущий пароль неверный":"Current password is incorrect","Нет доступа":"Access denied","Ошибка сервера":"Server error"};
+const srv=m=>LANG==="en"&&SRV[m]?SRV[m]:m;
+const TX={"Кристальный алтарь":"Crystal Altar","Бросай, качай удачу, собери всё — вплоть до Divine":"Roll, upgrade your luck, collect everything — up to Divine",
+"👤 Изменить профиль":"👤 Edit profile","🛠️ Админ панель":"🛠️ Admin panel","🗑️ Очистить весь прогресс":"🗑️ Wipe all progress",
+"🪙 Монеты":"🪙 Coins","🍀 Удача":"🍀 Luck","🎲 Броски":"🎲 Rolls","Лучшая редкость (рекорд)":"Best rarity (record)",
+"Сделай первый бросок":"Make your first roll","Копи монеты и бросай":"Save coins and roll","Бросок · 10":"Roll · 10",
+"Шансы с учётом удачи":"Odds with luck","Слияние (5 дубликатов → 1 предмет редкостью выше)":"Fusion (5 duplicates → 1 item of higher rarity)","Коллекция":"Collection",
+"Настройки профиля":"Profile settings","Аватарка":"Avatar","Сохранить аватарку":"Save avatar","Никнейм (меняется раз в 7 дней)":"Nickname (changes once every 7 days)","Сменить":"Change","Пароль":"Password",
+"Админ-панель":"Admin panel","Выдать доступ к админке":"Grant admin access","Заходили на сайт:":"Visited the site:","Есть доступ:":"Has access:",
+"Выдать монеты":"Give coins","Уровень удачи":"Luck level","Выдать предмет":"Give item","Открыть всю коллекцию":"Unlock the whole collection",
+"⚠️ Обнуление прогресса":"⚠️ Progress wipe","Вы уверены, что хотите обнулить прогресс всех игроков?":"Are you sure you want to wipe all players' progress?","Это действие нельзя отменить.":"This cannot be undone.",
+"Отмена":"Cancel","Обнулить":"Wipe","Понятно":"OK","Регистрация":"Sign up","Вход":"Sign in","Позже":"Later",
+"Новый ник":"New nickname","Текущий пароль":"Current password","Новый пароль (от 4 символов)":"New password (4+ characters)","Никнейм":"Nickname","Пароль (от 4 символов)":"Password (4+ characters)","Меню":"Menu","Закрыть":"Close"};
+const o0=new WeakMap();
+function applyStatic(){const en=LANG==="en",w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
+ while(n=w.nextNode()){if(n.parentNode.tagName==="SCRIPT")continue;const o=o0.has(n)?o0.get(n):n.nodeValue,k=o.trim();if(TX[k]){o0.set(n,o);n.nodeValue=en?o.replace(k,TX[k]):o}}
+ document.querySelectorAll("[placeholder],[aria-label]").forEach(e=>["placeholder","aria-label"].forEach(a=>{const v=e.getAttribute(a);if(v===null)return;const k="_"+a,o=e[k]||v;if(TX[o]){e[k]=o;e.setAttribute(a,en?TX[o]:o)}}));
+ document.title=en?"Crystal Altar — Gacha":"Кристальный алтарь — Гача"}
+function setLang(l){LANG=l;try{localStorage.setItem("gacha-lang",l)}catch(e){}document.documentElement.lang=l;applyStatic();
+ $("lang").textContent=$("lang2").textContent=l==="en"?"🌐 Русский":"🌐 English";render();renderProf();
+ if($("reg").style.display==="flex")openReg();if(me&&$("setp").style.display==="block")renderSet()}
 const INCOME=1,MAXLUCK=20,MAXINC=15,PL=99,PM=1000,PS=10000;
 const inc=()=>INCOME+S.inc,incCost=()=>Math.floor(50*Math.pow(1.55,S.inc));
 const setsDone=()=>R.filter(r=>r.items.every(t=>S.found[t])).length;
@@ -178,7 +221,7 @@ const FRESH=()=>({coins:30,luck:0,rolls:0,found:{},best:-1,inc:0,pl:0,pm:0,ps:0}
 let S=FRESH(),busy=false;
 const SB_URL="https://ybjnbrioosiumcnoqvbz.supabase.co",SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inliam5icmlvb3NpdW1jbm9xdmJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjMyMTksImV4cCI6MjEwNjQzOTIxOX0.PO15psCKHeawvXdS50UwF7u7Gq1scL02TM2djXWwIBs";
 async function rpc(fn,args,keep){try{const r=await fetch(SB_URL+"/rest/v1/rpc/"+fn,{method:"POST",keepalive:!!keep,headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},body:JSON.stringify(args||{})});
- const j=await r.json().catch(()=>null);if(!r.ok)return{error:(j&&j.message)||"Ошибка сервера"};return{data:j}}catch(e){return{error:"Нет связи с сервером"}}}
+ const j=await r.json().catch(()=>null);if(!r.ok)return{error:srv((j&&j.message)||"Ошибка сервера")};return{data:j}}catch(e){return{error:tr("noconn"),net:true}}}
 const BASE="gacha-v2",KEY=BASE;let TOKEN=null;try{TOKEN=localStorage.getItem("gacha-token")}catch(e){}
 let ready=!TOKEN,dirty=false;
 function normS(){S.luck=Math.min(S.luck,MAXLUCK);if(S.best<0)ALL.forEach(a=>{if(S.found[a.t]&&a.i>S.best)S.best=a.i})}
@@ -194,7 +237,7 @@ const SUF=["","K","M","B","T","Qa","Qi","Sx","Sp","Oc","No","Dc"];
 const fmt=n=>{if(n<1e4)return Math.floor(n).toString();let i=Math.floor(Math.log10(n)/3),v=n/Math.pow(1000,i);if(+v.toFixed(2)>=1000){i++;v/=1000}return i>=SUF.length?n.toExponential(2):(+v.toFixed(2))+SUF[i]}
 const luckCost=()=>Math.floor(100*Math.pow(1.4,S.luck));
 const weights=(l=S.luck)=>{const m=1+l*.07;return R.map((r,i)=>r.w*Math.pow(m,i))};
-const fmtP=p=>p>=1?p.toFixed(1)+"%":p>=.1?p.toFixed(2)+"%":"1 из "+fmt(Math.round(100/p));
+const fmtP=p=>p>=1?p.toFixed(1)+"%":p>=.1?p.toFixed(2)+"%":tr("oneIn")+fmt(Math.round(100/p));
 function pick(){const w=weights(),t=w.reduce((a,b)=>a+b,0);let x=Math.random()*t,i=0;
  for(;i<w.length;i++){if((x-=w[i])<0)break}if(i>=w.length)i=0;
  if(S.ps>=PS-1&&i<6)i=6;else if(S.pm>=PM-1&&i<5)i=5;else if(S.pl>=PL-1&&i<4)i=4;
@@ -203,11 +246,11 @@ const dupes=i=>R[i].items.reduce((a,t)=>a+Math.max(0,(S.found[t]||0)-1),0);
 function fuse(i){if(busy||dupes(i)<5)return;let need=5;
  for(const t of R[i].items){while(need>0&&(S.found[t]||0)>1){S.found[t]--;need--}}
  const its=R[i+1].items,t=its[Math.floor(Math.random()*its.length)];S.found[t]=(S.found[t]||0)+1;if(i+1>S.best)S.best=i+1;
- show(i+1,t,"слияние");render();save()}
+ show(i+1,t,tr("fusion"));render();save()}
 function show(i,t,extra){
  const [e,...n]=t.split(" "),o=$("orb");
- o.style.setProperty("--rc",R[i].c);$("em").textContent=e;$("nm").textContent=n.join(" ");
- $("rr").textContent=R[i].n+" · "+R[i].ru+(extra?" · "+extra:"");$("rr").style.color=R[i].c;
+ o.style.setProperty("--rc",R[i].c);$("em").textContent=e;$("nm").textContent=iname(t);
+ $("rr").textContent=rn(i)+(extra?" · "+extra:"");$("rr").style.color=R[i].c;
  o.classList.remove("reveal");void o.offsetWidth;o.classList.add("reveal");
  if(i>=4){const f=$("flash");f.style.setProperty("--fc",R[i].c);f.classList.remove("go");void f.offsetWidth;f.classList.add("go")}
 }
@@ -218,7 +261,7 @@ function roll(n){
   const i=pick(),its=R[i].items,t=its[Math.floor(Math.random()*its.length)];
   S.rolls++;S.found[t]=(S.found[t]||0)+1;gain+=R[i].v;
   if(i>best){best=i;bi=t}if(i>S.best)S.best=i;
-  if(i>=3)lines.push(`<div style="color:${R[i].c}">${R[i].ru}: ${t}</div>`);
+  if(i>=3)lines.push(`<div style="color:${R[i].c}">${rname(i)}: ${iview(t)}</div>`);
  }
  gain=Math.floor(gain*(1+.1*setsDone()));S.coins+=gain;render();save();
  const o=$("orb");o.classList.add("charge");$("nm").textContent="…";$("rr").textContent="";
@@ -228,35 +271,35 @@ function roll(n){
 }
 function render(){
  $("coins").textContent=fmt(S.coins);$("rolls").textContent=S.rolls;
- const b=$("best");if(S.best>=0){b.textContent=R[S.best].n+" · "+R[S.best].ru;b.style.color=R[S.best].c}else{b.textContent="—";b.style.color=""}
+ const b=$("best");if(S.best>=0){b.textContent=rn(S.best);b.style.color=R[S.best].c}else{b.textContent="—";b.style.color=""}
  $("r1").disabled=busy||S.coins<10;$("r10").disabled=busy||S.coins<100;
- const lc=luckCost(),mx=S.luck>=MAXLUCK;$("luck").textContent=mx?`Удача на максимуме (${MAXLUCK}/${MAXLUCK})`:`Прокачать удачу до ${S.luck+1} · ${fmt(lc)}`;$("luck").disabled=mx||S.coins<lc;
- $("inc").textContent=S.inc>=MAXINC?"Доход на максимуме":`Доход ${inc()}→${inc()+1}/с · ${fmt(incCost())}`;$("inc").disabled=S.inc>=MAXINC||S.coins<incCost();
- $("pity").textContent=`Гарант: Legendary через ${fmt(Math.max(1,PL-(S.pl||0)))} бр. · Mythic через ${fmt(Math.max(1,PM-(S.pm||0)))} бр. · Secret через ${fmt(Math.max(1,PS-(S.ps||0)))} бр. · доход ${inc()}/с`;
+ const lc=luckCost(),mx=S.luck>=MAXLUCK;$("luck").textContent=mx?tr("luckmax",MAXLUCK):tr("luckup",S.luck+1,fmt(lc));$("luck").disabled=mx||S.coins<lc;
+ $("inc").textContent=S.inc>=MAXINC?tr("incmax"):tr("incup",inc(),inc()+1,fmt(incCost()));$("inc").disabled=S.inc>=MAXINC||S.coins<incCost();
+ $("pity").textContent=tr("pity",fmt(Math.max(1,PL-(S.pl||0))),fmt(Math.max(1,PM-(S.pm||0))),fmt(Math.max(1,PS-(S.ps||0))),inc());
  $("fuse").innerHTML=R.slice(0,7).map((r,i)=>`<button class="alt" data-f="${i}" ${dupes(i)<5?"disabled":""} style="border-color:${r.c}">${r.n}: ${dupes(i)}/5 → ${R[i+1].n}</button>`).join("");$("lucklv").textContent=S.luck+(mx?" (MAX)":"");
  const w=weights(),t=w.reduce((a,b)=>a+b,0);
  $("odds").innerHTML=R.map((r,i)=>{const p=w[i]/t*100,bw=Math.max(2,Math.min(100,Math.log10(p*1e4+1)/6*100));
   return `<div class="od"><span style="color:${r.c};font-weight:700">${r.n}</span><span class="bar"><i style="width:${bw}%;background:${r.c}"></i></span><span>${fmtP(p)}</span></div>`}).join("");
- const wm=weights(MAXLUCK),pm=wm[7]/wm.reduce((a,b)=>a+b,0)*100;$("maxd").textContent=`На максимуме удачи (${MAXLUCK}) шанс Divine: ${pm.toFixed(3)}% (${fmtP(pm)})`;
- const got=ALL.filter(a=>S.found[a.t]).length;$("colcount").textContent=`${got}/${ALL.length} · бонус монет +${setsDone()*10}%`;
+ const wm=weights(MAXLUCK),pm=wm[7]/wm.reduce((a,b)=>a+b,0)*100;$("maxd").textContent=tr("maxd",MAXLUCK,pm.toFixed(3),fmtP(pm));
+ const got=ALL.filter(a=>S.found[a.t]).length;$("colcount").textContent=tr("colcnt",got,ALL.length,setsDone()*10);
  $("col").innerHTML=ALL.map(a=>{const n=S.found[a.t]||0,e=a.t.split(" ")[0];
-  return `<div class="glass it ${n?"":"off"}" style="${n?"border-color:"+R[a.i].c:""}"><div class="e">${n?e:"❔"}</div>${n?a.t.slice(e.length+1):"???"}<div style="color:${R[a.i].c};font-size:12px">${R[a.i].ru}${n?" ×"+n:""}</div></div>`}).join("");
+  return `<div class="glass it ${n?"":"off"}" style="${n?"border-color:"+R[a.i].c:""}"><div class="e">${n?e:"❔"}</div>${n?iname(a.t):"???"}<div style="color:${R[a.i].c};font-size:12px">${rname(a.i)}${n?" ×"+n:""}</div></div>`}).join("");
 }
 $("fuse").onclick=e=>{const b=e.target.closest("[data-f]");if(b&&!b.disabled)fuse(+b.dataset.f)};
 $("inc").onclick=()=>{const c=incCost();if(S.inc<MAXINC&&S.coins>=c){S.coins-=c;S.inc++;render();save()}};
 $("r1").onclick=()=>roll(1);$("r10").onclick=()=>roll(10);
 $("luck").onclick=()=>{const c=luckCost();if(S.luck<MAXLUCK&&S.coins>=c){S.coins-=c;S.luck++;render();save()}};
-function showNotice(title,text,ok=true){$("noticeTitle").textContent=(ok?"✨ ":"⚠️ ")+title;$("noticeText").textContent=text;$("noticeModal").classList.add("show")}$("noticeOk").onclick=()=>$("noticeModal").classList.remove("show");$("noticeModal").onclick=e=>{if(e.target===$("noticeModal"))$("noticeModal").classList.remove("show")};$("reset").onclick=async()=>{if(!isOwner||!TOKEN)return;$("confirmModal").classList.add("show")};$("confirmNo").onclick=()=>$("confirmModal").classList.remove("show");$("confirmModal").onclick=e=>{if(e.target===$("confirmModal"))$("confirmModal").classList.remove("show")};$("confirmYes").onclick=async()=>{$("confirmModal").classList.remove("show");const r=await rpc("gacha_reset_all",{p_token:TOKEN});if(r.error){showNotice("Ошибка",r.error,false);return}S=FRESH();dirty=false;$("log").innerHTML="";render();showNotice("Готово","Прогресс всех игроков успешно обнулён.",true)};
+function showNotice(title,text,ok=true){$("noticeTitle").textContent=(ok?"✨ ":"⚠️ ")+title;$("noticeText").textContent=text;$("noticeModal").classList.add("show")}$("noticeOk").onclick=()=>$("noticeModal").classList.remove("show");$("noticeModal").onclick=e=>{if(e.target===$("noticeModal"))$("noticeModal").classList.remove("show")};$("reset").onclick=async()=>{if(!isOwner||!TOKEN)return;$("confirmModal").classList.add("show")};$("confirmNo").onclick=()=>$("confirmModal").classList.remove("show");$("confirmModal").onclick=e=>{if(e.target===$("confirmModal"))$("confirmModal").classList.remove("show")};$("confirmYes").onclick=async()=>{$("confirmModal").classList.remove("show");const r=await rpc("gacha_reset_all",{p_token:TOKEN});if(r.error){showNotice(tr("error"),r.error,false);return}S=FRESH();dirty=false;$("log").innerHTML="";render();showNotice(tr("done"),tr("wiped"),true)};
 let isOwner=false,granted=false,me=null,pickAv="😀",mode="reg";
 const AV=["😀","😎","🤖","👻","🐱","🦊","🐼","🐸","🦄","🐲","👑","🧙","🥷","🚀","🌟","💀"];
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 $("a_rar").innerHTML=R.map((r,i)=>`<option value="${i}">${r.n}</option>`).join("");
 $("adm").onclick=()=>openPanel("admp");
-function renderProf(){$("menuBtn").style.display=me?"":"none";$("prof").innerHTML=me?`<span class="av">${esc(me.avatar)}</span><b>${esc(me.nick)}</b>${isOwner?'<span class="tag">Владелец</span>':granted?'<span class="tag">Админ</span>':''}<button class="alt" id="out" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">Выйти</button>`:`<span class="av">👤</span><b>Гость</b><button id="inb" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">Войти</button>`;
+function renderProf(){$("menuBtn").style.display="";$("prof").innerHTML=me?`<span class="av">${esc(me.avatar)}</span><b>${esc(me.nick)}</b>${isOwner?'<span class="tag">'+tr("owner")+'</span>':granted?'<span class="tag">'+tr("admin")+'</span>':''}<button class="alt" id="out" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">${tr("logout")}</button>`:`<span class="av">👤</span><b>${tr("guest")}</b><button id="inb" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">${tr("login")}</button>`;
  if($("out"))$("out").onclick=()=>{try{localStorage.removeItem("gacha-token")}catch(e){}location.reload()};
  if($("inb"))$("inb").onclick=()=>openReg()}
-function openReg(m){if(m)mode=m;const r=mode==="reg";$("reg").style.display="flex";$("reg_t").textContent=r?"Создай профиль":"Вход";
- $("t_reg").style.opacity=r?1:.5;$("t_in").style.opacity=r?.5:1;$("avs").style.display=r?"grid":"none";$("reg_ok").textContent=r?"Создать":"Войти";$("reg_st").textContent="";
+function openReg(m){if(m)mode=m;const r=mode==="reg";$("reg").style.display="flex";$("reg_t").textContent=r?tr("createProf"):tr("signin");
+ $("t_reg").style.opacity=r?1:.5;$("t_in").style.opacity=r?.5:1;$("avs").style.display=r?"grid":"none";$("reg_ok").textContent=r?tr("create"):tr("signin");$("reg_st").textContent="";
  $("avs").innerHTML=AV.map(a=>`<button class="alt avb${a===pickAv?" sel":""}" data-a="${a}">${a}</button>`).join("");
  document.querySelectorAll("#avs .avb").forEach(b=>b.onclick=()=>{pickAv=b.dataset.a;document.querySelectorAll("#avs .avb").forEach(x=>x.classList.toggle("sel",x===b))})}
 $("t_reg").onclick=()=>openReg("reg");$("t_in").onclick=()=>openReg("in");$("reg_x").onclick=()=>{$("reg").style.display="none"};
@@ -265,17 +308,17 @@ function applyMe(d){me={nick:d.nick,avatar:d.avatar,role:d.role||"",nickAt:+d.ni
  renderProf();const a=isOwner||granted;$("adm").style.display=a?"":"none";$("reset").style.display=isOwner?"":"none";$("setb").style.display="";
  if(isOwner){$("own").style.display="block";renderGrants()}$("reg").style.display="none";render()}
 $("reg_ok").onclick=async()=>{const n=$("reg_nick").value.trim(),p=$("reg_pw").value,st=$("reg_st");
- if(!/^[A-Za-z0-9_А-Яа-яЁё-]{3,16}$/.test(n)){st.textContent="Ник: 3–16 символов — буквы, цифры, _ и -";return}
- if(p.length<4){st.textContent="Пароль: минимум 4 символа";return}
- st.textContent="Подождите…";
+ if(!/^[A-Za-z0-9_А-Яа-яЁё-]{3,16}$/.test(n)){st.textContent=tr("nickrule");return}
+ if(p.length<4){st.textContent=tr("pwmin");return}
+ st.textContent=tr("wait");
  const r=mode==="reg"?await rpc("gacha_register",{p_nick:n,p_pass:p,p_avatar:pickAv,p_save:S}):await rpc("gacha_login",{p_nick:n,p_pass:p});
  if(r.error){st.textContent=r.error;return}
  TOKEN=r.data.token;try{localStorage.setItem("gacha-token",TOKEN)}catch(e){}applyMe(r.data)};
 async function setRole(k,r){const x=await rpc("gacha_set_role",{p_token:TOKEN,p_key:k,p_role:r});if(x.error)alert(x.error);renderGrants()}
 async function renderGrants(){if(!isOwner)return;const r=await rpc("gacha_players",{p_token:TOKEN});if(r.error)return;let can="",has="";
  (r.data||[]).forEach(x=>{if(x.role==="owner")return;const row=`<div class="gr"><span>${esc(x.avatar)} ${esc(x.nick)}</span>`;
-  if(x.role==="admin")has+=row+`<button class="alt" data-rv="${esc(x.key)}">Забрать</button></div>`;else can+=row+`<button data-gv="${esc(x.key)}">Выдать</button></div>`});
- $("g_can").innerHTML=can||"<i>Пока никого</i>";$("g_list").innerHTML=has||"<i>Никого</i>";
+  if(x.role==="admin")has+=row+`<button class="alt" data-rv="${esc(x.key)}">${tr("revoke")}</button></div>`;else can+=row+`<button data-gv="${esc(x.key)}">${tr("grant")}</button></div>`});
+ $("g_can").innerHTML=can||"<i>"+tr("nobodyyet")+"</i>";$("g_list").innerHTML=has||"<i>"+tr("nobody")+"</i>";
  document.querySelectorAll("[data-gv]").forEach(b=>b.onclick=()=>setRole(b.dataset.gv,"admin"));
  document.querySelectorAll("[data-rv]").forEach(b=>b.onclick=()=>setRole(b.dataset.rv,""))}
 const DAY7=7*864e5,NICKRE=/^[A-Za-z0-9_А-Яа-яЁё-]{3,16}$/;
@@ -283,22 +326,22 @@ const sMsg=(t,ok)=>{const e=$("s_st");e.textContent=t;e.style.color=ok?"var(--c1
 const nickLeft=()=>me.nickAt?me.nickAt+DAY7-Date.now():0;
 function renderSet(){$("s_avs").innerHTML=AV.map(a=>`<button class="alt avb${a===pickAv?" sel":""}" data-a="${a}">${a}</button>`).join("");
  document.querySelectorAll("#s_avs .avb").forEach(b=>b.onclick=()=>{pickAv=b.dataset.a;document.querySelectorAll("#s_avs .avb").forEach(x=>x.classList.toggle("sel",x===b))});
- $("s_nick").value=me.nick;const l=nickLeft();sMsg(l>0?"Ник можно сменить через "+Math.ceil(l/864e5)+" дн.":"",true)}
+ $("s_nick").value=me.nick;const l=nickLeft();sMsg(l>0?tr("nickwait",Math.ceil(l/864e5)):"",true)}
 $("setb").onclick=()=>{pickAv=me.avatar;renderSet();openPanel("setp")};
-$("s_av").onclick=async()=>{const r=await rpc("gacha_set_avatar",{p_token:TOKEN,p_avatar:pickAv});if(r.error)return sMsg(r.error);me.avatar=pickAv;renderProf();sMsg("Аватарка сохранена",1)};
+$("s_av").onclick=async()=>{const r=await rpc("gacha_set_avatar",{p_token:TOKEN,p_avatar:pickAv});if(r.error)return sMsg(r.error);me.avatar=pickAv;renderProf();sMsg(tr("avok"),1)};
 $("s_nb").onclick=async()=>{const n=$("s_nick").value.trim();
- if(!NICKRE.test(n))return sMsg("Ник: 3–16 символов — буквы, цифры, _ и -");
- if(n===me.nick)return sMsg("Это ваш текущий ник");
- const l=nickLeft();if(l>0)return sMsg("Ник можно сменить через "+Math.ceil(l/864e5)+" дн.");
+ if(!NICKRE.test(n))return sMsg(tr("nickrule"));
+ if(n===me.nick)return sMsg(tr("samenick"));
+ const l=nickLeft();if(l>0)return sMsg(tr("nickwait",Math.ceil(l/864e5)));
  const r=await rpc("gacha_change_nick",{p_token:TOKEN,p_nick:n});if(r.error)return sMsg(r.error);
- me.nick=n;me.nickAt=Date.now();renderProf();renderSet();sMsg("Ник изменён",1);if(isOwner)renderGrants()};
+ me.nick=n;me.nickAt=Date.now();renderProf();renderSet();sMsg(tr("nickok"),1);if(isOwner)renderGrants()};
 $("s_pb").onclick=async()=>{const o=$("s_old").value,n=$("s_new").value;
- if(n.length<4)return sMsg("Новый пароль: минимум 4 символа");
+ if(n.length<4)return sMsg(tr("pwmin2"));
  const r=await rpc("gacha_change_password",{p_token:TOKEN,p_old:o,p_new:n});if(r.error)return sMsg(r.error);
  TOKEN=r.data.token;try{localStorage.setItem("gacha-token",TOKEN)}catch(e){}
- $("s_old").value=$("s_new").value="";sMsg("Пароль изменён",1)};
+ $("s_old").value=$("s_new").value="";sMsg(tr("pwok"),1)};
 async function boot(){const r=await rpc("gacha_me",{p_token:TOKEN});
- if(r.error==="Нет связи с сервером"){$("pity").textContent="Нет связи с сервером, повторяю…";setTimeout(boot,4000);return}
+ if(r.net){$("pity").textContent=tr("retry");setTimeout(boot,4000);return}
  if(r.error){TOKEN=null;try{localStorage.removeItem("gacha-token")}catch(e){}ready=true;renderProf();openReg("in");return}
  applyMe(r.data)}
 renderProf();
@@ -306,7 +349,7 @@ if(TOKEN)boot();else{let seen=null;try{seen=localStorage.getItem("gacha-seen")}c
 $("a_give").onclick=()=>{S.coins+=Math.max(0,+$("a_coins").value||0);render();save()};
 $("a_setluck").onclick=()=>{S.luck=Math.min(MAXLUCK,Math.max(0,Math.floor(+$("a_luck").value||0)));render();save()};
 $("a_item").onclick=()=>{const i=+$("a_rar").value,its=R[i].items,t=its[Math.floor(Math.random()*its.length)];
- S.found[t]=(S.found[t]||0)+1;show(i,t,"Выдано админом");render();save()};
+ S.found[t]=(S.found[t]||0)+1;show(i,t,tr("byadm"));render();save()};
 $("a_all").onclick=()=>{ALL.forEach(a=>{if(!S.found[a.t])S.found[a.t]=1});render();save()};
 setInterval(()=>{if(!ready)return;S.coins+=inc();render();save()},1000);
 /* плавное появление блоков при прокрутке (вниз и вверх) */
@@ -384,7 +427,8 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel()});
  addEventListener("resize",()=>{clearTimeout(rt);rt=setTimeout(()=>{if(innerWidth!==W||Math.abs(innerHeight-H)>150)size()},150)});
  const sc=()=>{mkSprites();size()};lightMQ.addEventListener?lightMQ.addEventListener("change",sc):lightMQ.addListener(sc);
 })();
-render();
+$("lang").onclick=$("lang2").onclick=()=>setLang(LANG==="en"?"ru":"en");
+setLang(LANG);
 </script>
 </body>
 </html>
