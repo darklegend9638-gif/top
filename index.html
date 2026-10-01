@@ -150,6 +150,7 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
    <div style="color:var(--mute);font-size:13px;margin-top:8px">Есть доступ:</div><div id="g_list" style="font-size:14px"></div></div>
   <div id="tgtw" style="display:none;margin:10px 0"><div style="color:var(--mute);font-size:13px">Кого изменить:</div><div class="row" style="margin-top:6px"><select id="a_who"></select></div><div id="a_st" style="font-size:14px;min-height:18px;margin-top:6px"></div></div>
   <div class="row"><input id="a_coins" type="number" value="1000"><button id="a_give">Выдать монеты</button></div>
+  <div class="row"><button class="alt" id="a_take">Забрать монеты</button></div>
   <div class="row"><input id="a_luck" type="number" value="10"><button id="a_setluck">Уровень удачи</button></div>
   <div class="row"><input id="a_inc" type="number" value="5"><button id="a_setinc">Уровень дохода</button></div>
   <div class="row"><select id="a_rar"></select><button id="a_item">Выдать предмет</button></div>
@@ -207,7 +208,7 @@ const TX={"Кристальный алтарь":"Crystal Altar","Бросай, �
 "Шансы с учётом удачи":"Odds with luck","Слияние (5 дубликатов → 1 предмет редкостью выше)":"Fusion (5 duplicates → 1 item of higher rarity)","Коллекция":"Collection",
 "Настройки профиля":"Profile settings","Аватарка":"Avatar","Сохранить аватарку":"Save avatar","Никнейм (меняется раз в 7 дней)":"Nickname (changes once every 7 days)","Сменить":"Change","Пароль":"Password",
 "Админ-панель":"Admin panel","Выдать доступ к админке":"Grant admin access","Заходили на сайт:":"Visited the site:","Есть доступ:":"Has access:",
-"Выдать монеты":"Give coins","Уровень удачи":"Luck level","Выдать предмет":"Give item","Открыть всю коллекцию":"Unlock the whole collection",
+"Выдать монеты":"Give coins","Забрать монеты":"Take coins","Уровень удачи":"Luck level","Выдать предмет":"Give item","Открыть всю коллекцию":"Unlock the whole collection",
 "⚠️ Обнуление прогресса":"⚠️ Progress wipe","Вы уверены, что хотите обнулить прогресс всех игроков?":"Are you sure you want to wipe all players' progress?","Это действие нельзя отменить.":"This cannot be undone.",
 "Отмена":"Cancel","Обнулить":"Wipe","Понятно":"OK","Регистрация":"Sign up","Вход":"Sign in","Позже":"Later",
 "Новый ник":"New nickname","Текущий пароль":"Current password","Новый пароль (от 4 символов)":"New password (4+ characters)","Никнейм":"Nickname","Пароль (от 4 символов)":"Password (4+ characters)","Меню":"Menu","Закрыть":"Close","Кого изменить:":"Whom to edit:","Уровень дохода":"Income level"};
@@ -360,6 +361,7 @@ async function adm(f){const k=isOwner?$("a_who").value:"";
  const r=await rpc("gacha_admin_set",{p_token:TOKEN,p_key:k,p_save:o});if(r.error)return aMsg(r.error);
  aMsg(tr("edited",$("a_who").selectedOptions[0].textContent),1)}
 $("a_give").onclick=()=>adm(o=>{o.coins+=Math.max(0,+$("a_coins").value||0)});
+$("a_take").onclick=()=>adm(o=>{o.coins=Math.max(0,o.coins-Math.max(0,+$("a_coins").value||0))});
 $("a_setluck").onclick=()=>adm(o=>{o.luck=Math.min(MAXLUCK,Math.max(0,Math.floor(+$("a_luck").value||0)))});
 $("a_setinc").onclick=()=>adm(o=>{o.inc=Math.min(MAXINC,Math.max(0,Math.floor(+$("a_inc").value||0)))});
 $("a_item").onclick=()=>adm(o=>{const i=+$("a_rar").value,its=R[i].items,t=its[Math.floor(Math.random()*its.length)];
