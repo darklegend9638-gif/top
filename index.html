@@ -5,14 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Кристальный алтарь — Гача</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&display=swap);
-.reveal-on-scroll{opacity:0;transform:translateY(28px) scale(.97);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.75,.25,1);will-change:opacity,transform}
-.reveal-on-scroll.visible{opacity:1;transform:translateY(0) scale(1)}
-.reveal-on-scroll .e,.reveal-on-scroll .av{transition:transform .7s cubic-bezier(.2,.75,.25,1),opacity .7s ease}
-.reveal-on-scroll:not(.visible) .e,.reveal-on-scroll:not(.visible) .av{transform:scale(.65) rotate(-12deg);opacity:0}
-.reveal-on-scroll.visible .e,.reveal-on-scroll.visible .av{transform:scale(1) rotate(0);opacity:1}
-@media(prefers-reduced-motion:reduce){.reveal-on-scroll,.reveal-on-scroll.visible{opacity:1;transform:none;transition:none}}
-
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
 --bg:#0b0816;--bg2:#1b1040;--glass:rgba(255,255,255,.06);--line:rgba(255,255,255,.12);--text:#f1edff;--mute:#a69fc6;--btn1:#7b4dff;--btn2:#c04dff;--inp:#120d26;
 --c0:#9aa0ad;--c1:#5fd068;--c2:#4a9dff;--c3:#b25cff;--c4:#ffb02e;--c5:#ff4f6d;--c6:#1ee3cf;--c7:#ffe98a}
@@ -20,10 +12,10 @@
 :root[data-theme="dark"]{--bg:#0b0816;--bg2:#1b1040}
 html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
 *{box-sizing:border-box}
-body{margin:0;min-height:100%;color:var(--text);font:500 16px/1.45 "Cinzel","Trebuchet MS","Segoe UI",sans-serif;
+body{margin:0;min-height:100%;color:var(--text);font:16px/1.45 "Trebuchet MS","Segoe UI",sans-serif;
 background:radial-gradient(900px 500px at 15% -10%,var(--bg2),transparent 60%),radial-gradient(700px 500px at 100% 10%,#4a1566 0,transparent 55%),var(--bg);background-attachment:fixed}
 main{max-width:660px;margin:0 auto;padding:18px 14px 40px}
-h1{font:800 32px/1.05 Georgia,"Times New Roman",serif;text-align:center;margin:6px 0 4px;letter-spacing:1px;
+h1{font:800 32px/1.05 "Russo One","Trebuchet MS",sans-serif;text-align:center;margin:6px 0 4px;letter-spacing:1px;
 background:linear-gradient(90deg,#ffe98a,#ff7ad9,#7bdcff,#ffe98a);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 8s linear infinite}
 @keyframes flow{to{background-position:300% 0}}
 .sub{text-align:center;color:var(--mute);margin:0 0 16px;font-size:14px}
@@ -42,7 +34,7 @@ background:linear-gradient(90deg,#ffe98a,#ff7ad9,#7bdcff,#ffe98a);background-siz
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px) rotate(-3deg)}40%{transform:translateX(5px) rotate(3deg)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 .orb.reveal .inner{animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
 @keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
-#nm{font:700 22px Georgia,serif;min-height:28px}#rr{font-size:14px;min-height:22px;letter-spacing:.5px}
+#nm{font:700 22px "Russo One","Trebuchet MS",sans-serif;min-height:28px}#rr{font-size:14px;min-height:22px;letter-spacing:.5px}
 .row{display:flex;gap:10px;margin-top:12px}
 button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:14px;background:linear-gradient(135deg,var(--btn1),var(--btn2));color:#fff;cursor:pointer;flex:1;box-shadow:0 6px 18px rgba(123,77,255,.35);transition:transform .1s,filter .2s}
 button:active:not(:disabled){transform:scale(.97)}button:hover:not(:disabled){filter:brightness(1.12)}
@@ -72,6 +64,29 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
 
 .confirm-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(5,3,15,.72);z-index:1000}.confirm-modal.show{display:flex}.confirm-modal .modal-box{width:100%;max-width:390px;padding:22px;background:var(--bg2);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,.45);text-align:center}.confirm-modal .modal-title{font:700 20px Georgia,serif;margin-bottom:10px}.confirm-modal .modal-text{color:var(--mute);font-size:14px;margin-bottom:18px}.confirm-modal .modal-actions{display:flex;gap:10px}.confirm-modal .modal-actions button{flex:1}
+
+/* Современный игровой шрифт + аккуратная мобильная типографика */
+button,h1,h2,#nm,.tag,.stat b{font-family:"Russo One","Montserrat","Trebuchet MS",sans-serif}
+body{letter-spacing:.05px}
+.sub{font-weight:500}
+@media(max-width:480px){
+  main{padding:14px 12px 34px}
+  h1{font-size:27px;line-height:1.12}
+  .sub{font-size:13px}
+  .stat b{font-size:18px}
+  .od{grid-template-columns:92px 1fr 64px;font-size:13px}
+  button{padding:11px 9px;font-size:14px}
+}
+
+/* Плавное появление карточек и иконок при прокрутке */
+.scroll-pop{opacity:0;transform:translateY(24px) scale(.96);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.8,.25,1)}
+.scroll-pop.is-visible{opacity:1;transform:translateY(0) scale(1)}
+.scroll-pop .e,.scroll-pop .av{opacity:0;transform:scale(.55) rotate(-10deg);transition:opacity .55s ease .08s,transform .6s cubic-bezier(.2,1.4,.3,1) .08s}
+.scroll-pop.is-visible .e,.scroll-pop.is-visible .av{opacity:1;transform:scale(1) rotate(0)}
+@media(prefers-reduced-motion:reduce){
+  .scroll-pop,.scroll-pop.is-visible{opacity:1;transform:none;transition:none}
+  .scroll-pop .e,.scroll-pop .av,.scroll-pop.is-visible .e,.scroll-pop.is-visible .av{opacity:1;transform:none;transition:none}
+}
 </style>
 </head>
 <body>
@@ -80,7 +95,7 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
 <h1>Кристальный алтарь</h1>
 <p class="sub">Бросай, качай удачу, собери всё — вплоть до Divine</p>
 
-<div class="glass prof reveal-on-scroll" id="prof"></div>
+<div class="glass prof" id="prof"></div>
 <div class="top">
   <div class="glass stat"><small>🪙 Монеты</small><b id="coins">0</b></div>
   <div class="glass stat"><small>🍀 Удача</small><b id="lucklv">0</b></div>
@@ -88,7 +103,7 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
   <div class="glass stat wide"><small>Лучшая редкость (рекорд)</small><b id="best">—</b></div>
 </div>
 
-<div class="glass stage reveal-on-scroll">
+<div class="glass stage">
   <div class="orb" id="orb"><div class="ring"></div><div class="glow"></div><div class="inner" id="em">🔮</div></div>
   <div id="nm">Сделай первый бросок</div><div id="rr" style="color:var(--mute)">Копи монеты и бросай</div>
   <div class="row"><button id="r1">Бросок · 10</button><button id="r10">×10 · 100</button></div>
@@ -97,14 +112,14 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
 </div>
 
 <h2>Шансы с учётом удачи</h2>
-<div class="glass odds reveal-on-scroll" id="odds"></div>
+<div class="glass odds" id="odds"></div>
 <div id="maxd" style="color:var(--mute);font-size:13px;margin:6px 4px 0"></div>
 
 <h2>Слияние (5 дубликатов → 1 предмет редкостью выше)</h2>
-<div class="glass reveal-on-scroll" id="fuse"></div>
+<div class="glass" id="fuse"></div>
 
 <h2>Коллекция <span id="colcount"></span></h2>
-<div class="grid reveal-on-scroll" id="col"></div>
+<div class="grid" id="col"></div>
 
 <div class="row" style="margin-top:22px"><button class="alt" id="reset" style="display:none">Сбросить прогресс всем</button><button class="alt" id="setb" style="display:none">Настройки</button><button class="alt" id="adm" style="display:none">Админ</button></div>
 <div id="setp" class="glass stage" style="display:none;margin-top:12px;text-align:left">
@@ -206,9 +221,6 @@ function roll(n){
   if(lines.length)$("log").innerHTML=lines.join("")+$("log").innerHTML;
   busy=false;render()},n>1?650:450);
 }
-
-function setupScrollReveal(){const els=document.querySelectorAll(".reveal-on-scroll:not([data-observed])");if(!("IntersectionObserver" in window)){els.forEach(e=>e.classList.add("visible"));return}if(!window.__scrollRevealObserver){window.__scrollRevealObserver=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("visible");window.__scrollRevealObserver.unobserve(e.target)}}),{threshold:.12,rootMargin:"0px 0px -35px 0px"})}els.forEach(e=>{e.dataset.observed="1";window.__scrollRevealObserver.observe(e)})}
-
 function render(){
  $("coins").textContent=fmt(S.coins);$("rolls").textContent=S.rolls;
  const b=$("best");if(S.best>=0){b.textContent=R[S.best].n+" · "+R[S.best].ru;b.style.color=R[S.best].c}else{b.textContent="—";b.style.color=""}
@@ -223,8 +235,7 @@ function render(){
  const wm=weights(MAXLUCK),pm=wm[7]/wm.reduce((a,b)=>a+b,0)*100;$("maxd").textContent=`На максимуме удачи (${MAXLUCK}) шанс Divine: ${pm.toFixed(3)}% (${fmtP(pm)})`;
  const got=ALL.filter(a=>S.found[a.t]).length;$("colcount").textContent=`${got}/${ALL.length} · бонус монет +${setsDone()*10}%`;
  $("col").innerHTML=ALL.map(a=>{const n=S.found[a.t]||0,e=a.t.split(" ")[0];
-  return `<div class="glass it reveal-on-scroll ${n?"":"off"}" style="${n?"border-color:"+R[a.i].c:""}"><div class="e">${n?e:"❔"}</div>${n?a.t.slice(e.length+1):"???"}<div style="color:${R[a.i].c};font-size:12px">${R[a.i].ru}${n?" ×"+n:""}</div></div>`}).join("");
-  setupScrollReveal();
+  return `<div class="glass it ${n?"":"off"}" style="${n?"border-color:"+R[a.i].c:""}"><div class="e">${n?e:"❔"}</div>${n?a.t.slice(e.length+1):"???"}<div style="color:${R[a.i].c};font-size:12px">${R[a.i].ru}${n?" ×"+n:""}</div></div>`}).join("");
 }
 $("fuse").onclick=e=>{const b=e.target.closest("[data-f]");if(b&&!b.disabled)fuse(+b.dataset.f)};
 $("inc").onclick=()=>{const c=incCost();if(S.inc<MAXINC&&S.coins>=c){S.coins-=c;S.inc++;render();save()}};
@@ -294,6 +305,7 @@ $("a_item").onclick=()=>{const i=+$("a_rar").value,its=R[i].items,t=its[Math.flo
 $("a_all").onclick=()=>{ALL.forEach(a=>{if(!S.found[a.t])S.found[a.t]=1});render();save()};
 setInterval(()=>{if(!ready)return;S.coins+=inc();render();save()},1000);
 render();
+setupScrollReveal();
 </script>
 </body>
 </html>
