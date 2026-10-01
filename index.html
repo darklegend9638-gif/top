@@ -225,7 +225,7 @@ const AV=["😀","😎","🤖","👻","🐱","🦊","🐼","🐸","🦄","🐲",
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 $("a_rar").innerHTML=R.map((r,i)=>`<option value="${i}">${r.n}</option>`).join("");
 $("adm").onclick=()=>{const p=$("admp");p.style.display=p.style.display==="none"?"block":"none"};
-function renderProf(){$("prof").innerHTML=me?`<span class="av">${esc(me.avatar)}</span><b>${esc(me.nick)}</b>${isOwner?'<span class="tag">владелец</span>':granted?'<span class="tag">админ</span>':''}<button class="alt" id="out" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">Выйти</button>`:`<span class="av">👤</span><b>Гость</b><button id="inb" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">Войти</button>`;
+function renderProf(){$("prof").innerHTML=me?`<span class="av">${esc(me.avatar)}</span><b>${esc(me.nick)}</b>${isOwner?'<span class="tag">Владелец</span>':granted?'<span class="tag">Админ</span>':''}<button class="alt" id="out" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">Выйти</button>`:`<span class="av">👤</span><b>Гость</b><button id="inb" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">Войти</button>`;
  if($("out"))$("out").onclick=()=>{try{localStorage.removeItem("gacha-token")}catch(e){}location.reload()};
  if($("inb"))$("inb").onclick=()=>openReg()}
 function openReg(m){if(m)mode=m;const r=mode==="reg";$("reg").style.display="flex";$("reg_t").textContent=r?"Создай профиль":"Вход";
@@ -248,7 +248,7 @@ async function setRole(k,r){const x=await rpc("gacha_set_role",{p_token:TOKEN,p_
 async function renderGrants(){if(!isOwner)return;const r=await rpc("gacha_players",{p_token:TOKEN});if(r.error)return;let can="",has="";
  (r.data||[]).forEach(x=>{if(x.role==="owner")return;const row=`<div class="gr"><span>${esc(x.avatar)} ${esc(x.nick)}</span>`;
   if(x.role==="admin")has+=row+`<button class="alt" data-rv="${esc(x.key)}">Забрать</button></div>`;else can+=row+`<button data-gv="${esc(x.key)}">Выдать</button></div>`});
- $("g_can").innerHTML=can||"<i>пока никого</i>";$("g_list").innerHTML=has||"<i>никого</i>";
+ $("g_can").innerHTML=can||"<i>Пока никого</i>";$("g_list").innerHTML=has||"<i>Никого</i>";
  document.querySelectorAll("[data-gv]").forEach(b=>b.onclick=()=>setRole(b.dataset.gv,"admin"));
  document.querySelectorAll("[data-rv]").forEach(b=>b.onclick=()=>setRole(b.dataset.rv,""))}
 const DAY7=7*864e5,NICKRE=/^[A-Za-z0-9_А-Яа-яЁё-]{3,16}$/;
@@ -279,7 +279,7 @@ if(TOKEN)boot();else{let seen=null;try{seen=localStorage.getItem("gacha-seen")}c
 $("a_give").onclick=()=>{S.coins+=Math.max(0,+$("a_coins").value||0);render();save()};
 $("a_setluck").onclick=()=>{S.luck=Math.min(MAXLUCK,Math.max(0,Math.floor(+$("a_luck").value||0)));render();save()};
 $("a_item").onclick=()=>{const i=+$("a_rar").value,its=R[i].items,t=its[Math.floor(Math.random()*its.length)];
- S.found[t]=(S.found[t]||0)+1;show(i,t,"выдано админом");render();save()};
+ S.found[t]=(S.found[t]||0)+1;show(i,t,"Выдано админом");render();save()};
 $("a_all").onclick=()=>{ALL.forEach(a=>{if(!S.found[a.t])S.found[a.t]=1});render();save()};
 setInterval(()=>{if(!ready)return;S.coins+=inc();render();save()},1000);
 render();
