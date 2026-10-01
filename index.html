@@ -78,6 +78,13 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
 #menu #reset{border-color:var(--c5)}
 @media (prefers-reduced-motion:reduce){#menu,#menuBtn span{transition:none}}
 
+#pwrap{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(5,3,15,.72);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease,visibility .25s}
+#pwrap.open{opacity:1;visibility:visible;pointer-events:auto}
+.pbox{position:relative;width:100%;max-width:420px;max-height:calc(100% - 8px);overflow:auto;overscroll-behavior:contain;margin:0;background:var(--bg2);box-shadow:0 18px 60px rgba(0,0,0,.45);transform:translateY(14px) scale(.96);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+#pwrap.open .pbox{transform:none}
+.pclose{position:absolute;top:10px;right:10px;flex:none;width:36px;height:36px;padding:0;font-size:24px;line-height:1;box-shadow:none}
+@media (prefers-reduced-motion:reduce){#pwrap,.pbox{transition:none}}
+
 .confirm-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(5,3,15,.72);z-index:1000}.confirm-modal.show{display:flex}.confirm-modal .modal-box{width:100%;max-width:390px;padding:22px;background:var(--bg2);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,.45);text-align:center}.confirm-modal .modal-title{font:700 20px Georgia,serif;margin-bottom:10px}.confirm-modal .modal-text{color:var(--mute);font-size:14px;margin-bottom:18px}.confirm-modal .modal-actions{display:flex;gap:10px}.confirm-modal .modal-actions button{flex:1}
 </style>
 </head>
@@ -119,7 +126,8 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
 <h2>Коллекция <span id="colcount"></span></h2>
 <div class="grid" id="col"></div>
 
-<div id="setp" class="glass stage" style="display:none;margin-top:12px;text-align:left">
+</main>
+<div id="pwrap"><div id="setp" class="glass stage pbox" style="display:none;text-align:left"><button class="alt pclose" aria-label="Закрыть">×</button>
   <b>Настройки профиля</b>
   <div style="color:var(--mute);font-size:13px;margin-top:10px">Аватарка</div><div id="s_avs"></div>
   <div class="row" style="margin-top:0"><button id="s_av">Сохранить аватарку</button></div>
@@ -130,7 +138,7 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
   <div class="row"><input id="s_new" type="password" placeholder="Новый пароль (от 4 символов)"><button id="s_pb" style="flex:none">Сменить</button></div>
   <div id="s_st" style="font-size:14px;min-height:20px;margin-top:8px"></div>
 </div>
-<div id="admp" class="glass stage" style="display:none;margin-top:12px;text-align:left">
+<div id="admp" class="glass stage pbox" style="display:none;text-align:left"><button class="alt pclose" aria-label="Закрыть">×</button>
   <b>Админ-панель</b>
   <div id="own" style="display:none;margin:10px 0;padding:10px;border:1px dashed var(--line);border-radius:12px"><b style="font-size:14px">Выдать доступ к админке</b>
    <div style="color:var(--mute);font-size:13px;margin-top:6px">Заходили на сайт:</div><div id="g_can" style="font-size:14px"></div>
@@ -139,8 +147,7 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
   <div class="row"><input id="a_luck" type="number" value="10"><button id="a_setluck">Уровень удачи</button></div>
   <div class="row"><select id="a_rar"></select><button id="a_item">Выдать предмет</button></div>
   <div class="row"><button class="alt" id="a_all">Открыть всю коллекцию</button></div>
-</div>
-</main>
+</div></div>
 <div id="confirmModal" class="confirm-modal"><div class="modal-box"><div class="modal-title">⚠️ Обнуление прогресса</div><div class="modal-text">Вы уверены, что хотите обнулить прогресс всех игроков?<br>Это действие нельзя отменить.</div><div class="modal-actions"><button class="alt" id="confirmNo">Отмена</button><button id="confirmYes">Обнулить</button></div></div></div><div id="noticeModal" class="confirm-modal"><div class="modal-box"><div class="modal-title" id="noticeTitle">Готово</div><div class="modal-text" id="noticeText"></div><div class="modal-actions"><button id="noticeOk">Понятно</button></div></div></div><div id="reg"><div class="box"><b style="font-size:20px" id="reg_t">Создай профиль</b>
  <div class="row" style="margin:8px 0"><button class="alt" id="t_reg">Регистрация</button><button class="alt" id="t_in">Вход</button></div>
  <input id="reg_nick" maxlength="16" placeholder="Никнейм" autocomplete="username" style="width:100%">
@@ -243,7 +250,7 @@ let isOwner=false,granted=false,me=null,pickAv="😀",mode="reg";
 const AV=["😀","😎","🤖","👻","🐱","🦊","🐼","🐸","🦄","🐲","👑","🧙","🥷","🚀","🌟","💀"];
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 $("a_rar").innerHTML=R.map((r,i)=>`<option value="${i}">${r.n}</option>`).join("");
-$("adm").onclick=()=>{const p=$("admp");p.style.display=p.style.display==="none"?"block":"none"};
+$("adm").onclick=()=>openPanel("admp");
 function renderProf(){$("menuBtn").style.display=me?"":"none";$("prof").innerHTML=me?`<span class="av">${esc(me.avatar)}</span><b>${esc(me.nick)}</b>${isOwner?'<span class="tag">Владелец</span>':granted?'<span class="tag">Админ</span>':''}<button class="alt" id="out" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">Выйти</button>`:`<span class="av">👤</span><b>Гость</b><button id="inb" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">Войти</button>`;
  if($("out"))$("out").onclick=()=>{try{localStorage.removeItem("gacha-token")}catch(e){}location.reload()};
  if($("inb"))$("inb").onclick=()=>openReg()}
@@ -276,7 +283,7 @@ const nickLeft=()=>me.nickAt?me.nickAt+DAY7-Date.now():0;
 function renderSet(){$("s_avs").innerHTML=AV.map(a=>`<button class="alt avb${a===pickAv?" sel":""}" data-a="${a}">${a}</button>`).join("");
  document.querySelectorAll("#s_avs .avb").forEach(b=>b.onclick=()=>{pickAv=b.dataset.a;document.querySelectorAll("#s_avs .avb").forEach(x=>x.classList.toggle("sel",x===b))});
  $("s_nick").value=me.nick;const l=nickLeft();sMsg(l>0?"Ник можно сменить через "+Math.ceil(l/864e5)+" дн.":"",true)}
-$("setb").onclick=()=>{const p=$("setp");const o=p.style.display==="none";p.style.display=o?"block":"none";if(o){pickAv=me.avatar;renderSet()}};
+$("setb").onclick=()=>{pickAv=me.avatar;renderSet();openPanel("setp")};
 $("s_av").onclick=async()=>{const r=await rpc("gacha_set_avatar",{p_token:TOKEN,p_avatar:pickAv});if(r.error)return sMsg(r.error);me.avatar=pickAv;renderProf();sMsg("Аватарка сохранена",1)};
 $("s_nb").onclick=async()=>{const n=$("s_nick").value.trim();
  if(!NICKRE.test(n))return sMsg("Ник: 3–16 символов — буквы, цифры, _ и -");
@@ -309,6 +316,12 @@ setInterval(()=>{if(!ready)return;S.coins+=inc();render();save()},1000);
  const io=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle("in",e.isIntersecting)),{threshold:.08,rootMargin:"0px 0px -6% 0px"});
  els.forEach(el=>{el.classList.add("rv");io.observe(el)});
 })();
+/* окна по центру экрана */
+function openPanel(id){["setp","admp"].forEach(x=>$(x).style.display=x===id?"block":"none");$("pwrap").classList.add("open");$(id).scrollTop=0}
+function closePanel(){$("pwrap").classList.remove("open")}
+$("pwrap").onclick=e=>{if(e.target===$("pwrap"))closePanel()};
+document.querySelectorAll(".pclose").forEach(b=>b.onclick=closePanel);
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanel()});
 /* меню-бургер */
 (function(){
  const b=$("menuBtn"),m=$("menu");
@@ -316,9 +329,7 @@ setInterval(()=>{if(!ready)return;S.coins+=inc();render();save()},1000);
  b.onclick=e=>{e.stopPropagation();set(!m.classList.contains("open"))};
  document.addEventListener("click",e=>{if(!m.contains(e.target))set(false)});
  document.addEventListener("keydown",e=>{if(e.key==="Escape")set(false)});
- m.addEventListener("click",e=>{const btn=e.target.closest("button");if(!btn)return;set(false);
-  const pn={setb:"setp",adm:"admp"}[btn.id];
-  if(pn)setTimeout(()=>{const p=$(pn);if(p.style.display!=="none")p.scrollIntoView({behavior:"smooth",block:"start"})},50)});
+ m.addEventListener("click",e=>{if(e.target.closest("button"))set(false)});
 })();
 render();
 </script>
