@@ -145,8 +145,10 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
   <div id="own" style="display:none;margin:10px 0;padding:10px;border:1px dashed var(--line);border-radius:12px"><b style="font-size:14px">Выдать доступ к админке</b>
    <div style="color:var(--mute);font-size:13px;margin-top:6px">Заходили на сайт:</div><div id="g_can" style="font-size:14px"></div>
    <div style="color:var(--mute);font-size:13px;margin-top:8px">Есть доступ:</div><div id="g_list" style="font-size:14px"></div></div>
+  <div id="tgtw" style="display:none;margin:10px 0"><div style="color:var(--mute);font-size:13px">Кого изменить:</div><div class="row" style="margin-top:6px"><select id="a_who"></select></div><div id="a_st" style="font-size:14px;min-height:18px;margin-top:6px"></div></div>
   <div class="row"><input id="a_coins" type="number" value="1000"><button id="a_give">Выдать монеты</button></div>
   <div class="row"><input id="a_luck" type="number" value="10"><button id="a_setluck">Уровень удачи</button></div>
+  <div class="row"><input id="a_inc" type="number" value="5"><button id="a_setinc">Уровень дохода</button></div>
   <div class="row"><select id="a_rar"></select><button id="a_item">Выдать предмет</button></div>
   <div class="row"><button class="alt" id="a_all">Открыть всю коллекцию</button></div>
 </div></div>
@@ -187,7 +189,7 @@ incmax:["Доход на максимуме","Income maxed"],incup:["Доход 
 pity:["Гарант: Legendary через {0} бр. · Mythic через {1} бр. · Secret через {2} бр. · доход {3}/с","Pity: Legendary in {0} rolls · Mythic in {1} rolls · Secret in {2} rolls · income {3}/s"],
 maxd:["На максимуме удачи ({0}) шанс Divine: {1}% ({2})","At max luck ({0}) Divine chance: {1}% ({2})"],
 colcnt:["{0}/{1} · бонус монет +{2}%","{0}/{1} · coin bonus +{2}%"],oneIn:["1 из ","1 in "],fusion:["слияние","fusion"],byadm:["Выдано админом","Given by admin"],
-error:["Ошибка","Error"],done:["Готово","Done"],wiped:["Прогресс всех игроков успешно обнулён.","All players' progress has been wiped."]};
+meopt:["Я (себя)","Me (myself)"],edited:["Изменено у {0}","Updated {0}"],error:["Ошибка","Error"],done:["Готово","Done"],wiped:["Прогресс всех игроков успешно обнулён.","All players' progress has been wiped."]};
 const tr=(k,...a)=>{let s=D[k][LANG==="en"?1:0];a.forEach((v,i)=>s=s.split("{"+i+"}").join(v));return s};
 const EN=[["Stone","Leaf","Spoon","Sock"],["Clover","Key","Candle","Potion"],["Sapphire","Shield","Scroll","Owl"],["Orb of Fate","Shadow Blade","Unicorn"],["Crown of Kings","Dragon","Zeus's Lightning"],["Phoenix","Galaxy Shard","Kraken"],["Black Hole","Stranger's Mask","Forgotten Time"],["Heart of the Sun","Eye of the Universe","First Star"]];
 const IT={};R.forEach((r,i)=>r.items.forEach((t,j)=>IT[t]=EN[i][j]));
@@ -205,7 +207,7 @@ const TX={"Кристальный алтарь":"Crystal Altar","Бросай, �
 "Выдать монеты":"Give coins","Уровень удачи":"Luck level","Выдать предмет":"Give item","Открыть всю коллекцию":"Unlock the whole collection",
 "⚠️ Обнуление прогресса":"⚠️ Progress wipe","Вы уверены, что хотите обнулить прогресс всех игроков?":"Are you sure you want to wipe all players' progress?","Это действие нельзя отменить.":"This cannot be undone.",
 "Отмена":"Cancel","Обнулить":"Wipe","Понятно":"OK","Регистрация":"Sign up","Вход":"Sign in","Позже":"Later",
-"Новый ник":"New nickname","Текущий пароль":"Current password","Новый пароль (от 4 символов)":"New password (4+ characters)","Никнейм":"Nickname","Пароль (от 4 символов)":"Password (4+ characters)","Меню":"Menu","Закрыть":"Close"};
+"Новый ник":"New nickname","Текущий пароль":"Current password","Новый пароль (от 4 символов)":"New password (4+ characters)","Никнейм":"Nickname","Пароль (от 4 символов)":"Password (4+ characters)","Меню":"Menu","Закрыть":"Close","Кого изменить:":"Whom to edit:","Уровень дохода":"Income level"};
 const o0=new WeakMap();
 function applyStatic(){const en=LANG==="en",w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
  while(n=w.nextNode()){if(n.parentNode.tagName==="SCRIPT")continue;const o=o0.has(n)?o0.get(n):n.nodeValue,k=o.trim();if(TX[k]){o0.set(n,o);n.nodeValue=en?o.replace(k,TX[k]):o}}
@@ -294,7 +296,7 @@ let isOwner=false,granted=false,me=null,pickAv="😀",mode="reg";
 const AV=["😀","😎","🤖","👻","🐱","🦊","🐼","🐸","🦄","🐲","👑","🧙","🥷","🚀","🌟","💀"];
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 $("a_rar").innerHTML=R.map((r,i)=>`<option value="${i}">${r.n}</option>`).join("");
-$("adm").onclick=()=>openPanel("admp");
+$("adm").onclick=()=>{openPanel("admp");renderGrants()};
 function renderProf(){$("menuBtn").style.display="";$("prof").innerHTML=me?`<span class="av">${esc(me.avatar)}</span><b>${esc(me.nick)}</b>${isOwner?'<span class="tag">'+tr("owner")+'</span>':granted?'<span class="tag">'+tr("admin")+'</span>':''}<button class="alt" id="out" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">${tr("logout")}</button>`:`<span class="av">👤</span><b>${tr("guest")}</b><button id="inb" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">${tr("login")}</button>`;
  if($("out"))$("out").onclick=()=>{try{localStorage.removeItem("gacha-token")}catch(e){}location.reload()};
  if($("inb"))$("inb").onclick=()=>openReg()}
@@ -306,7 +308,7 @@ $("t_reg").onclick=()=>openReg("reg");$("t_in").onclick=()=>openReg("in");$("reg
 function applyMe(d){me={nick:d.nick,avatar:d.avatar,role:d.role||"",nickAt:+d.nick_at||0};isOwner=me.role==="owner";granted=me.role==="admin";
  S=Object.assign(FRESH(),d.save||{});normS();ready=true;dirty=false;try{localStorage.setItem("gacha-seen","1")}catch(e){}
  renderProf();const a=isOwner||granted;$("adm").style.display=a?"":"none";$("reset").style.display=isOwner?"":"none";$("setb").style.display="";
- if(isOwner){$("own").style.display="block";renderGrants()}$("reg").style.display="none";render()}
+ $("tgtw").style.display=isOwner?"block":"none";if(isOwner){$("own").style.display="block";renderGrants()}$("reg").style.display="none";render()}
 $("reg_ok").onclick=async()=>{const n=$("reg_nick").value.trim(),p=$("reg_pw").value,st=$("reg_st");
  if(!/^[A-Za-z0-9_А-Яа-яЁё-]{3,16}$/.test(n)){st.textContent=tr("nickrule");return}
  if(p.length<4){st.textContent=tr("pwmin");return}
@@ -315,7 +317,8 @@ $("reg_ok").onclick=async()=>{const n=$("reg_nick").value.trim(),p=$("reg_pw").v
  if(r.error){st.textContent=r.error;return}
  TOKEN=r.data.token;try{localStorage.setItem("gacha-token",TOKEN)}catch(e){}applyMe(r.data)};
 async function setRole(k,r){const x=await rpc("gacha_set_role",{p_token:TOKEN,p_key:k,p_role:r});if(x.error)alert(x.error);renderGrants()}
-async function renderGrants(){if(!isOwner)return;const r=await rpc("gacha_players",{p_token:TOKEN});if(r.error)return;let can="",has="";
+async function renderGrants(){if(!isOwner)return;const r=await rpc("gacha_players",{p_token:TOKEN});if(r.error)return;let can="",has="";const w=$("a_who"),cv=w.value;
+ w.innerHTML=`<option value="">${tr("meopt")}</option>`+(r.data||[]).filter(x=>x.role!=="owner").map(x=>`<option value="${esc(x.key)}">${esc(x.avatar)} ${esc(x.nick)}</option>`).join("");w.value=[...w.options].some(o=>o.value===cv)?cv:"";
  (r.data||[]).forEach(x=>{if(x.role==="owner")return;const row=`<div class="gr"><span>${esc(x.avatar)} ${esc(x.nick)}</span>`;
   if(x.role==="admin")has+=row+`<button class="alt" data-rv="${esc(x.key)}">${tr("revoke")}</button></div>`;else can+=row+`<button data-gv="${esc(x.key)}">${tr("grant")}</button></div>`});
  $("g_can").innerHTML=can||"<i>"+tr("nobodyyet")+"</i>";$("g_list").innerHTML=has||"<i>"+tr("nobody")+"</i>";
@@ -346,11 +349,19 @@ async function boot(){const r=await rpc("gacha_me",{p_token:TOKEN});
  applyMe(r.data)}
 renderProf();
 if(TOKEN)boot();else{let seen=null;try{seen=localStorage.getItem("gacha-seen")}catch(e){}openReg(seen?"in":"reg")}
-$("a_give").onclick=()=>{S.coins+=Math.max(0,+$("a_coins").value||0);render();save()};
-$("a_setluck").onclick=()=>{S.luck=Math.min(MAXLUCK,Math.max(0,Math.floor(+$("a_luck").value||0)));render();save()};
-$("a_item").onclick=()=>{const i=+$("a_rar").value,its=R[i].items,t=its[Math.floor(Math.random()*its.length)];
- S.found[t]=(S.found[t]||0)+1;show(i,t,tr("byadm"));render();save()};
-$("a_all").onclick=()=>{ALL.forEach(a=>{if(!S.found[a.t])S.found[a.t]=1});render();save()};
+const aMsg=(t,ok)=>{const e=$("a_st");e.textContent=t;e.style.color=ok?"var(--c1)":"var(--c5)"};
+async function adm(f){const k=isOwner?$("a_who").value:"";
+ if(!k){f(S);render();save();return}
+ const g=await rpc("gacha_admin_get",{p_token:TOKEN,p_key:k});if(g.error)return aMsg(g.error);
+ const o=Object.assign(FRESH(),(g.data&&g.data.save)||g.data||{});f(o);
+ const r=await rpc("gacha_admin_set",{p_token:TOKEN,p_key:k,p_save:o});if(r.error)return aMsg(r.error);
+ aMsg(tr("edited",$("a_who").selectedOptions[0].textContent),1)}
+$("a_give").onclick=()=>adm(o=>{o.coins+=Math.max(0,+$("a_coins").value||0)});
+$("a_setluck").onclick=()=>adm(o=>{o.luck=Math.min(MAXLUCK,Math.max(0,Math.floor(+$("a_luck").value||0)))});
+$("a_setinc").onclick=()=>adm(o=>{o.inc=Math.min(MAXINC,Math.max(0,Math.floor(+$("a_inc").value||0)))});
+$("a_item").onclick=()=>adm(o=>{const i=+$("a_rar").value,its=R[i].items,t=its[Math.floor(Math.random()*its.length)];
+ o.found[t]=(o.found[t]||0)+1;if(i>o.best)o.best=i;if(o===S)show(i,t,tr("byadm"))});
+$("a_all").onclick=()=>adm(o=>{ALL.forEach(a=>{if(!o.found[a.t])o.found[a.t]=1})});
 setInterval(()=>{if(!ready)return;S.coins+=inc();render();save()},1000);
 /* плавное появление блоков при прокрутке (вниз и вверх) */
 (function(){
