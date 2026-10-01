@@ -3,11 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Unbounded:wght@500;700;800&display=swap">
 <title>Кристальный алтарь — Гача</title>
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
 --bg:#0b0816;--bg2:#1b1040;--glass:rgba(255,255,255,.06);--line:rgba(255,255,255,.12);--text:#f1edff;--mute:#a69fc6;--btn1:#7b4dff;--btn2:#c04dff;--inp:#120d26;
---c0:#9aa0ad;--c1:#5fd068;--c2:#4a9dff;--c3:#b25cff;--c4:#ffb02e;--c5:#ff4f6d;--c6:#1ee3cf;--c7:#ffe98a}
+--c0:#9aa0ad;--c1:#5fd068;--c2:#4a9dff;--c3:#b25cff;--c4:#ffb02e;--c5:#ff4f6d;--c6:#1ee3cf;--c7:#ffe98a;--fb:"Nunito","Trebuchet MS","Segoe UI",sans-serif;--fh:"Unbounded","Trebuchet MS","Segoe UI",sans-serif}
 @media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f3effd;--bg2:#d9ccff;--glass:rgba(255,255,255,.7);--line:rgba(60,30,120,.18);--text:#1d1536;--mute:#5d5480;--inp:#fff}}
 :root[data-theme="dark"]{--bg:#0b0816;--bg2:#1b1040}
 html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
@@ -15,10 +17,10 @@ html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
 body{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 input,select,textarea{-webkit-user-select:text;user-select:text}
 button:focus:not(:focus-visible),select:focus:not(:focus-visible){outline:none}
-body{margin:0;min-height:100%;color:var(--text);font:16px/1.45 "Trebuchet MS","Segoe UI",sans-serif;
+body{margin:0;min-height:100%;color:var(--text);font:16px/1.45 var(--fb);
 background:radial-gradient(900px 500px at 15% -10%,var(--bg2),transparent 60%),radial-gradient(700px 500px at 100% 10%,#4a1566 0,transparent 55%),var(--bg);background-attachment:fixed}
 main{max-width:660px;margin:0 auto;padding:60px 14px 40px}
-h1{font:800 32px/1.05 Georgia,"Times New Roman",serif;text-align:center;margin:6px 0 4px;letter-spacing:1px;
+h1{font:800 clamp(22px,6.4vw,32px)/1.15 var(--fh);text-align:center;margin:6px 0 4px;letter-spacing:1px;
 background:linear-gradient(90deg,#ffe98a,#ff7ad9,#7bdcff,#ffe98a);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 8s linear infinite}
 @keyframes flow{to{background-position:300% 0}}
 .sub{text-align:center;color:var(--mute);margin:0 0 16px;font-size:14px}
@@ -37,7 +39,7 @@ background:linear-gradient(90deg,#ffe98a,#ff7ad9,#7bdcff,#ffe98a);background-siz
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px) rotate(-3deg)}40%{transform:translateX(5px) rotate(3deg)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 .orb.reveal .inner{animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
 @keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
-#nm{font:700 22px Georgia,serif;min-height:28px}#rr{font-size:14px;min-height:22px;letter-spacing:.5px}
+#nm{font:700 18px var(--fh);min-height:28px}#rr{font-size:14px;min-height:22px;letter-spacing:.5px}
 .row{display:flex;gap:10px;margin-top:12px}
 button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:14px;background:linear-gradient(135deg,var(--btn1),var(--btn2));color:#fff;cursor:pointer;flex:1;box-shadow:0 6px 18px rgba(123,77,255,.35);transition:transform .1s,filter .2s}
 button:active:not(:disabled){transform:scale(.97)}button:hover:not(:disabled){filter:brightness(1.12)}
@@ -85,7 +87,8 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
 @media (prefers-reduced-motion:reduce){#pwrap,.pbox{transition:none}}
 
 #stB,#stF{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
-.confirm-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(5,3,15,.72);z-index:1000}.confirm-modal.show{display:flex}.confirm-modal .modal-box{width:100%;max-width:390px;padding:22px;background:var(--bg2);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,.45);text-align:center}.confirm-modal .modal-title{font:700 20px Georgia,serif;margin-bottom:10px}.confirm-modal .modal-text{color:var(--mute);font-size:14px;margin-bottom:18px}.confirm-modal .modal-actions{display:flex;gap:10px}.confirm-modal .modal-actions button{flex:1}
+.confirm-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(5,3,15,.72);z-index:1000}.confirm-modal.show{display:flex}.confirm-modal .modal-box{width:100%;max-width:390px;padding:22px;background:var(--bg2);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,.45);text-align:center}.confirm-modal .modal-title{font:700 17px var(--fh);margin-bottom:10px}.confirm-modal .modal-text{color:var(--mute);font-size:14px;margin-bottom:18px}.confirm-modal .modal-actions{display:flex;gap:10px}.confirm-modal .modal-actions button{flex:1}
+.stat b{font:800 17px var(--fh)}.tag{font-family:var(--fh);font-size:10px}h2{font-family:var(--fh);font-size:12px}
 </style>
 </head>
 <body>
