@@ -141,6 +141,7 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
   <div style="color:var(--mute);font-size:13px;margin-top:14px">Пароль</div>
   <div class="row"><input id="s_old" type="password" placeholder="Текущий пароль"></div>
   <div class="row"><input id="s_new" type="password" placeholder="Новый пароль (от 4 символов)"><button id="s_pb" style="flex:none">Сменить</button></div>
+  <div class="row"><button class="alt" id="s_del" style="border-color:var(--c5);color:var(--c5)">Удалить аккаунт</button></div>
   <div id="s_st" style="font-size:14px;min-height:20px;margin-top:8px"></div>
 </div>
 <div id="admp" class="glass stage pbox" style="display:none;text-align:left"><button class="alt pclose" aria-label="Закрыть">×</button>
@@ -156,7 +157,8 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
   <div class="row"><select id="a_rar"></select><button id="a_item">Выдать предмет</button></div>
   <div class="row"><button class="alt" id="a_all">Открыть всю коллекцию</button></div>
 </div></div>
-<div id="confirmModal" class="confirm-modal"><div class="modal-box"><div class="modal-title">⚠️ Обнуление прогресса</div><div class="modal-text">Вы уверены, что хотите обнулить прогресс всех игроков?<br>Это действие нельзя отменить.</div><div class="modal-actions"><button class="alt" id="confirmNo">Отмена</button><button id="confirmYes">Обнулить</button></div></div></div><div id="noticeModal" class="confirm-modal"><div class="modal-box"><div class="modal-title" id="noticeTitle">Готово</div><div class="modal-text" id="noticeText"></div><div class="modal-actions"><button id="noticeOk">Понятно</button></div></div></div><div id="reg"><div class="box"><button class="alt" id="lang2" style="float:right;flex:none;padding:6px 12px;font-size:13px"></button><b style="font-size:20px" id="reg_t">Создай профиль</b>
+<div id="confirmModal" class="confirm-modal"><div class="modal-box"><div class="modal-title">⚠️ Обнуление прогресса</div><div class="modal-text">Вы уверены, что хотите обнулить прогресс всех игроков?<br>Это действие нельзя отменить.</div><div class="modal-actions"><button class="alt" id="confirmNo">Отмена</button><button id="confirmYes">Обнулить</button></div></div></div><div id="noticeModal" class="confirm-modal"><div class="modal-box"><div class="modal-title" id="noticeTitle">Готово</div><div class="modal-text" id="noticeText"></div><div class="modal-actions"><button id="noticeOk">Понятно</button></div></div></div><div id="delModal" class="confirm-modal"><div class="modal-box"><div class="modal-title">⚠️ Удаление аккаунта</div><div class="modal-text">Аккаунт и весь ваш прогресс будут удалены навсегда. Для подтверждения введите свой ник.</div><input id="del_nick" maxlength="16" autocomplete="off" style="width:100%;margin-bottom:8px"><div id="del_st" style="color:var(--c5);font-size:14px;min-height:20px;margin-bottom:8px"></div><div class="modal-actions"><button class="alt" id="delNo">Отмена</button><button id="delYes">Удалить</button></div></div></div>
+<div id="reg"><div class="box"><button class="alt" id="lang2" style="float:right;flex:none;padding:6px 12px;font-size:13px"></button><b style="font-size:20px" id="reg_t">Создай профиль</b>
  <div class="row" style="margin:8px 0"><button class="alt" id="t_reg">Регистрация</button><button class="alt" id="t_in">Вход</button></div>
  <input id="reg_nick" maxlength="16" placeholder="Никнейм" autocomplete="username" style="width:100%">
  <input id="reg_pw" type="password" maxlength="40" placeholder="Пароль (от 4 символов)" style="width:100%;margin-top:8px">
@@ -193,13 +195,13 @@ incmax:["Доход на максимуме","Income maxed"],incup:["Доход 
 pity:["Гарант: Legendary через {0} бр. · Mythic через {1} бр. · Secret через {2} бр. · доход {3}/с","Pity: Legendary in {0} rolls · Mythic in {1} rolls · Secret in {2} rolls · income {3}/s"],
 maxd:["На максимуме удачи ({0}) шанс Divine: {1}% ({2})","At max luck ({0}) Divine chance: {1}% ({2})"],
 colcnt:["{0}/{1} · бонус монет +{2}%","{0}/{1} · coin bonus +{2}%"],oneIn:["1 из ","1 in "],fusion:["слияние","fusion"],byadm:["Выдано админом","Given by admin"],
-meopt:["Я (себя)","Me (myself)"],edited:["Изменено у {0}","Updated {0}"],error:["Ошибка","Error"],done:["Готово","Done"],wiped:["Прогресс всех игроков успешно обнулён.","All players' progress has been wiped."]};
+meopt:["Я (себя)","Me (myself)"],edited:["Изменено у {0}","Updated {0}"],ownerdel:["Владелец не может удалить аккаунт","The owner cannot delete the account"],delmis:["Ник не совпадает","Nickname does not match"],error:["Ошибка","Error"],done:["Готово","Done"],wiped:["Прогресс всех игроков успешно обнулён.","All players' progress has been wiped."]};
 const tr=(k,...a)=>{let s=D[k][LANG==="en"?1:0];a.forEach((v,i)=>s=s.split("{"+i+"}").join(v));return s};
 const EN=[["Stone","Leaf","Spoon","Sock"],["Clover","Key","Candle","Potion"],["Sapphire","Shield","Scroll","Owl"],["Orb of Fate","Shadow Blade","Unicorn"],["Crown of Kings","Dragon","Zeus's Lightning"],["Phoenix","Galaxy Shard","Kraken"],["Black Hole","Stranger's Mask","Forgotten Time"],["Heart of the Sun","Eye of the Universe","First Star"]];
 const IT={};R.forEach((r,i)=>r.items.forEach((t,j)=>IT[t]=EN[i][j]));
 const iname=t=>LANG==="en"&&IT[t]?IT[t]:t.slice(t.indexOf(" ")+1),iview=t=>t.split(" ")[0]+" "+iname(t);
 const rname=i=>LANG==="ru"?R[i].ru:R[i].n,rn=i=>LANG==="ru"?R[i].n+" · "+R[i].ru:R[i].n;
-const SRV={"Этот ник уже занят":"This nickname is already taken","Неверный ник или пароль":"Wrong nickname or password","Текущий пароль неверный":"Current password is incorrect","Нет доступа":"Access denied","Ошибка сервера":"Server error"};
+const SRV={"Этот ник уже занят":"This nickname is already taken","Неверный ник или пароль":"Wrong nickname or password","Текущий пароль неверный":"Current password is incorrect","Нет доступа":"Access denied","Ошибка сервера":"Server error","Игрок не найден":"Player not found","Некорректное сохранение":"Invalid save","Владелец не может удалить аккаунт":"The owner cannot delete the account"};
 const srv=m=>LANG==="en"&&SRV[m]?SRV[m]:m;
 const TX={"Кристальный алтарь":"Crystal Altar","Бросай, качай удачу, собери всё — вплоть до Divine":"Roll, upgrade your luck, collect everything — up to Divine",
 "👤 Изменить профиль":"👤 Edit profile","🛠️ Админ панель":"🛠️ Admin panel","🗑️ Очистить весь прогресс":"🗑️ Wipe all progress",
@@ -211,7 +213,7 @@ const TX={"Кристальный алтарь":"Crystal Altar","Бросай, �
 "Выдать монеты":"Give coins","Забрать монеты":"Take coins","Уровень удачи":"Luck level","Выдать предмет":"Give item","Открыть всю коллекцию":"Unlock the whole collection",
 "⚠️ Обнуление прогресса":"⚠️ Progress wipe","Вы уверены, что хотите обнулить прогресс всех игроков?":"Are you sure you want to wipe all players' progress?","Это действие нельзя отменить.":"This cannot be undone.",
 "Отмена":"Cancel","Обнулить":"Wipe","Понятно":"OK","Регистрация":"Sign up","Вход":"Sign in","Позже":"Later",
-"Новый ник":"New nickname","Текущий пароль":"Current password","Новый пароль (от 4 символов)":"New password (4+ characters)","Никнейм":"Nickname","Пароль (от 4 символов)":"Password (4+ characters)","Меню":"Menu","Закрыть":"Close","Кого изменить:":"Whom to edit:","Уровень дохода":"Income level"};
+"Новый ник":"New nickname","Текущий пароль":"Current password","Новый пароль (от 4 символов)":"New password (4+ characters)","Никнейм":"Nickname","Пароль (от 4 символов)":"Password (4+ characters)","Меню":"Menu","Закрыть":"Close","Удалить аккаунт":"Delete account","⚠️ Удаление аккаунта":"⚠️ Delete account","Аккаунт и весь ваш прогресс будут удалены навсегда. Для подтверждения введите свой ник.":"Your account and all progress will be permanently deleted. Type your nickname to confirm.","Удалить":"Delete","Кого изменить:":"Whom to edit:","Уровень дохода":"Income level"};
 const o0=new WeakMap();
 function applyStatic(){const en=LANG==="en",w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
  while(n=w.nextNode()){if(n.parentNode.tagName==="SCRIPT")continue;const o=o0.has(n)?o0.get(n):n.nodeValue,k=o.trim();if(TX[k]){o0.set(n,o);n.nodeValue=en?o.replace(k,TX[k]):o}}
@@ -347,6 +349,11 @@ $("s_pb").onclick=async()=>{const o=$("s_old").value,n=$("s_new").value;
  const r=await rpc("gacha_change_password",{p_token:TOKEN,p_old:o,p_new:n});if(r.error)return sMsg(r.error);
  TOKEN=r.data.token;try{localStorage.setItem("gacha-token",TOKEN)}catch(e){}
  $("s_old").value=$("s_new").value="";sMsg(tr("pwok"),1)};
+$("s_del").onclick=()=>{if(isOwner)return sMsg(tr("ownerdel"));$("del_nick").value="";$("del_st").textContent="";$("delModal").classList.add("show")};
+$("delNo").onclick=()=>$("delModal").classList.remove("show");
+$("delYes").onclick=async()=>{if($("del_nick").value.trim().toLowerCase()!==me.nick.toLowerCase()){$("del_st").textContent=tr("delmis");return}
+ const r=await rpc("gacha_delete_account",{p_token:TOKEN});if(r.error){$("del_st").textContent=r.error;return}
+ TOKEN=null;ready=false;dirty=false;try{localStorage.removeItem("gacha-token")}catch(e){}location.reload()};
 async function boot(){const r=await rpc("gacha_me",{p_token:TOKEN});
  if(r.net){$("pity").textContent=tr("retry");setTimeout(boot,4000);return}
  if(r.error){TOKEN=null;try{localStorage.removeItem("gacha-token")}catch(e){}ready=true;renderProf();openReg("in");return}
