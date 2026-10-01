@@ -62,6 +62,8 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
 .gr{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:3px 0}.gr button{flex:0 0 auto;padding:6px 12px}
 #fuse{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}#fuse button{padding:10px;font-size:13px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+
+.confirm-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(5,3,15,.72);z-index:1000}.confirm-modal.show{display:flex}.confirm-modal .modal-box{width:100%;max-width:390px;padding:22px;background:var(--bg2);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,.45);text-align:center}.confirm-modal .modal-title{font:700 20px Georgia,serif;margin-bottom:10px}.confirm-modal .modal-text{color:var(--mute);font-size:14px;margin-bottom:18px}.confirm-modal .modal-actions{display:flex;gap:10px}.confirm-modal .modal-actions button{flex:1}
 </style>
 </head>
 <body>
@@ -119,7 +121,7 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
   <div class="row"><button class="alt" id="a_all">Открыть всю коллекцию</button></div>
 </div>
 </main>
-<div id="reg"><div class="box"><b style="font-size:20px" id="reg_t">Создай профиль</b>
+<div id="confirmModal" class="confirm-modal"><div class="modal-box"><div class="modal-title">⚠️ Обнуление прогресса</div><div class="modal-text">Вы уверены, что хотите обнулить прогресс всех игроков?<br>Это действие нельзя отменить.</div><div class="modal-actions"><button class="alt" id="confirmNo">Отмена</button><button id="confirmYes">Обнулить</button></div></div></div><div id="noticeModal" class="confirm-modal"><div class="modal-box"><div class="modal-title" id="noticeTitle">Готово</div><div class="modal-text" id="noticeText"></div><div class="modal-actions"><button id="noticeOk">Понятно</button></div></div></div><div id="reg"><div class="box"><b style="font-size:20px" id="reg_t">Создай профиль</b>
  <div class="row" style="margin:8px 0"><button class="alt" id="t_reg">Регистрация</button><button class="alt" id="t_in">Вход</button></div>
  <input id="reg_nick" maxlength="16" placeholder="Никнейм" autocomplete="username" style="width:100%">
  <input id="reg_pw" type="password" maxlength="40" placeholder="Пароль (от 4 символов)" style="width:100%;margin-top:8px">
@@ -216,10 +218,7 @@ $("fuse").onclick=e=>{const b=e.target.closest("[data-f]");if(b&&!b.disabled)fus
 $("inc").onclick=()=>{const c=incCost();if(S.inc<MAXINC&&S.coins>=c){S.coins-=c;S.inc++;render();save()}};
 $("r1").onclick=()=>roll(1);$("r10").onclick=()=>roll(10);
 $("luck").onclick=()=>{const c=luckCost();if(S.luck<MAXLUCK&&S.coins>=c){S.coins-=c;S.luck++;render();save()}};
-$("reset").onclick=async()=>{if(!(isOwner||granted)||!TOKEN)return;
- if(!confirm("Сбросить прогресс у ВСЕХ игроков? Это нельзя отменить."))return;
- const r=await rpc("gacha_reset_all",{p_token:TOKEN});if(r.error)return alert(r.error);
- S=FRESH();dirty=false;$("log").innerHTML="";render();alert("Прогресс сброшен у всех игроков")};
+function showNotice(title,text,ok=true){$("noticeTitle").textContent=(ok?"✨ ":"⚠️ ")+title;$("noticeText").textContent=text;$("noticeModal").classList.add("show")}$("noticeOk").onclick=()=>$("noticeModal").classList.remove("show");$("noticeModal").onclick=e=>{if(e.target===$("noticeModal"))$("noticeModal").classList.remove("show")};$("reset").onclick=async()=>{if(!(isOwner||granted)||!TOKEN)return;$("confirmModal").classList.add("show")};$("confirmNo").onclick=()=>$("confirmModal").classList.remove("show");$("confirmModal").onclick=e=>{if(e.target===$("confirmModal"))$("confirmModal").classList.remove("show")};$("confirmYes").onclick=async()=>{$("confirmModal").classList.remove("show");const r=await rpc("gacha_reset_all",{p_token:TOKEN});if(r.error){showNotice("Ошибка",r.error,false);return}S=FRESH();dirty=false;$("log").innerHTML="";render();showNotice("Готово","Прогресс всех игроков успешно обнулён.",true)};
 let isOwner=false,granted=false,me=null,pickAv="😀",mode="reg";
 const AV=["😀","😎","🤖","👻","🐱","🦊","🐼","🐸","🦄","🐲","👑","🧙","🥷","🚀","🌟","💀"];
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
