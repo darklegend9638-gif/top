@@ -571,7 +571,7 @@ render();
   });
 
   // Only owner/admin gets the admin tab. Reset itself stays inside the admin panel.
-  if (adminBtn && (window.isOwner === true || window.granted === true)) {
+  if (adminBtn && window.granted === true) {
     adminBtn.style.display = "block";
   }
 
