@@ -97,9 +97,85 @@ button:not(:disabled)::after{content:"";position:absolute;inset:0;background:lin
 @keyframes confirmRGB{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 @media (prefers-reduced-motion:reduce){.star{animation:none;display:none}.reveal-on-scroll{opacity:1;transform:none;filter:none;transition:none}body::before,.glass::before,button:not(:disabled)::after,#resetModal h3,#resetConfirm{animation:none}}
 
+
+/* ===== V2: compact top menu / performance ===== */
+#topMenuBtn{
+  position:fixed;top:16px;right:16px;z-index:1200;
+  width:48px;height:48px;border:1px solid rgba(190,100,255,.55);
+  border-radius:15px;background:rgba(20,10,38,.78);color:#fff;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:0 0 18px rgba(150,60,255,.28);
+  font-size:24px;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease;
+}
+#topMenuBtn:active{transform:scale(.94)}
+#topMenu{
+  position:fixed;top:74px;right:16px;z-index:1199;width:min(280px,calc(100vw - 32px));
+  padding:10px;border:1px solid rgba(190,100,255,.5);border-radius:18px;
+  background:rgba(17,9,31,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  box-shadow:0 12px 40px rgba(0,0,0,.45),0 0 25px rgba(160,60,255,.2);
+  opacity:0;transform:translateY(-10px) scale(.97);pointer-events:none;
+  transition:opacity .18s ease,transform .18s ease;
+}
+#topMenu.open{opacity:1;transform:none;pointer-events:auto}
+#topMenu button{
+  width:100%;padding:12px 14px;margin:3px 0;border:0;border-radius:12px;
+  background:rgba(255,255,255,.055);color:#fff;text-align:left;font-size:15px;cursor:pointer;
+}
+#topMenu button:hover{background:rgba(180,80,255,.16)}
+#topMenu .danger{color:#ff9cff}
+.menu-section{padding:7px 10px 4px;font-size:11px;color:#b99ccc;text-transform:uppercase;letter-spacing:.08em}
+
+#resetSuccessModal{
+  position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;
+  padding:20px;background:rgba(4,2,10,.72);opacity:0;visibility:hidden;
+  transition:opacity .2s ease,visibility .2s ease;
+}
+#resetSuccessModal.open{opacity:1;visibility:visible}
+.success-card{
+  width:min(430px,100%);position:relative;overflow:hidden;padding:28px 24px;
+  border:1px solid rgba(191,93,255,.6);border-radius:24px;text-align:center;
+  background:rgba(24,12,42,.96);box-shadow:0 0 50px rgba(170,65,255,.3);
+  transform:translateY(12px) scale(.97);transition:transform .2s ease;
+}
+#resetSuccessModal.open .success-card{transform:none}
+.success-card:before{
+  content:"";position:absolute;top:0;left:-30%;width:160%;height:3px;
+  background:linear-gradient(90deg,#7b4dff,#ff4dff,#4df7ff,#7b4dff);
+  background-size:300% 100%;animation:rgbLine 2.2s linear infinite;
+}
+.success-icon{
+  width:62px;height:62px;margin:0 auto 12px;border-radius:50%;
+  display:grid;place-items:center;font-size:30px;
+  background:rgba(150,65,255,.13);border:1px solid rgba(210,120,255,.5);
+  box-shadow:0 0 24px rgba(180,70,255,.28);
+}
+.success-card h3{margin:0 0 8px;font-size:22px}
+.success-card p{margin:0;color:#cdbfd5;line-height:1.45}
+.success-card .close-success{
+  margin-top:18px;width:100%;padding:11px;border:0;border-radius:12px;
+  color:#fff;background:linear-gradient(90deg,#7b4dff,#c04dff);cursor:pointer;
+}
+
+/* Reduce expensive effects on mobile / while scrolling */
+@media (max-width:700px){
+  #stars .star:nth-child(n+45){display:none}
+  body::before{animation-duration:18s}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
 </style>
 </head>
 <body>
+
+<button id="topMenuBtn" aria-label="Открыть меню">☰</button>
+<div id="topMenu">
+  <div class="menu-section">Навигация</div>
+  <button data-scroll="settings">⚙️ Настройки</button>
+  <button data-scroll="admin" id="menuAdmin" style="display:none">🛡️ Админ-панель</button>
+</div>
+
 <div id="stars" aria-hidden="true"></div>
 <div id="flash"></div>
 <div id="resetModal" role="dialog" aria-modal="true" aria-labelledby="resetTitle">
@@ -284,7 +360,7 @@ $("resetConfirm").onclick=async()=>{
   const r=await rpc("gacha_reset_all",{p_token:TOKEN});
   if(r.error){resetBusy=false;b.disabled=false;b.textContent="Сбросить всё";closeResetModal();return alert(r.error)}
   S=FRESH();dirty=false;$("log").innerHTML="";render();closeResetModal();
-  setTimeout(()=>alert("Прогресс сброшен у всех игроков"),280);
+  setTimeout(()=>openResetSuccess(),280);
   resetBusy=false;b.disabled=false;b.textContent="Сбросить всё";
 };
 let isOwner=false,granted=false,me=null,pickAv="😀",mode="reg";
@@ -374,5 +450,63 @@ setInterval(()=>{if(!ready)return;S.coins+=inc();render();save()},1000);
 })();
 render();
 </script>
+
+<div id="resetSuccessModal" aria-hidden="true">
+  <div class="success-card">
+    <div class="success-icon">✓</div>
+    <h3>Прогресс сброшен</h3>
+    <p>Прогресс всех игроков успешно сброшен. Новый игровой прогресс уже готов к использованию.</p>
+    <button class="close-success" id="closeResetSuccess">Продолжить</button>
+  </div>
+</div>
+
+
+<script>
+(() => {
+  const menuBtn = document.getElementById("topMenuBtn");
+  const menu = document.getElementById("topMenu");
+  const success = document.getElementById("resetSuccessModal");
+  const closeSuccess = document.getElementById("closeResetSuccess");
+
+  function toggleMenu(force) {
+    const open = force === undefined ? !menu.classList.contains("open") : force;
+    menu.classList.toggle("open", open);
+  }
+  menuBtn?.addEventListener("click", e => { e.stopPropagation(); toggleMenu(); });
+  document.addEventListener("click", e => {
+    if (menu.classList.contains("open") && !menu.contains(e.target) && e.target !== menuBtn) toggleMenu(false);
+  });
+
+  document.querySelectorAll("#topMenu [data-scroll]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.scroll;
+      toggleMenu(false);
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({behavior:"smooth", block:"start"});
+    });
+  });
+
+  window.openResetSuccess = () => {
+    if (!success) return;
+    success.classList.add("open");
+    success.setAttribute("aria-hidden","false");
+  };
+  function closeResetSuccess() {
+    success?.classList.remove("open");
+    success?.setAttribute("aria-hidden","true");
+  }
+  closeSuccess?.addEventListener("click", closeResetSuccess);
+  success?.addEventListener("click", e => { if (e.target === success) closeResetSuccess(); });
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") { toggleMenu(false); closeResetSuccess(); }
+  });
+
+  // Show admin menu item only when the existing admin area is actually visible/authorized.
+  const adminPanel = document.getElementById("admin");
+  const menuAdmin = document.getElementById("menuAdmin");
+  if (menuAdmin && (window.isOwner || window.granted)) menuAdmin.style.display = "block";
+})();
+</script>
+
 </body>
 </html>
