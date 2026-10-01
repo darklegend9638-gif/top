@@ -107,11 +107,13 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
   <div class="row"><button class="alt" id="a_all">Открыть всю коллекцию</button></div>
 </div>
 </main>
-<div id="reg"><div class="box"><b style="font-size:20px">Создай профиль</b>
- <div style="color:var(--mute);font-size:14px;margin:4px 0 10px">Придумай ник (если не занят) и выбери аватарку</div>
- <input id="reg_nick" maxlength="16" placeholder="Никнейм"><div id="avs"></div>
+<div id="reg"><div class="box"><b style="font-size:20px" id="reg_t">Создай профиль</b>
+ <div class="row" style="margin:8px 0"><button class="alt" id="t_reg">Регистрация</button><button class="alt" id="t_in">Вход</button></div>
+ <input id="reg_nick" maxlength="16" placeholder="Никнейм" autocomplete="username" style="width:100%">
+ <input id="reg_pw" type="password" maxlength="40" placeholder="Пароль (от 4 символов)" style="width:100%;margin-top:8px">
+ <div id="avs"></div>
  <div id="reg_st" style="color:var(--c5);font-size:14px;min-height:20px"></div>
- <div class="row"><button id="reg_ok">Играть</button></div></div></div>
+ <div class="row"><button id="reg_ok">Создать</button><button class="alt" id="reg_x" style="flex:none">Позже</button></div></div></div>
 
 <script>
 const R=[
@@ -131,8 +133,9 @@ const INCOME=3,MAXLUCK=10,MAXINC=15;
 const inc=()=>INCOME+S.inc*2,incCost=()=>Math.floor(80*Math.pow(1.5,S.inc));
 const setsDone=()=>R.filter(r=>r.items.every(t=>S.found[t])).length;
 let S={coins:30,luck:0,rolls:0,found:{},best:-1,inc:0,pr:0,pe:0},busy=false;
-const KEY="gacha-v2";
-try{const s=localStorage.getItem(KEY)||localStorage.getItem("gacha-v1");if(s)S=Object.assign(S,JSON.parse(s))}catch(e){}
+const BASE="gacha-v2";let cur=null;try{cur=localStorage.getItem("gacha-cur")}catch(e){}
+const KEY=BASE+(cur?":"+cur:"");
+try{const s=localStorage.getItem(KEY)||(cur?null:localStorage.getItem("gacha-v1"));if(s)S=Object.assign(S,JSON.parse(s))}catch(e){}
 S.luck=Math.min(S.luck,MAXLUCK);
 if(S.best<0)ALL.forEach(a=>{if(S.found[a.t]&&a.i>S.best)S.best=a.i});
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
@@ -191,42 +194,46 @@ $("inc").onclick=()=>{const c=incCost();if(S.inc<MAXINC&&S.coins>=c){S.coins-=c;
 $("r1").onclick=()=>roll(1);$("r10").onclick=()=>roll(10);
 $("luck").onclick=()=>{const c=luckCost();if(S.luck<MAXLUCK&&S.coins>=c){S.coins-=c;S.luck++;render();save()}};
 $("reset").onclick=()=>{if(confirm("Удалить весь прогресс?")){S={coins:30,luck:0,rolls:0,found:{},best:-1,inc:0,pr:0,pe:0};$("log").innerHTML="";save();render()}};
-let db=null,isOwner=false,myId=null,granted=false,me=null,pickAv="😀";
+let isOwner=false,granted=false,me=null,pickAv="😀",mode="reg";
 const AV=["😀","😎","🤖","👻","🐱","🦊","🐼","🐸","🦄","🐲","👑","🧙","🥷","🚀","🌟","💀"];
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const LS=(k,v)=>{try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v))}catch(e){return null}};
+const accs=()=>LS("gacha-accs")||{};
 $("a_rar").innerHTML=R.map((r,i)=>`<option value="${i}">${r.n}</option>`).join("");
 $("adm").onclick=()=>{const p=$("admp");p.style.display=p.style.display==="none"?"block":"none"};
 const nickKey=n=>Array.from(n.toLowerCase()).map(c=>c.codePointAt(0).toString(16)).join("-");
-function renderProf(){$("prof").innerHTML=me?`<span class="av">${esc(me.avatar)}</span><b>${esc(me.nick)}</b>${isOwner?'<span class="tag">владелец</span>':granted?'<span class="tag">админ</span>':''}`:`<span class="av">👤</span><b>Гость</b><span style="color:var(--mute);font-size:13px">войдите в Claude, чтобы создать профиль</span>`}
-function openReg(){$("reg").style.display="flex";$("avs").innerHTML=AV.map(a=>`<button class="alt avb${a===pickAv?" sel":""}" data-a="${a}">${a}</button>`).join("");
- document.querySelectorAll(".avb").forEach(b=>b.onclick=()=>{pickAv=b.dataset.a;openReg()})}
-$("reg_ok").onclick=async()=>{const n=$("reg_nick").value.trim(),st=$("reg_st");
- if(!/^[A-Za-z0-9_А-Яа-яЁё-]{3,16}$/.test(n)){st.textContent="3–16 символов: буквы, цифры, _ и -";return}
- try{const k="nicks/"+nickKey(n),d=await db.doc(k).get();
-  if(d.exists&&d.data().uid!==myId){st.textContent="Этот ник уже занят";return}
-  await db.doc(k).set({uid:myId});me={nick:n,avatar:pickAv,seen:Date.now()};await db.doc("players/"+myId).set(me);
-  $("reg").style.display="none";renderProf();renderGrants()}catch(e){st.textContent="Не удалось сохранить, попробуйте ещё раз"}};
-async function renderGrants(){if(!db||!isOwner)return;try{
- const ps=await db.collection("players").get(),ad=await db.collection("admins").get(),A=new Set(ad.docs.map(d=>d.id));let can="",has="";
- ps.docs.forEach(d=>{if(d.id===myId||!d.exists)return;const x=d.data(),row=`<div class="gr"><span>${esc(x.avatar||"👤")} ${esc(x.nick||"?")}</span>`;
-  if(A.has(d.id))has+=row+`<button class="alt" data-rv="${esc(d.id)}">Забрать</button></div>`;else can+=row+`<button data-gv="${esc(d.id)}">Выдать</button></div>`});
+async function hp(p,s){const t=s+"|"+p;try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,"0")).join("")}catch(e){let h=5381;for(const c of t)h=((h<<5)+h+c.codePointAt(0))>>>0;return "f"+h}}
+function renderProf(){$("prof").innerHTML=me?`<span class="av">${esc(me.avatar)}</span><b>${esc(me.nick)}</b>${isOwner?'<span class="tag">владелец</span>':granted?'<span class="tag">админ</span>':''}<button class="alt" id="out" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">Выйти</button>`:`<span class="av">👤</span><b>Гость</b><button id="inb" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">Войти</button>`;
+ if($("out"))$("out").onclick=()=>{try{localStorage.removeItem("gacha-cur")}catch(e){}location.reload()};
+ if($("inb"))$("inb").onclick=()=>openReg()}
+function openReg(m){if(m)mode=m;const r=mode==="reg";$("reg").style.display="flex";$("reg_t").textContent=r?"Создай профиль":"Вход";
+ $("t_reg").style.opacity=r?1:.5;$("t_in").style.opacity=r?.5:1;$("avs").style.display=r?"grid":"none";$("reg_ok").textContent=r?"Создать":"Войти";$("reg_st").textContent="";
+ $("avs").innerHTML=AV.map(a=>`<button class="alt avb${a===pickAv?" sel":""}" data-a="${a}">${a}</button>`).join("");
+ document.querySelectorAll(".avb").forEach(b=>b.onclick=()=>{pickAv=b.dataset.a;document.querySelectorAll(".avb").forEach(x=>x.classList.toggle("sel",x===b))})}
+$("t_reg").onclick=()=>openReg("reg");$("t_in").onclick=()=>openReg("in");$("reg_x").onclick=()=>{$("reg").style.display="none"};
+$("reg_ok").onclick=async()=>{const n=$("reg_nick").value.trim(),p=$("reg_pw").value,st=$("reg_st"),A=accs(),k=nickKey(n);
+ if(!/^[A-Za-z0-9_А-Яа-яЁё-]{3,16}$/.test(n)){st.textContent="Ник: 3–16 символов — буквы, цифры, _ и -";return}
+ if(p.length<4){st.textContent="Пароль: минимум 4 символа";return}
+ if(mode==="reg"){
+  if(A[k]){st.textContent="Этот ник уже занят";return}
+  const salt=Math.random().toString(36).slice(2);
+  A[k]={nick:n,avatar:pickAv,salt,hash:await hp(p,salt),role:Object.keys(A).length?"":"owner"};LS("gacha-accs",A);
+  try{localStorage.setItem(BASE+":"+k,JSON.stringify(S))}catch(e){}
+ }else if(!A[k]||A[k].hash!==await hp(p,A[k].salt)){st.textContent="Неверный ник или пароль";return}
+ try{localStorage.setItem("gacha-cur",k)}catch(e){}location.reload()};
+function setRole(k,r){const A=accs();if(A[k]){A[k].role=r;LS("gacha-accs",A)}renderGrants()}
+function renderGrants(){if(!isOwner)return;let can="",has="";
+ Object.entries(accs()).forEach(([k,x])=>{if(k===cur)return;const row=`<div class="gr"><span>${esc(x.avatar)} ${esc(x.nick)}</span>`;
+  if(x.role==="admin")has+=row+`<button class="alt" data-rv="${esc(k)}">Забрать</button></div>`;else can+=row+`<button data-gv="${esc(k)}">Выдать</button></div>`});
  $("g_can").innerHTML=can||"<i>пока никого</i>";$("g_list").innerHTML=has||"<i>никого</i>";
- document.querySelectorAll("[data-gv]").forEach(b=>b.onclick=async()=>{try{await db.doc("admins/"+b.dataset.gv).set({granted:true})}catch(e){}renderGrants()});
- document.querySelectorAll("[data-rv]").forEach(b=>b.onclick=async()=>{try{await db.doc("admins/"+b.dataset.rv).delete()}catch(e){}renderGrants()});
- }catch(e){}}
-async function initAdmin(){try{
- if(typeof claude==="undefined"){renderProf();return}
- const u=await claude.use("user");if(!u){renderProf();return}
- isOwner=await u.isOwner();myId=await u.id();db=await claude.use("db");
- if(!db||!myId){renderProf();return}
- const p=await db.doc("players/"+myId).get();
- if(p.exists){me=p.data();await db.doc("players/"+myId).set({...me,seen:Date.now()})}
- if(!isOwner)granted=(await db.doc("admins/"+myId).get()).exists;
- renderProf();if(isOwner||granted)$("adm").style.display="";
- if(isOwner){$("own").style.display="block";renderGrants()}
- if(!me)openReg();
-}catch(e){renderProf()}}
-renderProf();initAdmin();
+ document.querySelectorAll("[data-gv]").forEach(b=>b.onclick=()=>setRole(b.dataset.gv,"admin"));
+ document.querySelectorAll("[data-rv]").forEach(b=>b.onclick=()=>setRole(b.dataset.rv,""))}
+me=cur?accs()[cur]||null:null;
+if(me){isOwner=me.role==="owner";granted=me.role==="admin"}
+renderProf();
+if(isOwner||granted)$("adm").style.display="";
+if(isOwner){$("own").style.display="block";renderGrants()}
+if(!me)openReg(Object.keys(accs()).length?"in":"reg");
 $("a_give").onclick=()=>{S.coins+=Math.max(0,+$("a_coins").value||0);render();save()};
 $("a_setluck").onclick=()=>{S.luck=Math.min(MAXLUCK,Math.max(0,Math.floor(+$("a_luck").value||0)));render();save()};
 $("a_item").onclick=()=>{const i=+$("a_rar").value,its=R[i].items,t=its[Math.floor(Math.random()*its.length)];
