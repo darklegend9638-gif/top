@@ -62,23 +62,70 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
 .gr{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:3px 0}.gr button{flex:0 0 auto;padding:6px 12px}
 #fuse{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}#fuse button{padding:10px;font-size:13px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
+
+/* ===== PREMIUM PURPLE / RGB UI ===== */
+body{overflow-x:hidden;background:radial-gradient(900px 520px at 12% -8%,rgba(123,77,255,.32),transparent 62%),radial-gradient(800px 560px at 105% 8%,rgba(255,50,220,.20),transparent 58%),radial-gradient(700px 600px at 50% 110%,rgba(0,220,255,.10),transparent 60%),var(--bg)}
+body::before{content:"";position:fixed;inset:-30%;z-index:-3;pointer-events:none;background:conic-gradient(from 0deg,rgba(123,77,255,.10),rgba(255,40,220,.10),rgba(0,220,255,.08),rgba(123,77,255,.10));filter:blur(70px);animation:rgbAura 14s linear infinite}
+@keyframes rgbAura{to{transform:rotate(360deg)}}
+#stars{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.star{position:absolute;top:-30px;width:var(--sz);height:var(--sz);border-radius:50%;background:#fff;box-shadow:0 0 5px rgba(255,255,255,.95),0 0 12px var(--sc),0 0 22px var(--sc);opacity:0;animation:fall var(--dur) linear var(--delay) infinite}
+.star::after{content:"";position:absolute;width:1px;height:calc(var(--sz) * 7);top:var(--sz);left:50%;background:linear-gradient(to bottom,var(--sc),transparent);opacity:.35}
+@keyframes fall{0%{transform:translate3d(0,-50px,0);opacity:0}10%{opacity:.85}80%{opacity:.65}100%{transform:translate3d(var(--drift),115vh,0) rotate(180deg);opacity:0}}
+.glass{position:relative;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.025),0 12px 45px rgba(0,0,0,.16)}
+.glass::before{content:"";position:absolute;inset:-2px;z-index:-1;border-radius:inherit;background:linear-gradient(120deg,rgba(150,70,255,.28),rgba(255,50,220,.16),rgba(0,230,255,.18),rgba(150,70,255,.28));background-size:300% 300%;animation:rgbBorder 8s ease infinite;opacity:.45}
+@keyframes rgbBorder{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+button:not(:disabled){position:relative;overflow:hidden}
+button:not(:disabled)::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 25%,rgba(255,255,255,.20) 50%,transparent 75%);transform:translateX(-120%);animation:buttonShine 4s ease-in-out infinite;pointer-events:none}
+@keyframes buttonShine{0%,55%,100%{transform:translateX(-120%)}70%{transform:translateX(120%)}}
+.reveal-on-scroll{opacity:0;transform:translateY(34px) scale(.985);filter:blur(5px);transition:opacity .7s cubic-bezier(.2,.75,.2,1),transform .7s cubic-bezier(.2,.75,.2,1),filter .7s ease}
+.reveal-on-scroll.revealed{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+.reveal-delay-1{transition-delay:.08s}
+#resetModal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(4,1,15,.72);backdrop-filter:blur(13px);-webkit-backdrop-filter:blur(13px);opacity:0;transition:opacity .25s ease}
+#resetModal.open{opacity:1}
+#resetModal .reset-box{width:min(430px,100%);position:relative;padding:26px;border-radius:24px;border:1px solid rgba(255,255,255,.16);background:radial-gradient(circle at 15% 0%,rgba(168,75,255,.30),transparent 45%),radial-gradient(circle at 100% 100%,rgba(255,42,218,.20),transparent 45%),rgba(17,9,39,.94);box-shadow:0 0 0 1px rgba(150,70,255,.12),0 0 45px rgba(140,50,255,.28),0 25px 90px rgba(0,0,0,.55);transform:translateY(18px) scale(.96);transition:transform .35s cubic-bezier(.2,1.35,.4,1);overflow:hidden}
+#resetModal.open .reset-box{transform:translateY(0) scale(1)}
+#resetModal .reset-box::before{content:"";position:absolute;left:-25%;top:-3px;width:150%;height:3px;background:linear-gradient(90deg,#7b4dff,#ff36d5,#38e8ff,#7b4dff);background-size:200% 100%;box-shadow:0 0 18px #b34dff;animation:modalRGB 3s linear infinite}
+@keyframes modalRGB{to{background-position:200% 0}}
+.reset-icon{width:62px;height:62px;margin:0 auto 14px;display:grid;place-items:center;border-radius:20px;font-size:30px;background:linear-gradient(135deg,rgba(123,77,255,.28),rgba(255,50,220,.20));border:1px solid rgba(255,255,255,.12);box-shadow:0 0 30px rgba(170,70,255,.28),inset 0 0 22px rgba(255,255,255,.04)}
+#resetModal h3{margin:0;text-align:center;font-size:22px;background:linear-gradient(90deg,#fff,#c59cff,#ff8de7,#fff);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 5s linear infinite}
+#resetModal .reset-text{margin:9px 0 18px;text-align:center;color:#bcb3d8;font-size:14px}
+#resetModal .reset-danger{color:#ff82a5;font-weight:700}
+#resetModal .reset-actions{display:flex;gap:10px}
+#resetModal .reset-actions button{min-height:48px}
+#resetCancel{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);box-shadow:none}
+#resetConfirm{background:linear-gradient(135deg,#7b4dff,#d43cff,#ff4d9d);background-size:200% 200%;animation:confirmRGB 4s ease infinite;box-shadow:0 8px 28px rgba(185,55,255,.35)}
+@keyframes confirmRGB{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@media (prefers-reduced-motion:reduce){.star{animation:none;display:none}.reveal-on-scroll{opacity:1;transform:none;filter:none;transition:none}body::before,.glass::before,button:not(:disabled)::after,#resetModal h3,#resetConfirm{animation:none}}
+
 </style>
 </head>
 <body>
+<div id="stars" aria-hidden="true"></div>
 <div id="flash"></div>
+<div id="resetModal" role="dialog" aria-modal="true" aria-labelledby="resetTitle">
+  <div class="reset-box">
+    <div class="reset-icon">⚡</div>
+    <h3 id="resetTitle">Сбросить прогресс?</h3>
+    <div class="reset-text">Вы уверены, что хотите сбросить прогресс <span class="reset-danger">у всех игроков</span>?<br>Это действие нельзя отменить.</div>
+    <div class="reset-actions">
+      <button id="resetCancel" type="button">Отмена</button>
+      <button id="resetConfirm" type="button">Сбросить всё</button>
+    </div>
+  </div>
+</div>
 <main>
 <h1>Кристальный алтарь</h1>
 <p class="sub">Бросай, качай удачу, собери всё — вплоть до Divine</p>
 
-<div class="glass prof" id="prof"></div>
-<div class="top">
+<div class="glass prof reveal-on-scroll" id="prof"></div>
+<div class="top reveal-on-scroll">
   <div class="glass stat"><small>🪙 Монеты</small><b id="coins">0</b></div>
   <div class="glass stat"><small>🍀 Удача</small><b id="lucklv">0</b></div>
   <div class="glass stat"><small>🎲 Броски</small><b id="rolls">0</b></div>
   <div class="glass stat wide"><small>Лучшая редкость (рекорд)</small><b id="best">—</b></div>
 </div>
 
-<div class="glass stage">
+<div class="glass stage reveal-on-scroll reveal-delay-1">
   <div class="orb" id="orb"><div class="ring"></div><div class="glow"></div><div class="inner" id="em">🔮</div></div>
   <div id="nm">Сделай первый бросок</div><div id="rr" style="color:var(--mute)">Копи монеты и бросай</div>
   <div class="row"><button id="r1">Бросок · 10</button><button id="r10">×10 · 100</button></div>
@@ -86,18 +133,18 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
   <div id="pity" style="color:var(--mute);font-size:13px;margin-top:10px"></div><div id="log"></div>
 </div>
 
-<h2>Шансы с учётом удачи</h2>
-<div class="glass odds" id="odds"></div>
+<h2 class="reveal-on-scroll">Шансы с учётом удачи</h2>
+<div class="glass odds reveal-on-scroll reveal-delay-1" id="odds"></div>
 <div id="maxd" style="color:var(--mute);font-size:13px;margin:6px 4px 0"></div>
 
-<h2>Слияние (5 дубликатов → 1 предмет редкостью выше)</h2>
-<div class="glass" id="fuse"></div>
+<h2 class="reveal-on-scroll">Слияние (5 дубликатов → 1 предмет редкостью выше)</h2>
+<div class="glass reveal-on-scroll reveal-delay-1" id="fuse"></div>
 
-<h2>Коллекция <span id="colcount"></span></h2>
-<div class="grid" id="col"></div>
+<h2 class="reveal-on-scroll">Коллекция <span id="colcount"></span></h2>
+<div class="grid reveal-on-scroll reveal-delay-1" id="col"></div>
 
 <div class="row" style="margin-top:22px"><button class="alt" id="reset" style="display:none">Сбросить прогресс всем</button><button class="alt" id="setb" style="display:none">Настройки</button><button class="alt" id="adm" style="display:none">Админ</button></div>
-<div id="setp" class="glass stage" style="display:none;margin-top:12px;text-align:left">
+<div id="setp" class="glass stage reveal-on-scroll" style="display:none;margin-top:12px;text-align:left">
   <b>Настройки профиля</b>
   <div style="color:var(--mute);font-size:13px;margin-top:10px">Аватарка</div><div id="s_avs"></div>
   <div class="row" style="margin-top:0"><button id="s_av">Сохранить аватарку</button></div>
@@ -108,7 +155,7 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
   <div class="row"><input id="s_new" type="password" placeholder="Новый пароль (от 4 символов)"><button id="s_pb" style="flex:none">Сменить</button></div>
   <div id="s_st" style="font-size:14px;min-height:20px;margin-top:8px"></div>
 </div>
-<div id="admp" class="glass stage" style="display:none;margin-top:12px;text-align:left">
+<div id="admp" class="glass stage reveal-on-scroll" style="display:none;margin-top:12px;text-align:left">
   <b>Админ-панель</b>
   <div id="own" style="display:none;margin:10px 0;padding:10px;border:1px dashed var(--line);border-radius:12px"><b style="font-size:14px">Выдать доступ к админке</b>
    <div style="color:var(--mute);font-size:13px;margin-top:6px">Заходили на сайт:</div><div id="g_can" style="font-size:14px"></div>
@@ -216,10 +263,30 @@ $("fuse").onclick=e=>{const b=e.target.closest("[data-f]");if(b&&!b.disabled)fus
 $("inc").onclick=()=>{const c=incCost();if(S.inc<MAXINC&&S.coins>=c){S.coins-=c;S.inc++;render();save()}};
 $("r1").onclick=()=>roll(1);$("r10").onclick=()=>roll(10);
 $("luck").onclick=()=>{const c=luckCost();if(S.luck<MAXLUCK&&S.coins>=c){S.coins-=c;S.luck++;render();save()}};
-$("reset").onclick=async()=>{if(!(isOwner||granted)||!TOKEN)return;
- if(!confirm("Сбросить прогресс у ВСЕХ игроков? Это нельзя отменить."))return;
- const r=await rpc("gacha_reset_all",{p_token:TOKEN});if(r.error)return alert(r.error);
- S=FRESH();dirty=false;$("log").innerHTML="";render();alert("Прогресс сброшен у всех игроков")};
+let resetBusy=false;
+function openResetModal(){
+  if(!(isOwner||granted)||!TOKEN||resetBusy)return;
+  const m=$("resetModal");m.style.display="flex";
+  requestAnimationFrame(()=>m.classList.add("open"));
+}
+function closeResetModal(){
+  const m=$("resetModal");m.classList.remove("open");
+  setTimeout(()=>{if(!m.classList.contains("open"))m.style.display="none"},250);
+}
+$("reset").onclick=openResetModal;
+$("resetCancel").onclick=closeResetModal;
+$("resetModal").onclick=e=>{if(e.target===$("resetModal"))closeResetModal()};
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("resetModal").classList.contains("open"))closeResetModal()});
+$("resetConfirm").onclick=async()=>{
+  if(resetBusy||!(isOwner||granted)||!TOKEN)return;
+  resetBusy=true;
+  const b=$("resetConfirm");b.disabled=true;b.textContent="Сбрасываем…";
+  const r=await rpc("gacha_reset_all",{p_token:TOKEN});
+  if(r.error){resetBusy=false;b.disabled=false;b.textContent="Сбросить всё";closeResetModal();return alert(r.error)}
+  S=FRESH();dirty=false;$("log").innerHTML="";render();closeResetModal();
+  setTimeout(()=>alert("Прогресс сброшен у всех игроков"),280);
+  resetBusy=false;b.disabled=false;b.textContent="Сбросить всё";
+};
 let isOwner=false,granted=false,me=null,pickAv="😀",mode="reg";
 const AV=["😀","😎","🤖","👻","🐱","🦊","🐼","🐸","🦄","🐲","👑","🧙","🥷","🚀","🌟","💀"];
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -282,6 +349,29 @@ $("a_item").onclick=()=>{const i=+$("a_rar").value,its=R[i].items,t=its[Math.flo
  S.found[t]=(S.found[t]||0)+1;show(i,t,"Выдано админом");render();save()};
 $("a_all").onclick=()=>{ALL.forEach(a=>{if(!S.found[a.t])S.found[a.t]=1});render();save()};
 setInterval(()=>{if(!ready)return;S.coins+=inc();render();save()},1000);
+
+/* ===== Falling stars + scroll reveal ===== */
+(function(){
+  const layer=$("stars"),colors=["#a86bff","#ff5bd8","#5ee7ff","#8b7cff","#ffffff"];
+  const count=Math.min(70,Math.max(34,Math.floor(innerWidth/14)));
+  for(let i=0;i<count;i++){
+    const s=document.createElement("i");s.className="star";
+    s.style.left=(Math.random()*100)+"vw";
+    s.style.setProperty("--sz",(Math.random()*2.6+.8).toFixed(2)+"px");
+    s.style.setProperty("--dur",(Math.random()*8+6).toFixed(2)+"s");
+    s.style.setProperty("--delay",(-Math.random()*14).toFixed(2)+"s");
+    s.style.setProperty("--drift",((Math.random()-.5)*180).toFixed(0)+"px");
+    s.style.setProperty("--sc",colors[Math.floor(Math.random()*colors.length)]);
+    layer.appendChild(s);
+  }
+  const items=document.querySelectorAll(".reveal-on-scroll");
+  if("IntersectionObserver" in window){
+    const io=new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("revealed");io.unobserve(entry.target)}});
+    },{threshold:.08,rootMargin:"0px 0px -40px 0px"});
+    items.forEach(el=>io.observe(el));
+  }else items.forEach(el=>el.classList.add("revealed"));
+})();
 render();
 </script>
 </body>
