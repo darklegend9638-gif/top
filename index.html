@@ -67,7 +67,7 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
 body{overflow-x:hidden;background:radial-gradient(900px 520px at 12% -8%,rgba(123,77,255,.32),transparent 62%),radial-gradient(800px 560px at 105% 8%,rgba(255,50,220,.20),transparent 58%),radial-gradient(700px 600px at 50% 110%,rgba(0,220,255,.10),transparent 60%),var(--bg)}
 body::before{content:"";position:fixed;inset:-30%;z-index:-3;pointer-events:none;background:conic-gradient(from 0deg,rgba(123,77,255,.10),rgba(255,40,220,.10),rgba(0,220,255,.08),rgba(123,77,255,.10));filter:blur(70px);animation:rgbAura 14s linear infinite}
 @keyframes rgbAura{to{transform:rotate(360deg)}}
-#stars{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+
 .star{position:absolute;top:-30px;width:var(--sz);height:var(--sz);border-radius:50%;background:#fff;box-shadow:0 0 5px rgba(255,255,255,.95),0 0 12px var(--sc),0 0 22px var(--sc);opacity:0;animation:fall var(--dur) linear var(--delay) infinite}
 .star::after{content:"";position:absolute;width:1px;height:calc(var(--sz) * 7);top:var(--sz);left:50%;background:linear-gradient(to bottom,var(--sc),transparent);opacity:.35}
 @keyframes fall{0%{transform:translate3d(0,-50px,0);opacity:0}10%{opacity:.85}80%{opacity:.65}100%{transform:translate3d(var(--drift),115vh,0) rotate(180deg);opacity:0}}
@@ -158,25 +158,98 @@ button:not(:disabled)::after{content:"";position:absolute;inset:0;background:lin
 
 /* Reduce expensive effects on mobile / while scrolling */
 @media (max-width:700px){
-  #stars .star:nth-child(n+45){display:none}
+  
   body::before{animation-duration:18s}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
 
+
+/* ===== V3 MENU ===== */
+#topMenuBtn{
+  position:fixed;
+  top:14px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:1200;
+  width:48px;height:42px;
+  border:1px solid rgba(190,100,255,.55);
+  border-radius:14px;
+  background:rgba(20,10,38,.86);
+  color:#fff;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  box-shadow:0 0 18px rgba(150,60,255,.28);
+  font-size:22px;
+  line-height:1;
+  cursor:pointer;
+  transition:opacity .22s ease,transform .22s ease,box-shadow .2s ease;
+}
+#topMenuBtn.menu-hidden{
+  opacity:0;
+  pointer-events:none;
+  transform:translate(-50%,-14px);
+}
+#topMenuBtn:active{transform:translateX(-50%) scale(.94)}
+#topMenu{
+  position:fixed;
+  top:65px;
+  left:50%;
+  z-index:1199;
+  width:min(280px,calc(100vw - 32px));
+  padding:10px;
+  transform:translate(-50%,-10px) scale(.97);
+  opacity:0;
+  pointer-events:none;
+  border:1px solid rgba(190,100,255,.5);
+  border-radius:18px;
+  background:rgba(17,9,31,.95);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  box-shadow:0 12px 40px rgba(0,0,0,.45),0 0 25px rgba(160,60,255,.2);
+  transition:opacity .18s ease,transform .18s ease;
+}
+#topMenu.open{opacity:1;transform:translate(-50%,0) scale(1);pointer-events:auto}
+#topMenu button{
+  width:100%;
+  padding:12px 14px;
+  margin:3px 0;
+  border:0;
+  border-radius:12px;
+  background:rgba(255,255,255,.055);
+  color:#fff;
+  text-align:left;
+  font-size:15px;
+  cursor:pointer;
+}
+#topMenu button:hover{background:rgba(180,80,255,.16)}
+.menu-section{
+  padding:7px 10px 4px;
+  font-size:11px;
+  color:#b99ccc;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+@media (prefers-reduced-motion:reduce){
+  #topMenuBtn,#topMenu{transition:none}
+}
+
 </style>
 </head>
 <body>
 
+
 <button id="topMenuBtn" aria-label="Открыть меню">☰</button>
 <div id="topMenu">
-  <div class="menu-section">Навигация</div>
-  <button data-scroll="settings">⚙️ Настройки</button>
+  <div class="menu-section">Меню</div>
+  <button data-action="profile">👤 Смена профиля</button>
+  <button data-action="admin" id="menuAdmin" style="display:none">🛡️ Админ-панель</button>
+</div>
+<button data-scroll="settings">⚙️ Настройки</button>
   <button data-scroll="admin" id="menuAdmin" style="display:none">🛡️ Админ-панель</button>
 </div>
 
-<div id="stars" aria-hidden="true"></div>
 <div id="flash"></div>
 <div id="resetModal" role="dialog" aria-modal="true" aria-labelledby="resetTitle">
   <div class="reset-box">
@@ -461,50 +534,71 @@ render();
 </div>
 
 
+
 <script>
 (() => {
-  const menuBtn = document.getElementById("topMenuBtn");
+  const btn = document.getElementById("topMenuBtn");
   const menu = document.getElementById("topMenu");
-  const success = document.getElementById("resetSuccessModal");
-  const closeSuccess = document.getElementById("closeResetSuccess");
+  const adminBtn = document.getElementById("menuAdmin");
 
-  function toggleMenu(force) {
-    const open = force === undefined ? !menu.classList.contains("open") : force;
-    menu.classList.toggle("open", open);
-  }
-  menuBtn?.addEventListener("click", e => { e.stopPropagation(); toggleMenu(); });
+  if (!btn || !menu) return;
+
+  const closeMenu = () => menu.classList.remove("open");
+  const toggleMenu = () => menu.classList.toggle("open");
+
+  btn.addEventListener("click", e => {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
   document.addEventListener("click", e => {
-    if (menu.classList.contains("open") && !menu.contains(e.target) && e.target !== menuBtn) toggleMenu(false);
+    if (menu.classList.contains("open") &&
+        !menu.contains(e.target) && e.target !== btn) closeMenu();
   });
 
-  document.querySelectorAll("#topMenu [data-scroll]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const id = btn.dataset.scroll;
-      toggleMenu(false);
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({behavior:"smooth", block:"start"});
-    });
+  menu.querySelector('[data-action="profile"]')?.addEventListener("click", () => {
+    closeMenu();
+    const profile = document.getElementById("settings");
+    if (profile) profile.style.display = "";
+    profile?.scrollIntoView({behavior:"smooth",block:"start"});
   });
 
-  window.openResetSuccess = () => {
-    if (!success) return;
-    success.classList.add("open");
-    success.setAttribute("aria-hidden","false");
-  };
-  function closeResetSuccess() {
-    success?.classList.remove("open");
-    success?.setAttribute("aria-hidden","true");
+  adminBtn?.addEventListener("click", () => {
+    closeMenu();
+    const admin = document.getElementById("admin");
+    if (admin) admin.style.display = "";
+    admin?.scrollIntoView({behavior:"smooth",block:"start"});
+  });
+
+  // Only owner/admin gets the admin tab. Reset itself stays inside the admin panel.
+  if (adminBtn && (window.isOwner === true || window.granted === true)) {
+    adminBtn.style.display = "block";
   }
-  closeSuccess?.addEventListener("click", closeResetSuccess);
-  success?.addEventListener("click", e => { if (e.target === success) closeResetSuccess(); });
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape") { toggleMenu(false); closeResetSuccess(); }
-  });
 
-  // Show admin menu item only when the existing admin area is actually visible/authorized.
-  const adminPanel = document.getElementById("admin");
-  const menuAdmin = document.getElementById("menuAdmin");
-  if (menuAdmin && (window.isOwner || window.granted)) menuAdmin.style.display = "block";
+  // Menu is visible at the start; after scrolling down it disappears.
+  let lastY = window.scrollY;
+  let ticking = false;
+  const updateMenu = () => {
+    const y = window.scrollY;
+    if (y > 90) {
+      btn.classList.add("menu-hidden");
+      closeMenu();
+    } else {
+      btn.classList.remove("menu-hidden");
+    }
+    lastY = y;
+    ticking = false;
+  };
+  window.addEventListener("scroll", () => {
+    if (!ticking) {
+      requestAnimationFrame(updateMenu);
+      ticking = true;
+    }
+  }, {passive:true});
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") closeMenu();
+  });
 })();
 </script>
 
