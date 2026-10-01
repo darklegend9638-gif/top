@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Кристальный алтарь — Гача</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#0b0816;--bg2:#1b1040;--glass:rgba(255,255,255,.06);--line:rgba(255,255,255,.12);--text:#f1edff;--mute:#a69fc6;--btn1:#7b4dff;--btn2:#c04dff;--inp:#120d26;
+--c0:#9aa0ad;--c1:#5fd068;--c2:#4a9dff;--c3:#b25cff;--c4:#ffb02e;--c5:#ff4f6d;--c6:#1ee3cf;--c7:#ffe98a}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f3effd;--bg2:#d9ccff;--glass:rgba(255,255,255,.7);--line:rgba(60,30,120,.18);--text:#1d1536;--mute:#5d5480;--inp:#fff}}
+:root[data-theme="dark"]{--bg:#0b0816;--bg2:#1b1040}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box}
+body{margin:0;min-height:100%;color:var(--text);font:16px/1.45 "Trebuchet MS","Segoe UI",sans-serif;
+background:radial-gradient(900px 500px at 15% -10%,var(--bg2),transparent 60%),radial-gradient(700px 500px at 100% 10%,#4a1566 0,transparent 55%),var(--bg);background-attachment:fixed}
+main{max-width:660px;margin:0 auto;padding:60px 14px 40px}
+h1{font:800 32px/1.05 Georgia,"Times New Roman",serif;text-align:center;margin:6px 0 4px;letter-spacing:1px;
+background:linear-gradient(90deg,#ffe98a,#ff7ad9,#7bdcff,#ffe98a);background-size:300% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:flow 8s linear infinite}
+@keyframes flow{to{background-position:300% 0}}
+.sub{text-align:center;color:var(--mute);margin:0 0 16px;font-size:14px}
+.glass{background:var(--glass);border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.top{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.stat{padding:10px 12px}.stat small{color:var(--mute);display:block;font-size:12px;text-transform:uppercase;letter-spacing:.8px}.stat b{font-size:21px}
+.stat.wide{grid-column:1/-1}
+.stage{padding:18px;text-align:center}
+.orb{position:relative;width:190px;height:190px;margin:4px auto 14px;display:grid;place-items:center}
+.ring{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,var(--rc,#7b4dff),transparent 30%,var(--rc,#7b4dff) 55%,transparent 80%,var(--rc,#7b4dff));filter:blur(.5px);animation:spin 6s linear infinite;
+-webkit-mask:radial-gradient(circle,transparent 62%,#000 64%);mask:radial-gradient(circle,transparent 62%,#000 64%)}
+.glow{position:absolute;inset:14px;border-radius:50%;box-shadow:0 0 50px var(--rc,#7b4dff),inset 0 0 40px color-mix(in srgb,var(--rc,#7b4dff) 40%,transparent);transition:box-shadow .4s}
+.inner{position:relative;width:140px;height:140px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,color-mix(in srgb,var(--rc,#7b4dff) 35%,#000),#0a0714 70%);border:1px solid var(--line);font-size:64px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.orb.charge .ring{animation-duration:.5s}.orb.charge .inner{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px) rotate(-3deg)}40%{transform:translateX(5px) rotate(3deg)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.orb.reveal .inner{animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
+#nm{font:700 22px Georgia,serif;min-height:28px}#rr{font-size:14px;min-height:22px;letter-spacing:.5px}
+.row{display:flex;gap:10px;margin-top:12px}
+button{font:inherit;font-weight:700;border:0;border-radius:14px;padding:14px;background:linear-gradient(135deg,var(--btn1),var(--btn2));color:#fff;cursor:pointer;flex:1;box-shadow:0 6px 18px rgba(123,77,255,.35);transition:transform .1s,filter .2s}
+button:active:not(:disabled){transform:scale(.97)}button:hover:not(:disabled){filter:brightness(1.12)}
+button:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}button:focus-visible{outline:3px solid var(--c4);outline-offset:2px}
+button.alt{background:var(--glass);color:var(--text);border:1px solid var(--line);box-shadow:none}
+h2{font-size:15px;text-transform:uppercase;letter-spacing:1.2px;color:var(--mute);margin:26px 4px 8px}
+.odds{padding:6px 14px}
+.od{display:grid;grid-template-columns:110px 1fr 84px;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px}
+.od:last-child{border:0}.od .bar{height:6px;border-radius:4px;background:var(--line);overflow:hidden}.od .bar i{display:block;height:100%;border-radius:4px}
+.od span:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.it{padding:10px;font-size:14px;border-radius:14px}.it.off{opacity:.3}.it .e{font-size:28px}
+#log{max-height:110px;overflow:auto;font-size:14px;margin-top:12px;text-align:left}
+#log div{padding:1px 0}
+#flash{position:fixed;inset:0;pointer-events:none;opacity:0;background:radial-gradient(circle,var(--fc,#fff),transparent 70%)}
+#flash.go{animation:fl .9s ease-out}
+@keyframes fl{0%{opacity:.7}100%{opacity:0}}
+input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;border:1px solid var(--line);background:var(--inp);color:var(--text)}
+.prof{display:flex;align-items:center;gap:10px;padding:10px 14px;margin-bottom:12px}
+.av{font-size:30px;line-height:1}.tag{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--btn1);color:#fff}
+#reg{position:fixed;inset:0;background:rgba(5,3,15,.82);display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
+#reg .box{width:100%;max-width:380px;padding:20px;background:var(--bg2);border:1px solid var(--line);border-radius:18px}
+#avs,#s_avs{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin:10px 0}
+.avb{padding:6px 0;font-size:22px;flex:none}.avb.sel{outline:2px solid var(--c4)}
+.gr{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:3px 0}.gr button{flex:0 0 auto;padding:6px 12px}
+#fuse{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}#fuse button{padding:10px;font-size:13px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+.rv{opacity:0;transform:translateY(28px) scale(.98);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.8,.2,1);will-change:opacity,transform}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+
+#menuBtn{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);right:12px;z-index:50;flex:none;width:44px;height:44px;padding:0;flex-direction:column;align-items:center;justify-content:center;gap:5px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+#menuBtn span{display:block;width:20px;height:2px;border-radius:2px;background:var(--text);transition:transform .3s ease,opacity .2s ease}
+#menuBtn.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+#menuBtn.open span:nth-child(2){opacity:0}
+#menuBtn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+#menu{position:fixed;top:calc(env(safe-area-inset-top,0px) + 62px);right:12px;z-index:50;min-width:240px;max-width:calc(100% - 24px);padding:8px;display:flex;flex-direction:column;gap:6px;background:var(--bg2);border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 40px rgba(0,0,0,.4);
+opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale(.96);transform-origin:top right;transition:opacity .25s ease,transform .25s cubic-bezier(.2,.8,.2,1),visibility .25s}
+#menu.open{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+#menu button{flex:none;text-align:left;box-shadow:none;padding:12px 14px}
+#menu #reset{border-color:var(--c5)}
+@media (prefers-reduced-motion:reduce){#menu,#menuBtn span{transition:none}}
+
+.confirm-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(5,3,15,.72);z-index:1000}.confirm-modal.show{display:flex}.confirm-modal .modal-box{width:100%;max-width:390px;padding:22px;background:var(--bg2);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,.45);text-align:center}.confirm-modal .modal-title{font:700 20px Georgia,serif;margin-bottom:10px}.confirm-modal .modal-text{color:var(--mute);font-size:14px;margin-bottom:18px}.confirm-modal .modal-actions{display:flex;gap:10px}.confirm-modal .modal-actions button{flex:1}
+</style>
+</head>
+<body>
+<div id="flash"></div>
+<button class="alt" id="menuBtn" aria-label="Меню" aria-expanded="false" style="display:none"><span></span><span></span><span></span></button>
+<div id="menu">
+ <button class="alt" id="setb" style="display:none">👤 Изменить профиль</button>
+ <button class="alt" id="adm" style="display:none">🛠️ Админ панель</button>
+ <button class="alt" id="reset" style="display:none">🗑️ Очистить весь прогресс</button>
+</div>
+<main>
+<h1>Кристальный алтарь</h1>
+<p class="sub">Бросай, качай удачу, собери всё — вплоть до Divine</p>
+
+<div class="glass prof" id="prof"></div>
+<div class="top">
+  <div class="glass stat"><small>🪙 Монеты</small><b id="coins">0</b></div>
+  <div class="glass stat"><small>🍀 Удача</small><b id="lucklv">0</b></div>
+  <div class="glass stat"><small>🎲 Броски</small><b id="rolls">0</b></div>
+  <div class="glass stat wide"><small>Лучшая редкость (рекорд)</small><b id="best">—</b></div>
+</div>
+
+<div class="glass stage">
+  <div class="orb" id="orb"><div class="ring"></div><div class="glow"></div><div class="inner" id="em">🔮</div></div>
+  <div id="nm">Сделай первый бросок</div><div id="rr" style="color:var(--mute)">Копи монеты и бросай</div>
+  <div class="row"><button id="r1">Бросок · 10</button><button id="r10">×10 · 100</button></div>
+  <div class="row"><button class="alt" id="luck"></button><button class="alt" id="inc"></button></div>
+  <div id="pity" style="color:var(--mute);font-size:13px;margin-top:10px"></div><div id="log"></div>
+</div>
+
+<h2>Шансы с учётом удачи</h2>
+<div class="glass odds" id="odds"></div>
+<div id="maxd" style="color:var(--mute);font-size:13px;margin:6px 4px 0"></div>
+
+<h2>Слияние (5 дубликатов → 1 предмет редкостью выше)</h2>
+<div class="glass" id="fuse"></div>
+
+<h2>Коллекция <span id="colcount"></span></h2>
+<div class="grid" id="col"></div>
+
+<div id="setp" class="glass stage" style="display:none;margin-top:12px;text-align:left">
+  <b>Настройки профиля</b>
+  <div style="color:var(--mute);font-size:13px;margin-top:10px">Аватарка</div><div id="s_avs"></div>
+  <div class="row" style="margin-top:0"><button id="s_av">Сохранить аватарку</button></div>
+  <div style="color:var(--mute);font-size:13px;margin-top:14px">Никнейм (меняется раз в 7 дней)</div>
+  <div class="row"><input id="s_nick" maxlength="16" placeholder="Новый ник"><button id="s_nb" style="flex:none">Сменить</button></div>
+  <div style="color:var(--mute);font-size:13px;margin-top:14px">Пароль</div>
+  <div class="row"><input id="s_old" type="password" placeholder="Текущий пароль"></div>
+  <div class="row"><input id="s_new" type="password" placeholder="Новый пароль (от 4 символов)"><button id="s_pb" style="flex:none">Сменить</button></div>
+  <div id="s_st" style="font-size:14px;min-height:20px;margin-top:8px"></div>
+</div>
+<div id="admp" class="glass stage" style="display:none;margin-top:12px;text-align:left">
+  <b>Админ-панель</b>
+  <div id="own" style="display:none;margin:10px 0;padding:10px;border:1px dashed var(--line);border-radius:12px"><b style="font-size:14px">Выдать доступ к админке</b>
+   <div style="color:var(--mute);font-size:13px;margin-top:6px">Заходили на сайт:</div><div id="g_can" style="font-size:14px"></div>
+   <div style="color:var(--mute);font-size:13px;margin-top:8px">Есть доступ:</div><div id="g_list" style="font-size:14px"></div></div>
+  <div class="row"><input id="a_coins" type="number" value="1000"><button id="a_give">Выдать монеты</button></div>
+  <div class="row"><input id="a_luck" type="number" value="10"><button id="a_setluck">Уровень удачи</button></div>
+  <div class="row"><select id="a_rar"></select><button id="a_item">Выдать предмет</button></div>
+  <div class="row"><button class="alt" id="a_all">Открыть всю коллекцию</button></div>
+</div>
+</main>
+<div id="confirmModal" class="confirm-modal"><div class="modal-box"><div class="modal-title">⚠️ Обнуление прогресса</div><div class="modal-text">Вы уверены, что хотите обнулить прогресс всех игроков?<br>Это действие нельзя отменить.</div><div class="modal-actions"><button class="alt" id="confirmNo">Отмена</button><button id="confirmYes">Обнулить</button></div></div></div><div id="noticeModal" class="confirm-modal"><div class="modal-box"><div class="modal-title" id="noticeTitle">Готово</div><div class="modal-text" id="noticeText"></div><div class="modal-actions"><button id="noticeOk">Понятно</button></div></div></div><div id="reg"><div class="box"><b style="font-size:20px" id="reg_t">Создай профиль</b>
+ <div class="row" style="margin:8px 0"><button class="alt" id="t_reg">Регистрация</button><button class="alt" id="t_in">Вход</button></div>
+ <input id="reg_nick" maxlength="16" placeholder="Никнейм" autocomplete="username" style="width:100%">
+ <input id="reg_pw" type="password" maxlength="40" placeholder="Пароль (от 4 символов)" style="width:100%;margin-top:8px">
+ <div id="avs"></div>
+ <div id="reg_st" style="color:var(--c5);font-size:14px;min-height:20px"></div>
+ <div class="row"><button id="reg_ok">Создать</button><button class="alt" id="reg_x" style="flex:none">Позже</button></div></div></div>
+
+<script>
+const R=[
+ {n:"Common",ru:"Обычный",w:0,v:1,c:"var(--c0)",items:["🪨 Камень","🍂 Лист","🥄 Ложка","🧦 Носок"]},
+ {n:"Uncommon",ru:"Необычный",w:28.5,v:2,c:"var(--c1)",items:["🍀 Клевер","🗝️ Ключ","🕯️ Свеча","🧪 Зелье"]},
+ {n:"Rare",ru:"Редкий",w:17.5,v:4,c:"var(--c2)",items:["💎 Сапфир","🛡️ Щит","📜 Свиток","🦉 Сова"]},
+ {n:"Epic",ru:"Эпический",w:8.5,v:10,c:"var(--c3)",items:["🔮 Шар судьбы","🗡️ Клинок теней","🦄 Единорог"]},
+ {n:"Legendary",ru:"Легендарный",w:1,v:40,c:"var(--c4)",items:["👑 Корона королей","🐉 Дракон","⚡ Молния Зевса"]},
+ {n:"Mythic",ru:"Мифический",w:.05,v:150,c:"var(--c5)",items:["🔥 Феникс","🌌 Осколок галактики","🐙 Кракен"]},
+ {n:"Secret",ru:"Секретный",w:.004,v:600,c:"var(--c6)",items:["🕳️ Чёрная дыра","🎭 Маска незнакомца","⌛ Забытое время"]},
+ {n:"Divine",ru:"Божественный",w:.0004,v:2500,c:"var(--c7)",items:["☀️ Сердце солнца","👁️ Око вселенной","✨ Первая звезда"]}
+];
+R[0].w=+(100-R.slice(1).reduce((a,r)=>a+r.w,0)).toFixed(4);
+const ALL=[];R.forEach((r,i)=>r.items.forEach(t=>ALL.push({i,t})));
+const $=id=>document.getElementById(id);
+const INCOME=1,MAXLUCK=20,MAXINC=15,PL=99,PM=1000,PS=10000;
+const inc=()=>INCOME+S.inc,incCost=()=>Math.floor(50*Math.pow(1.55,S.inc));
+const setsDone=()=>R.filter(r=>r.items.every(t=>S.found[t])).length;
+const FRESH=()=>({coins:30,luck:0,rolls:0,found:{},best:-1,inc:0,pl:0,pm:0,ps:0});
+let S=FRESH(),busy=false;
+const SB_URL="https://ybjnbrioosiumcnoqvbz.supabase.co",SB_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inliam5icmlvb3NpdW1jbm9xdmJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NjMyMTksImV4cCI6MjEwNjQzOTIxOX0.PO15psCKHeawvXdS50UwF7u7Gq1scL02TM2djXWwIBs";
+async function rpc(fn,args,keep){try{const r=await fetch(SB_URL+"/rest/v1/rpc/"+fn,{method:"POST",keepalive:!!keep,headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},body:JSON.stringify(args||{})});
+ const j=await r.json().catch(()=>null);if(!r.ok)return{error:(j&&j.message)||"Ошибка сервера"};return{data:j}}catch(e){return{error:"Нет связи с сервером"}}}
+const BASE="gacha-v2",KEY=BASE;let TOKEN=null;try{TOKEN=localStorage.getItem("gacha-token")}catch(e){}
+let ready=!TOKEN,dirty=false;
+function normS(){S.luck=Math.min(S.luck,MAXLUCK);if(S.best<0)ALL.forEach(a=>{if(S.found[a.t]&&a.i>S.best)S.best=a.i})}
+if(!TOKEN){try{const s=localStorage.getItem(KEY)||localStorage.getItem("gacha-v1");if(s)S=Object.assign(S,JSON.parse(s))}catch(e){}}
+normS();
+const save=()=>{if(!ready)return;if(TOKEN)dirty=true;else try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+async function push(keep){if(!TOKEN||!ready||!dirty)return;dirty=false;const r=await rpc("gacha_save",{p_token:TOKEN,p_save:S},keep);
+ if(r.error){dirty=true;return}
+ if(r.data&&r.data.reset){S=Object.assign(FRESH(),r.data.save);normS();dirty=false;$("log").innerHTML="";render()}}
+setInterval(()=>push(),5000);
+document.addEventListener("visibilitychange",()=>{if(document.hidden)push(true)});addEventListener("pagehide",()=>push(true));
+const SUF=["","K","M","B","T","Qa","Qi","Sx","Sp","Oc","No","Dc"];
+const fmt=n=>{if(n<1e4)return Math.floor(n).toString();let i=Math.floor(Math.log10(n)/3),v=n/Math.pow(1000,i);if(+v.toFixed(2)>=1000){i++;v/=1000}return i>=SUF.length?n.toExponential(2):(+v.toFixed(2))+SUF[i]}
+const luckCost=()=>Math.floor(100*Math.pow(1.4,S.luck));
+const weights=(l=S.luck)=>{const m=1+l*.07;return R.map((r,i)=>r.w*Math.pow(m,i))};
+const fmtP=p=>p>=1?p.toFixed(1)+"%":p>=.1?p.toFixed(2)+"%":"1 из "+fmt(Math.round(100/p));
+function pick(){const w=weights(),t=w.reduce((a,b)=>a+b,0);let x=Math.random()*t,i=0;
+ for(;i<w.length;i++){if((x-=w[i])<0)break}if(i>=w.length)i=0;
+ if(S.ps>=PS-1&&i<6)i=6;else if(S.pm>=PM-1&&i<5)i=5;else if(S.pl>=PL-1&&i<4)i=4;
+ S.pl=i>=4?0:S.pl+1;S.pm=i>=5?0:S.pm+1;S.ps=i>=6?0:S.ps+1;return i}
+const dupes=i=>R[i].items.reduce((a,t)=>a+Math.max(0,(S.found[t]||0)-1),0);
+function fuse(i){if(busy||dupes(i)<5)return;let need=5;
+ for(const t of R[i].items){while(need>0&&(S.found[t]||0)>1){S.found[t]--;need--}}
+ const its=R[i+1].items,t=its[Math.floor(Math.random()*its.length)];S.found[t]=(S.found[t]||0)+1;if(i+1>S.best)S.best=i+1;
+ show(i+1,t,"слияние");render();save()}
+function show(i,t,extra){
+ const [e,...n]=t.split(" "),o=$("orb");
+ o.style.setProperty("--rc",R[i].c);$("em").textContent=e;$("nm").textContent=n.join(" ");
+ $("rr").textContent=R[i].n+" · "+R[i].ru+(extra?" · "+extra:"");$("rr").style.color=R[i].c;
+ o.classList.remove("reveal");void o.offsetWidth;o.classList.add("reveal");
+ if(i>=4){const f=$("flash");f.style.setProperty("--fc",R[i].c);f.classList.remove("go");void f.offsetWidth;f.classList.add("go")}
+}
+function roll(n){
+ const cost=10*n;if(busy||!ready||S.coins<cost)return;S.coins-=cost;busy=true;
+ let best=-1,bi=null,gain=0,lines=[];
+ for(let k=0;k<n;k++){
+  const i=pick(),its=R[i].items,t=its[Math.floor(Math.random()*its.length)];
+  S.rolls++;S.found[t]=(S.found[t]||0)+1;gain+=R[i].v;
+  if(i>best){best=i;bi=t}if(i>S.best)S.best=i;
+  if(i>=3)lines.push(`<div style="color:${R[i].c}">${R[i].ru}: ${t}</div>`);
+ }
+ gain=Math.floor(gain*(1+.1*setsDone()));S.coins+=gain;render();save();
+ const o=$("orb");o.classList.add("charge");$("nm").textContent="…";$("rr").textContent="";
+ setTimeout(()=>{o.classList.remove("charge");show(best,bi,"+"+fmt(gain));
+  if(lines.length)$("log").innerHTML=lines.join("")+$("log").innerHTML;
+  busy=false;render()},n>1?650:450);
+}
+function render(){
+ $("coins").textContent=fmt(S.coins);$("rolls").textContent=S.rolls;
+ const b=$("best");if(S.best>=0){b.textContent=R[S.best].n+" · "+R[S.best].ru;b.style.color=R[S.best].c}else{b.textContent="—";b.style.color=""}
+ $("r1").disabled=busy||S.coins<10;$("r10").disabled=busy||S.coins<100;
+ const lc=luckCost(),mx=S.luck>=MAXLUCK;$("luck").textContent=mx?`Удача на максимуме (${MAXLUCK}/${MAXLUCK})`:`Прокачать удачу до ${S.luck+1} · ${fmt(lc)}`;$("luck").disabled=mx||S.coins<lc;
+ $("inc").textContent=S.inc>=MAXINC?"Доход на максимуме":`Доход ${inc()}→${inc()+1}/с · ${fmt(incCost())}`;$("inc").disabled=S.inc>=MAXINC||S.coins<incCost();
+ $("pity").textContent=`Гарант: Legendary через ${fmt(Math.max(1,PL-(S.pl||0)))} бр. · Mythic через ${fmt(Math.max(1,PM-(S.pm||0)))} бр. · Secret через ${fmt(Math.max(1,PS-(S.ps||0)))} бр. · доход ${inc()}/с`;
+ $("fuse").innerHTML=R.slice(0,7).map((r,i)=>`<button class="alt" data-f="${i}" ${dupes(i)<5?"disabled":""} style="border-color:${r.c}">${r.n}: ${dupes(i)}/5 → ${R[i+1].n}</button>`).join("");$("lucklv").textContent=S.luck+(mx?" (MAX)":"");
+ const w=weights(),t=w.reduce((a,b)=>a+b,0);
+ $("odds").innerHTML=R.map((r,i)=>{const p=w[i]/t*100,bw=Math.max(2,Math.min(100,Math.log10(p*1e4+1)/6*100));
+  return `<div class="od"><span style="color:${r.c};font-weight:700">${r.n}</span><span class="bar"><i style="width:${bw}%;background:${r.c}"></i></span><span>${fmtP(p)}</span></div>`}).join("");
+ const wm=weights(MAXLUCK),pm=wm[7]/wm.reduce((a,b)=>a+b,0)*100;$("maxd").textContent=`На максимуме удачи (${MAXLUCK}) шанс Divine: ${pm.toFixed(3)}% (${fmtP(pm)})`;
+ const got=ALL.filter(a=>S.found[a.t]).length;$("colcount").textContent=`${got}/${ALL.length} · бонус монет +${setsDone()*10}%`;
+ $("col").innerHTML=ALL.map(a=>{const n=S.found[a.t]||0,e=a.t.split(" ")[0];
+  return `<div class="glass it ${n?"":"off"}" style="${n?"border-color:"+R[a.i].c:""}"><div class="e">${n?e:"❔"}</div>${n?a.t.slice(e.length+1):"???"}<div style="color:${R[a.i].c};font-size:12px">${R[a.i].ru}${n?" ×"+n:""}</div></div>`}).join("");
+}
+$("fuse").onclick=e=>{const b=e.target.closest("[data-f]");if(b&&!b.disabled)fuse(+b.dataset.f)};
+$("inc").onclick=()=>{const c=incCost();if(S.inc<MAXINC&&S.coins>=c){S.coins-=c;S.inc++;render();save()}};
+$("r1").onclick=()=>roll(1);$("r10").onclick=()=>roll(10);
+$("luck").onclick=()=>{const c=luckCost();if(S.luck<MAXLUCK&&S.coins>=c){S.coins-=c;S.luck++;render();save()}};
+function showNotice(title,text,ok=true){$("noticeTitle").textContent=(ok?"✨ ":"⚠️ ")+title;$("noticeText").textContent=text;$("noticeModal").classList.add("show")}$("noticeOk").onclick=()=>$("noticeModal").classList.remove("show");$("noticeModal").onclick=e=>{if(e.target===$("noticeModal"))$("noticeModal").classList.remove("show")};$("reset").onclick=async()=>{if(!isOwner||!TOKEN)return;$("confirmModal").classList.add("show")};$("confirmNo").onclick=()=>$("confirmModal").classList.remove("show");$("confirmModal").onclick=e=>{if(e.target===$("confirmModal"))$("confirmModal").classList.remove("show")};$("confirmYes").onclick=async()=>{$("confirmModal").classList.remove("show");const r=await rpc("gacha_reset_all",{p_token:TOKEN});if(r.error){showNotice("Ошибка",r.error,false);return}S=FRESH();dirty=false;$("log").innerHTML="";render();showNotice("Готово","Прогресс всех игроков успешно обнулён.",true)};
+let isOwner=false,granted=false,me=null,pickAv="😀",mode="reg";
+const AV=["😀","😎","🤖","👻","🐱","🦊","🐼","🐸","🦄","🐲","👑","🧙","🥷","🚀","🌟","💀"];
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+$("a_rar").innerHTML=R.map((r,i)=>`<option value="${i}">${r.n}</option>`).join("");
+$("adm").onclick=()=>{const p=$("admp");p.style.display=p.style.display==="none"?"block":"none"};
+function renderProf(){$("menuBtn").style.display=me?"":"none";$("prof").innerHTML=me?`<span class="av">${esc(me.avatar)}</span><b>${esc(me.nick)}</b>${isOwner?'<span class="tag">Владелец</span>':granted?'<span class="tag">Админ</span>':''}<button class="alt" id="out" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">Выйти</button>`:`<span class="av">👤</span><b>Гость</b><button id="inb" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">Войти</button>`;
+ if($("out"))$("out").onclick=()=>{try{localStorage.removeItem("gacha-token")}catch(e){}location.reload()};
+ if($("inb"))$("inb").onclick=()=>openReg()}
+function openReg(m){if(m)mode=m;const r=mode==="reg";$("reg").style.display="flex";$("reg_t").textContent=r?"Создай профиль":"Вход";
+ $("t_reg").style.opacity=r?1:.5;$("t_in").style.opacity=r?.5:1;$("avs").style.display=r?"grid":"none";$("reg_ok").textContent=r?"Создать":"Войти";$("reg_st").textContent="";
+ $("avs").innerHTML=AV.map(a=>`<button class="alt avb${a===pickAv?" sel":""}" data-a="${a}">${a}</button>`).join("");
+ document.querySelectorAll("#avs .avb").forEach(b=>b.onclick=()=>{pickAv=b.dataset.a;document.querySelectorAll("#avs .avb").forEach(x=>x.classList.toggle("sel",x===b))})}
+$("t_reg").onclick=()=>openReg("reg");$("t_in").onclick=()=>openReg("in");$("reg_x").onclick=()=>{$("reg").style.display="none"};
+function applyMe(d){me={nick:d.nick,avatar:d.avatar,role:d.role||"",nickAt:+d.nick_at||0};isOwner=me.role==="owner";granted=me.role==="admin";
+ S=Object.assign(FRESH(),d.save||{});normS();ready=true;dirty=false;try{localStorage.setItem("gacha-seen","1")}catch(e){}
+ renderProf();const a=isOwner||granted;$("adm").style.display=a?"":"none";$("reset").style.display=isOwner?"":"none";$("setb").style.display="";
+ if(isOwner){$("own").style.display="block";renderGrants()}$("reg").style.display="none";render()}
+$("reg_ok").onclick=async()=>{const n=$("reg_nick").value.trim(),p=$("reg_pw").value,st=$("reg_st");
+ if(!/^[A-Za-z0-9_А-Яа-яЁё-]{3,16}$/.test(n)){st.textContent="Ник: 3–16 символов — буквы, цифры, _ и -";return}
+ if(p.length<4){st.textContent="Пароль: минимум 4 символа";return}
+ st.textContent="Подождите…";
+ const r=mode==="reg"?await rpc("gacha_register",{p_nick:n,p_pass:p,p_avatar:pickAv,p_save:S}):await rpc("gacha_login",{p_nick:n,p_pass:p});
+ if(r.error){st.textContent=r.error;return}
+ TOKEN=r.data.token;try{localStorage.setItem("gacha-token",TOKEN)}catch(e){}applyMe(r.data)};
+async function setRole(k,r){const x=await rpc("gacha_set_role",{p_token:TOKEN,p_key:k,p_role:r});if(x.error)alert(x.error);renderGrants()}
+async function renderGrants(){if(!isOwner)return;const r=await rpc("gacha_players",{p_token:TOKEN});if(r.error)return;let can="",has="";
+ (r.data||[]).forEach(x=>{if(x.role==="owner")return;const row=`<div class="gr"><span>${esc(x.avatar)} ${esc(x.nick)}</span>`;
+  if(x.role==="admin")has+=row+`<button class="alt" data-rv="${esc(x.key)}">Забрать</button></div>`;else can+=row+`<button data-gv="${esc(x.key)}">Выдать</button></div>`});
+ $("g_can").innerHTML=can||"<i>Пока никого</i>";$("g_list").innerHTML=has||"<i>Никого</i>";
+ document.querySelectorAll("[data-gv]").forEach(b=>b.onclick=()=>setRole(b.dataset.gv,"admin"));
+ document.querySelectorAll("[data-rv]").forEach(b=>b.onclick=()=>setRole(b.dataset.rv,""))}
+const DAY7=7*864e5,NICKRE=/^[A-Za-z0-9_А-Яа-яЁё-]{3,16}$/;
+const sMsg=(t,ok)=>{const e=$("s_st");e.textContent=t;e.style.color=ok?"var(--c1)":"var(--c5)"};
+const nickLeft=()=>me.nickAt?me.nickAt+DAY7-Date.now():0;
+function renderSet(){$("s_avs").innerHTML=AV.map(a=>`<button class="alt avb${a===pickAv?" sel":""}" data-a="${a}">${a}</button>`).join("");
+ document.querySelectorAll("#s_avs .avb").forEach(b=>b.onclick=()=>{pickAv=b.dataset.a;document.querySelectorAll("#s_avs .avb").forEach(x=>x.classList.toggle("sel",x===b))});
+ $("s_nick").value=me.nick;const l=nickLeft();sMsg(l>0?"Ник можно сменить через "+Math.ceil(l/864e5)+" дн.":"",true)}
+$("setb").onclick=()=>{const p=$("setp");const o=p.style.display==="none";p.style.display=o?"block":"none";if(o){pickAv=me.avatar;renderSet()}};
+$("s_av").onclick=async()=>{const r=await rpc("gacha_set_avatar",{p_token:TOKEN,p_avatar:pickAv});if(r.error)return sMsg(r.error);me.avatar=pickAv;renderProf();sMsg("Аватарка сохранена",1)};
+$("s_nb").onclick=async()=>{const n=$("s_nick").value.trim();
+ if(!NICKRE.test(n))return sMsg("Ник: 3–16 символов — буквы, цифры, _ и -");
+ if(n===me.nick)return sMsg("Это ваш текущий ник");
+ const l=nickLeft();if(l>0)return sMsg("Ник можно сменить через "+Math.ceil(l/864e5)+" дн.");
+ const r=await rpc("gacha_change_nick",{p_token:TOKEN,p_nick:n});if(r.error)return sMsg(r.error);
+ me.nick=n;me.nickAt=Date.now();renderProf();renderSet();sMsg("Ник изменён",1);if(isOwner)renderGrants()};
+$("s_pb").onclick=async()=>{const o=$("s_old").value,n=$("s_new").value;
+ if(n.length<4)return sMsg("Новый пароль: минимум 4 символа");
+ const r=await rpc("gacha_change_password",{p_token:TOKEN,p_old:o,p_new:n});if(r.error)return sMsg(r.error);
+ TOKEN=r.data.token;try{localStorage.setItem("gacha-token",TOKEN)}catch(e){}
+ $("s_old").value=$("s_new").value="";sMsg("Пароль изменён",1)};
+async function boot(){const r=await rpc("gacha_me",{p_token:TOKEN});
+ if(r.error==="Нет связи с сервером"){$("pity").textContent="Нет связи с сервером, повторяю…";setTimeout(boot,4000);return}
+ if(r.error){TOKEN=null;try{localStorage.removeItem("gacha-token")}catch(e){}ready=true;renderProf();openReg("in");return}
+ applyMe(r.data)}
+renderProf();
+if(TOKEN)boot();else{let seen=null;try{seen=localStorage.getItem("gacha-seen")}catch(e){}openReg(seen?"in":"reg")}
+$("a_give").onclick=()=>{S.coins+=Math.max(0,+$("a_coins").value||0);render();save()};
+$("a_setluck").onclick=()=>{S.luck=Math.min(MAXLUCK,Math.max(0,Math.floor(+$("a_luck").value||0)));render();save()};
+$("a_item").onclick=()=>{const i=+$("a_rar").value,its=R[i].items,t=its[Math.floor(Math.random()*its.length)];
+ S.found[t]=(S.found[t]||0)+1;show(i,t,"Выдано админом");render();save()};
+$("a_all").onclick=()=>{ALL.forEach(a=>{if(!S.found[a.t])S.found[a.t]=1});render();save()};
+setInterval(()=>{if(!ready)return;S.coins+=inc();render();save()},1000);
+/* плавное появление блоков при прокрутке (вниз и вверх) */
+(function(){
+ const sel=".prof,.top,main>.stage:not(#setp):not(#admp),main>h2,.odds,#maxd,#fuse,#col";
+ const els=document.querySelectorAll(sel);
+ if(!("IntersectionObserver" in window)){return}
+ const io=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle("in",e.isIntersecting)),{threshold:.08,rootMargin:"0px 0px -6% 0px"});
+ els.forEach(el=>{el.classList.add("rv");io.observe(el)});
+})();
+/* меню-бургер */
+(function(){
+ const b=$("menuBtn"),m=$("menu");
+ const set=o=>{m.classList.toggle("open",o);b.classList.toggle("open",o);b.setAttribute("aria-expanded",o)};
+ b.onclick=e=>{e.stopPropagation();set(!m.classList.contains("open"))};
+ document.addEventListener("click",e=>{if(!m.contains(e.target))set(false)});
+ document.addEventListener("keydown",e=>{if(e.key==="Escape")set(false)});
+ m.addEventListener("click",e=>{const btn=e.target.closest("button");if(!btn)return;set(false);
+  const pn={setb:"setp",adm:"admp"}[btn.id];
+  if(pn)setTimeout(()=>{const p=$(pn);if(p.style.display!=="none")p.scrollIntoView({behavior:"smooth",block:"start"})},50)});
+})();
+render();
+</script>
+</body>
+</html>
