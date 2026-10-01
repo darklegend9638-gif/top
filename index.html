@@ -65,10 +65,11 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
 
 .menu-wrap{position:relative;margin-bottom:12px}
 .menu-btn{width:48px;height:44px;padding:8px;font-size:25px;line-height:1;display:block;margin-left:auto}
-.menu-panel{display:none;position:absolute;right:0;top:52px;width:min(300px,calc(100vw - 28px));padding:10px;z-index:8}
-.menu-panel.open{display:block}.menu-panel button{display:block;width:100%;margin:6px 0;text-align:left;background:var(--glass);box-shadow:none;border:1px solid var(--line)}
+.menu-panel{display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(340px,calc(100vw - 28px));padding:14px;z-index:40;box-shadow:0 24px 80px rgba(0,0,0,.55)}
+.menu-panel.open{display:block}.menu-panel.open:before{content:"";position:fixed;inset:50vh 50vw;transform:translate(-50%,-50%);width:100vw;height:100vh;background:rgba(5,3,15,.55);z-index:-1;pointer-events:auto}.menu-panel button{display:block;width:100%;margin:6px 0;text-align:left;background:var(--glass);box-shadow:none;border:1px solid var(--line)}
 .modal{position:fixed;inset:0;background:rgba(5,3,15,.78);display:none;align-items:center;justify-content:center;padding:16px;z-index:30}
 .modal.open{display:flex}.modal-box{width:100%;max-width:390px;padding:20px;background:var(--bg2);border:1px solid var(--line);border-radius:18px;box-shadow:0 20px 70px rgba(0,0,0,.45)}
+.center-panel{position:fixed!important;left:50%;top:50%;transform:translate(-50%,-50%);width:min(620px,calc(100vw - 28px));max-height:88vh;overflow:auto;margin:0!important;z-index:35;box-shadow:0 0 0 100vmax rgba(5,3,15,.72),0 24px 80px rgba(0,0,0,.55)}
 .modal-title{font-size:20px;font-weight:800;margin-bottom:8px}.modal-text{color:var(--mute);margin-bottom:16px}.modal-actions{display:flex;gap:10px}.modal-actions button{flex:1}
 </style>
 </head>
@@ -112,7 +113,7 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
 <h2>Коллекция <span id="colcount"></span></h2>
 <div class="grid" id="col"></div>
 
-<div id="setp" class="glass stage" style="display:none;margin-top:12px;text-align:left">
+<div id="setp" class="glass stage center-panel" style="display:none;margin-top:12px;text-align:left">
   <b>Настройки профиля</b>
   <div style="color:var(--mute);font-size:13px;margin-top:10px">Аватарка</div><div id="s_avs"></div>
   <div class="row" style="margin-top:0"><button id="s_av">Сохранить аватарку</button></div>
@@ -123,7 +124,7 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
   <div class="row"><input id="s_new" type="password" placeholder="Новый пароль (от 4 символов)"><button id="s_pb" style="flex:none">Сменить</button></div>
   <div id="s_st" style="font-size:14px;min-height:20px;margin-top:8px"></div>
 </div>
-<div id="admp" class="glass stage" style="display:none;margin-top:12px;text-align:left">
+<div id="admp" class="glass stage center-panel" style="display:none;margin-top:12px;text-align:left">
   <b>Админ-панель</b>
   <div id="own" style="display:none;margin:10px 0;padding:10px;border:1px dashed var(--line);border-radius:12px"><b style="font-size:14px">Выдать доступ к админке</b>
    <div style="color:var(--mute);font-size:13px;margin-top:6px">Заходили на сайт:</div><div id="g_can" style="font-size:14px"></div>
