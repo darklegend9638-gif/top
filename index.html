@@ -87,6 +87,28 @@ body{letter-spacing:.05px}
   .scroll-pop,.scroll-pop.is-visible{opacity:1;transform:none;transition:none}
   .scroll-pop .e,.scroll-pop .av,.scroll-pop.is-visible .e,.scroll-pop.is-visible .av{opacity:1;transform:none;transition:none}
 }
+
+html{
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+}
+body{
+  overscroll-behavior-y:auto;
+}
+
+/* Плавное появление элементов при прокрутке */
+.reveal-on-scroll{
+  opacity:0;
+  transform:translateY(35px);
+  transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1);
+}
+.reveal-on-scroll.show{
+  opacity:1;
+  transform:translateY(0);
+}
+@media(prefers-reduced-motion:reduce){
+  .reveal-on-scroll{opacity:1;transform:none;transition:none}
+}
 </style>
 </head>
 <body>
@@ -304,6 +326,33 @@ $("a_item").onclick=()=>{const i=+$("a_rar").value,its=R[i].items,t=its[Math.flo
  S.found[t]=(S.found[t]||0)+1;show(i,t,"Выдано админом");render();save()};
 $("a_all").onclick=()=>{ALL.forEach(a=>{if(!S.found[a.t])S.found[a.t]=1});render();save()};
 setInterval(()=>{if(!ready)return;S.coins+=inc();render();save()},1000);
+
+function setupScrollReveal(){
+  const items=document.querySelectorAll(
+    ".glass:not(.reveal-on-scroll), h2, .od, .it"
+  );
+  items.forEach(el=>el.classList.add("reveal-on-scroll"));
+
+  if(!("IntersectionObserver" in window)){
+    items.forEach(el=>el.classList.add("show"));
+    return;
+  }
+
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add("show");
+        observer.unobserve(entry.target);
+      }
+    });
+  },{
+    threshold:.12,
+    rootMargin:"0px 0px -30px 0px"
+  });
+
+  items.forEach(el=>observer.observe(el));
+}
+
 render();
 setupScrollReveal();
 </script>
