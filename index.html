@@ -218,7 +218,7 @@ $("fuse").onclick=e=>{const b=e.target.closest("[data-f]");if(b&&!b.disabled)fus
 $("inc").onclick=()=>{const c=incCost();if(S.inc<MAXINC&&S.coins>=c){S.coins-=c;S.inc++;render();save()}};
 $("r1").onclick=()=>roll(1);$("r10").onclick=()=>roll(10);
 $("luck").onclick=()=>{const c=luckCost();if(S.luck<MAXLUCK&&S.coins>=c){S.coins-=c;S.luck++;render();save()}};
-function showNotice(title,text,ok=true){$("noticeTitle").textContent=(ok?"✨ ":"⚠️ ")+title;$("noticeText").textContent=text;$("noticeModal").classList.add("show")}$("noticeOk").onclick=()=>$("noticeModal").classList.remove("show");$("noticeModal").onclick=e=>{if(e.target===$("noticeModal"))$("noticeModal").classList.remove("show")};$("reset").onclick=async()=>{if(!(isOwner||granted)||!TOKEN)return;$("confirmModal").classList.add("show")};$("confirmNo").onclick=()=>$("confirmModal").classList.remove("show");$("confirmModal").onclick=e=>{if(e.target===$("confirmModal"))$("confirmModal").classList.remove("show")};$("confirmYes").onclick=async()=>{$("confirmModal").classList.remove("show");const r=await rpc("gacha_reset_all",{p_token:TOKEN});if(r.error){showNotice("Ошибка",r.error,false);return}S=FRESH();dirty=false;$("log").innerHTML="";render();showNotice("Готово","Прогресс всех игроков успешно обнулён.",true)};
+function showNotice(title,text,ok=true){$("noticeTitle").textContent=(ok?"✨ ":"⚠️ ")+title;$("noticeText").textContent=text;$("noticeModal").classList.add("show")}$("noticeOk").onclick=()=>$("noticeModal").classList.remove("show");$("noticeModal").onclick=e=>{if(e.target===$("noticeModal"))$("noticeModal").classList.remove("show")};$("reset").onclick=async()=>{if(!isOwner||!TOKEN)return;$("confirmModal").classList.add("show")};$("confirmNo").onclick=()=>$("confirmModal").classList.remove("show");$("confirmModal").onclick=e=>{if(e.target===$("confirmModal"))$("confirmModal").classList.remove("show")};$("confirmYes").onclick=async()=>{$("confirmModal").classList.remove("show");const r=await rpc("gacha_reset_all",{p_token:TOKEN});if(r.error){showNotice("Ошибка",r.error,false);return}S=FRESH();dirty=false;$("log").innerHTML="";render();showNotice("Готово","Прогресс всех игроков успешно обнулён.",true)};
 let isOwner=false,granted=false,me=null,pickAv="😀",mode="reg";
 const AV=["😀","😎","🤖","👻","🐱","🦊","🐼","🐸","🦄","🐲","👑","🧙","🥷","🚀","🌟","💀"];
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -234,7 +234,7 @@ function openReg(m){if(m)mode=m;const r=mode==="reg";$("reg").style.display="fle
 $("t_reg").onclick=()=>openReg("reg");$("t_in").onclick=()=>openReg("in");$("reg_x").onclick=()=>{$("reg").style.display="none"};
 function applyMe(d){me={nick:d.nick,avatar:d.avatar,role:d.role||"",nickAt:+d.nick_at||0};isOwner=me.role==="owner";granted=me.role==="admin";
  S=Object.assign(FRESH(),d.save||{});normS();ready=true;dirty=false;try{localStorage.setItem("gacha-seen","1")}catch(e){}
- renderProf();const a=isOwner||granted;$("adm").style.display=a?"":"none";$("reset").style.display=a?"":"none";$("setb").style.display="";
+ renderProf();const a=isOwner||granted;$("adm").style.display=a?"":"none";$("reset").style.display=isOwner?"":"none";$("setb").style.display="";
  if(isOwner){$("own").style.display="block";renderGrants()}$("reg").style.display="none";render()}
 $("reg_ok").onclick=async()=>{const n=$("reg_nick").value.trim(),p=$("reg_pw").value,st=$("reg_st");
  if(!/^[A-Za-z0-9_А-Яа-яЁё-]{3,16}$/.test(n)){st.textContent="Ник: 3–16 символов — буквы, цифры, _ и -";return}
