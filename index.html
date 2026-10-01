@@ -235,6 +235,10 @@ button:not(:disabled)::after{content:"";position:absolute;inset:0;background:lin
   #topMenuBtn,#topMenu{transition:none}
 }
 
+
+/* Hide legacy bottom controls: access is through the top menu/admin panel. */
+#setb,#adm,#reset{display:none !important;}
+
 </style>
 </head>
 <body>
@@ -245,9 +249,6 @@ button:not(:disabled)::after{content:"";position:absolute;inset:0;background:lin
   <div class="menu-section">Меню</div>
   <button data-action="profile">👤 Смена профиля</button>
   <button data-action="admin" id="menuAdmin" style="display:none">🛡️ Админ-панель</button>
-</div>
-<button data-scroll="settings">⚙️ Настройки</button>
-  <button data-scroll="admin" id="menuAdmin" style="display:none">🛡️ Админ-панель</button>
 </div>
 
 <div id="flash"></div>
@@ -451,7 +452,7 @@ function openReg(m){if(m)mode=m;const r=mode==="reg";$("reg").style.display="fle
 $("t_reg").onclick=()=>openReg("reg");$("t_in").onclick=()=>openReg("in");$("reg_x").onclick=()=>{$("reg").style.display="none"};
 function applyMe(d){me={nick:d.nick,avatar:d.avatar,role:d.role||"",nickAt:+d.nick_at||0};isOwner=me.role==="owner";granted=me.role==="admin";
  S=Object.assign(FRESH(),d.save||{});normS();ready=true;dirty=false;try{localStorage.setItem("gacha-seen","1")}catch(e){}
- renderProf();const a=isOwner||granted;$("adm").style.display=a?"":"none";$("reset").style.display=a?"":"none";$("setb").style.display="";
+ renderProf();const a=isOwner||granted;$("adm").style.display=a?"":"none";$("reset").style.display=isOwner?"":"none";$("setb").style.display="";
  if(isOwner){$("own").style.display="block";renderGrants()}$("reg").style.display="none";render()}
 $("reg_ok").onclick=async()=>{const n=$("reg_nick").value.trim(),p=$("reg_pw").value,st=$("reg_st");
  if(!/^[A-Za-z0-9_А-Яа-яЁё-]{3,16}$/.test(n)){st.textContent="Ник: 3–16 символов — буквы, цифры, _ и -";return}
@@ -558,20 +559,20 @@ render();
 
   menu.querySelector('[data-action="profile"]')?.addEventListener("click", () => {
     closeMenu();
-    const profile = document.getElementById("settings");
-    if (profile) profile.style.display = "";
+    const profile = document.getElementById("setp");
+    if (profile) profile.style.display = "block";
     profile?.scrollIntoView({behavior:"smooth",block:"start"});
   });
 
   adminBtn?.addEventListener("click", () => {
     closeMenu();
-    const admin = document.getElementById("admin");
-    if (admin) admin.style.display = "";
+    const admin = document.getElementById("admp");
+    if (admin) admin.style.display = "block";
     admin?.scrollIntoView({behavior:"smooth",block:"start"});
   });
 
   // Only owner/admin gets the admin tab. Reset itself stays inside the admin panel.
-  if (adminBtn && window.granted === true) {
+  if (adminBtn && (window.granted === true)) {
     adminBtn.style.display = "block";
   }
 
