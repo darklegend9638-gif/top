@@ -69,7 +69,8 @@ input,select{font:inherit;flex:1;min-width:0;padding:11px;border-radius:12px;bor
 #reg{position:fixed;inset:0;background:rgba(5,3,15,.82);display:none;align-items:center;justify-content:center;padding:16px;z-index:9}
 #reg .box{width:100%;max-width:380px;padding:20px;background:var(--bg2);border:1px solid var(--line);border-radius:18px}
 #avs,#s_avs{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin:10px 0}
-.avb{padding:6px 0;font-size:22px;flex:none}.avb.sel{outline:2px solid var(--c4)}
+.avb{padding:6px 0;font-size:22px;flex:none;transition:box-shadow .15s,background .15s,transform .15s}.avb:active{transform:scale(.92)}.avb.sel{outline:none;border-color:var(--c4);background:rgba(255,176,46,.18);box-shadow:0 0 0 2px var(--c4),0 0 14px rgba(255,176,46,.45)}
+#menu button{display:flex;align-items:center;gap:12px}#menu button .ico{width:24px;height:24px;vertical-align:0}#lang .ico,#lang2 .ico{width:20px;height:20px;vertical-align:-5px;margin-right:8px}#menu #lang{gap:0}
 .gr{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:3px 0}.gr button{flex:0 0 auto;padding:6px 12px}
 #fuse{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px}#fuse button{padding:10px;font-size:13px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important}}
@@ -115,6 +116,18 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
 <linearGradient id="g-gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff1a8"/><stop offset="1" stop-color="#f2a21a"/></linearGradient>
 <linearGradient id="g-silver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6fb"/><stop offset="1" stop-color="#9aa3b8"/></linearGradient>
 <linearGradient id="g-bronze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc79a"/><stop offset="1" stop-color="#c8742c"/></linearGradient>
+<linearGradient id="gG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7bdcff"/><stop offset="1" stop-color="#2f7bff"/></linearGradient>
+<linearGradient id="gP" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9ae0"/><stop offset="1" stop-color="#8a4dff"/></linearGradient>
+<linearGradient id="gM" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8bffb0"/><stop offset="1" stop-color="#1ee3cf"/></linearGradient>
+<linearGradient id="gU" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9bf5ff"/><stop offset="1" stop-color="#3a8dff"/></linearGradient>
+<linearGradient id="gW" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd27a"/><stop offset="1" stop-color="#ff6a3d"/></linearGradient>
+<linearGradient id="gR" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9fb0"/><stop offset="1" stop-color="#ff3d63"/></linearGradient>
+<symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="url(#gG)"/><g fill="none" stroke="#fff" stroke-opacity=".85" stroke-width="1.3" stroke-linecap="round"><ellipse cx="12" cy="12" rx="4" ry="9.5"/><path d="M2.8 9h18.4M2.8 15h18.4"/></g></symbol>
+<symbol id="i-titles" viewBox="0 0 24 24"><path d="M7.5 13.5L5.5 21.5l4.2-2.2 2.3 3 1.2-6.4z" fill="url(#gP)" opacity=".8"/><path d="M16.5 13.5l2 8-4.2-2.2-1.3 1.6-1.1-5.4z" fill="url(#gP)"/><circle cx="12" cy="9" r="7" fill="url(#gP)"/><circle cx="12" cy="9" r="5.2" fill="none" stroke="#fff" stroke-opacity=".5"/><path d="M12 5.4l1.2 2.5 2.7.4-2 1.9.5 2.7-2.4-1.3-2.4 1.3.5-2.7-2-1.9 2.7-.4z" fill="#fff"/></symbol>
+<symbol id="i-transfer" viewBox="0 0 24 24"><path d="M3.5 8h14.5M14.5 4.5L18 8l-3.5 3.5M20.5 16H6M9.5 12.5L6 16l3.5 3.5" fill="none" stroke="url(#gM)" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="3.2" fill="url(#gT)" stroke="rgba(120,60,0,.4)" stroke-width=".7"/></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><circle cx="10" cy="7.5" r="4.2" fill="url(#gU)"/><path d="M2.5 20.5c0-4.4 3.3-7 7.5-7 1.3 0 2.5.3 3.5.7l-2.8 2.8-.8 3.5z" fill="url(#gU)"/><path d="M15 20.8l.7-3 5.2-5.2 2.3 2.3-5.2 5.2z" fill="#ffd54a" stroke="rgba(120,70,0,.4)" stroke-width=".6"/></symbol>
+<symbol id="i-admin" viewBox="0 0 24 24"><path fill-rule="evenodd" fill="url(#gW)" d="M12 5.6a6.4 6.4 0 1 0 0 12.8 6.4 6.4 0 1 0 0-12.8zM12 9.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 1 1 0-5z"/><circle cx="12" cy="12" r="8.4" fill="none" stroke="url(#gW)" stroke-width="3.4" stroke-dasharray="3.3 3.3" stroke-dashoffset="1.6"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24"><rect x="3.5" y="4.6" width="17" height="3" rx="1.5" fill="url(#gR)"/><path d="M9 4.6V3.5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1.1" fill="none" stroke="url(#gR)" stroke-width="1.6"/><path d="M5.6 9h12.8l-.9 11a1.6 1.6 0 0 1-1.6 1.5H8.1A1.6 1.6 0 0 1 6.5 20z" fill="url(#gR)"/><path d="M10 11.5v7M14 11.5v7" stroke="#fff" stroke-opacity=".75" stroke-width="1.5" stroke-linecap="round"/></symbol>
 <symbol id="i-top" viewBox="0 0 24 24"><path d="M7 3h10v5.5a5 5 0 0 1-10 0z" fill="url(#gT)"/><path d="M7 5H4v2a3 3 0 0 0 3 3M17 5h3v2a3 3 0 0 1-3 3" fill="none" stroke="url(#gT)" stroke-width="1.8" stroke-linecap="round"/><rect x="10.7" y="13" width="2.6" height="4.2" fill="url(#gT)"/><rect x="7.2" y="17" width="9.6" height="3.4" rx="1.3" fill="url(#gT)"/><path d="M12 5.2l.9 1.9 2 .3-1.5 1.4.4 2-1.8-1-1.8 1 .4-2L9.1 7.4l2-.3z" fill="#fff" opacity=".85"/></symbol>
 <symbol id="i-shop" viewBox="0 0 24 24"><path d="M9 8.5V7a3 3 0 0 1 6 0v1.5" fill="none" stroke="url(#gS)" stroke-width="1.8" stroke-linecap="round"/><path d="M4.6 8h14.8l-1.1 12.2a1 1 0 0 1-1 .8H6.7a1 1 0 0 1-1-.8z" fill="url(#gS)"/><path d="M12 10.8l1.1 2.2 2.4.3-1.8 1.6.5 2.4-2.2-1.2-2.2 1.2.5-2.4-1.8-1.6 2.4-.3z" fill="#fff" opacity=".92"/></symbol>
 <symbol id="i-crown" viewBox="0 0 24 24"><path d="M2.5 8l5 4.2L12 4.5l4.5 7.7 5-4.2-2 11.5H4.5z" fill="url(#gC)" stroke="rgba(120,60,0,.35)" stroke-width=".8" stroke-linejoin="round"/><circle cx="12" cy="3.8" r="1.4" fill="#fff6c2"/></symbol>
@@ -125,11 +138,11 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
 <button class="alt" id="menuBtn" aria-label="Меню" aria-expanded="false" style="display:none">☰</button>
 <div id="menu">
  <button class="alt" id="lang"></button>
- <button class="alt" id="titb">🏆 Титулы</button>
- <button class="alt" id="trb">💸 Переводы</button>
- <button class="alt" id="setb" style="display:none">👤 Изменить профиль</button>
- <button class="alt" id="adm" style="display:none">🛠️ Админ панель</button>
- <button class="alt" id="reset" style="display:none">🗑️ Очистить весь прогресс</button>
+ <button class="alt" id="titb"><svg class="ico"><use href="#i-titles"/></svg>Титулы</button>
+ <button class="alt" id="trb"><svg class="ico"><use href="#i-transfer"/></svg>Переводы</button>
+ <button class="alt" id="setb" style="display:none"><svg class="ico"><use href="#i-user"/></svg>Изменить профиль</button>
+ <button class="alt" id="adm" style="display:none"><svg class="ico"><use href="#i-admin"/></svg>Админ панель</button>
+ <button class="alt" id="reset" style="display:none"><svg class="ico"><use href="#i-trash"/></svg>Очистить весь прогресс</button>
 </div>
 <main>
 <h1>Кристальный алтарь</h1>
@@ -164,7 +177,7 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
 
 </main>
 <div id="pwrap"><div id="setp" class="glass stage pbox" style="display:none;text-align:left"><button class="alt pclose" aria-label="Закрыть">×</button>
-  <b>Настройки профиля</b>
+  <b class="hd"><svg class="ico"><use href="#i-user"/></svg>Настройки профиля</b>
   <div style="color:var(--mute);font-size:13px;margin-top:10px">Аватарка</div><div id="s_avs"></div>
   <div class="row" style="margin-top:0"><button id="s_av">Сохранить аватарку</button></div>
   <div style="color:var(--mute);font-size:13px;margin-top:14px">Никнейм (меняется раз в 7 дней)</div>
@@ -181,7 +194,7 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
   <div id="toplist"></div>
 </div>
 <div id="trp" class="glass stage pbox" style="display:none;text-align:left"><button class="alt pclose" aria-label="Закрыть">×</button>
-  <b>Переводы</b>
+  <b class="hd"><svg class="ico"><use href="#i-transfer"/></svg>Переводы</b>
   <div style="color:var(--mute);font-size:13px;margin-top:4px">Отправь монеты другому игроку</div>
   <div id="trbal" style="font:800 17px var(--fh);margin-top:8px"></div>
   <div class="row"><input id="t_nick" maxlength="16" placeholder="Ник получателя" autocomplete="off"></div>
@@ -195,12 +208,12 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
   <div id="shlist"></div>
 </div>
 <div id="titp" class="glass stage pbox" style="display:none;text-align:left"><button class="alt pclose" aria-label="Закрыть">×</button>
-  <b>Титулы</b>
+  <b class="hd"><svg class="ico"><use href="#i-titles"/></svg>Титулы</b>
   <div id="titcnt" style="color:var(--mute);font-size:13px;margin-top:4px"></div>
   <div id="titlist"></div>
 </div>
 <div id="admp" class="glass stage pbox" style="display:none;text-align:left"><button class="alt pclose" aria-label="Закрыть">×</button>
-  <b>Админ-панель</b>
+  <b class="hd"><svg class="ico"><use href="#i-admin"/></svg>Админ-панель</b>
   <div id="own" style="display:none;margin:10px 0;padding:10px;border:1px dashed var(--line);border-radius:12px"><b style="font-size:14px">Выдать доступ к админке</b>
    <div style="color:var(--mute);font-size:13px;margin-top:6px">Заходили на сайт:</div><div id="g_can" style="font-size:14px"></div>
    <div style="color:var(--mute);font-size:13px;margin-top:8px">Есть доступ:</div><div id="g_list" style="font-size:14px"></div></div>
@@ -270,7 +283,7 @@ const rname=i=>LANG==="ru"?RA(i).ru:RA(i).n,rn=i=>LANG==="ru"?RA(i).n+" · "+RA(
 const SRV={"Этот ник уже занят":"This nickname is already taken","Неверный ник или пароль":"Wrong nickname or password","Текущий пароль неверный":"Current password is incorrect","Нет доступа":"Access denied","Ошибка сервера":"Server error","Игрок не найден":"Player not found","Некорректное сохранение":"Invalid save","Владелец не может удалить аккаунт":"The owner cannot delete the account","Недостаточно монет":"Not enough coins","Нельзя переводить себе":"You can't send coins to yourself","Некорректная сумма":"Invalid amount"};
 const srv=m=>LANG==="en"&&SRV[m]?SRV[m]:m;
 const TX={"Кристальный алтарь":"Crystal Altar","Бросай, качай удачу, собери всё — вплоть до Divine":"Roll, upgrade your luck, collect everything — up to Divine",
-"👤 Изменить профиль":"👤 Edit profile","🛠️ Админ панель":"🛠️ Admin panel","🗑️ Очистить весь прогресс":"🗑️ Wipe all progress",
+"Изменить профиль":"Edit profile","Админ панель":"Admin panel","Очистить весь прогресс":"Wipe all progress","👤 Изменить профиль":"👤 Edit profile","🛠️ Админ панель":"🛠️ Admin panel","🗑️ Очистить весь прогресс":"🗑️ Wipe all progress",
 "🪙 Монеты":"🪙 Coins","🍀 Удача":"🍀 Luck","🎲 Броски":"🎲 Rolls","Лучшая редкость (рекорд)":"Best rarity (record)",
 "Сделай первый бросок":"Make your first roll","Копи монеты и бросай":"Save coins and roll","Бросок · 10":"Roll · 10",
 "Шансы с учётом удачи":"Odds with luck","Слияние (5 дубликатов → 1 предмет редкостью выше)":"Fusion (5 duplicates → 1 item of higher rarity)","Коллекция":"Collection",
@@ -286,7 +299,7 @@ function applyStatic(){const en=LANG==="en",w=document.createTreeWalker(document
  document.querySelectorAll("[placeholder],[aria-label]").forEach(e=>["placeholder","aria-label"].forEach(a=>{const v=e.getAttribute(a);if(v===null)return;const k="_"+a,o=e[k]||v;if(TX[o]){e[k]=o;e.setAttribute(a,en?TX[o]:o)}}));
  document.title=en?"Crystal Altar — Gacha":"Кристальный алтарь — Гача"}
 function setLang(l){LANG=l;try{localStorage.setItem("gacha-lang",l)}catch(e){}document.documentElement.lang=l;applyStatic();
- $("lang").textContent=$("lang2").textContent=l==="en"?"🌐 Русский":"🌐 English";render();renderProf();evSel();renderEv();updAuto();
+ $("lang").innerHTML=$("lang2").innerHTML='<svg class="ico"><use href="#i-globe"/></svg>'+(l==="en"?"Русский":"English");render();renderProf();evSel();renderEv();updAuto();
  if($("reg").style.display==="flex")openReg();if(me&&$("setp").style.display==="block")renderSet()}
 const INCOME=1,MAXLUCK=20,MAXINC=15,PL=99,PM=1000,PS=10000;
 const inc=()=>INCOME+S.inc,incCost=()=>Math.floor(50*Math.pow(1.55,S.inc)*(ev().disc||1));
