@@ -760,13 +760,11 @@ function ico(ch){
  const ring=ri!=null&&ri>=4?`<circle cx="32" cy="32" r="29.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 4" opacity=".8"/>`:"";
  return `<span class="ic" style="color:${col}"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="currentColor" opacity=".15"/>${ring}<polygon points="${outer}" fill="currentColor"/>${tri}<polygon points="${inner}" fill="#fff" fill-opacity=".25" stroke="#fff" stroke-opacity=".75" stroke-width="1.2"/>${sp}</svg></span>`}
 const EMO=/\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic}\uFE0F?|[\u{1F3FB}-\u{1F3FF}])*/gu;
-const nz=x=>x.replace(/\uFE0F/g,"");
-const KEEP=new Set([...AV,"❔",...ALL.map(a=>a.t.split(" ")[0]),...EXALL.map(a=>a.t.split(" ")[0])].map(nz));
 function emojify(root){if(!root||root.nodeType!==1)return;const bad=/^(SCRIPT|STYLE|OPTION|TEXTAREA|TITLE|SELECT|SVG)$/i;
  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{const p=n.parentNode;if(!p||bad.test(p.nodeName)||(p.closest&&p.closest(".ic")))return NodeFilter.FILTER_REJECT;
   EMO.lastIndex=0;return EMO.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}}),list=[];let x;while(x=w.nextNode())list.push(x);
  list.forEach(t=>{const v=t.nodeValue,fr=document.createDocumentFragment();let last=0;
-  for(const m of v.matchAll(EMO)){if(m.index>last)fr.append(v.slice(last,m.index));if(KEEP.has(nz(m[0])))fr.append(m[0]);else{const tp=document.createElement("template");tp.innerHTML=ico(m[0]);fr.append(tp.content)}last=m.index+m[0].length}
+  for(const m of v.matchAll(EMO)){if(m.index>last)fr.append(v.slice(last,m.index));const tp=document.createElement("template");tp.innerHTML=ico(m[0]);fr.append(tp.content);last=m.index+m[0].length}
   if(last<v.length)fr.append(v.slice(last));t.replaceWith(fr)})}
 const EMOBS=new MutationObserver(ms=>{const roots=new Set();
  ms.forEach(m=>{if(m.type==="characterData"){if(m.target.parentNode)roots.add(m.target.parentNode)}else m.addedNodes.forEach(n=>roots.add(n.nodeType===1?n:n.parentNode))});
