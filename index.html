@@ -260,7 +260,7 @@ const R=[
 ];
 R[0].w=+(100-R.slice(1).reduce((a,r)=>a+r.w,0)).toFixed(4);
 const ALL=[];R.forEach((r,i)=>r.items.forEach(t=>ALL.push({i,t})));
-const X=8,EXC20=.00005,XR={n:"Exclusive",ru:"Эксклюзивный",v:250,c:"#ff5ce1"},RA=i=>i===X?XR:R[i];
+const X=8,XR={n:"Exclusive",ru:"Эксклюзивный",v:250,c:"#ff5ce1"},RA=i=>i===X?XR:R[i];
 const $=id=>document.getElementById(id);
 
 let LANG="ru";try{LANG=localStorage.getItem("gacha-lang")||(/^(ru|uk|be|kk)/i.test(navigator.language||"ru")?"ru":"en")}catch(e){}
@@ -330,7 +330,7 @@ const EVD={
 };
 let EVN=null;
 const EXALL=[];Object.keys(EVD).forEach(k=>{const d=EVD[k];if(d.ex)d.ex.forEach((t,j)=>{IT[t]=d.exen[j];EXALL.push({k,t})})});
-const exChance=()=>{const e=ev(),l=S.luck*(e.lk||1)+(e.la||0);return EXC20*(.2+.8*l/MAXLUCK)};
+const exChance=()=>{const w=weights(),t=w.reduce((x,y)=>x+y,0);return w[7]/t/2.5};
 function exRoll(){const e=ev();return e.ex&&Math.random()<exChance()?e.ex[Math.floor(Math.random()*e.ex.length)]:null}
 const ev=()=>EVN&&Date.now()<EVN.until&&EVD[EVN.id]?EVD[EVN.id]:{};
 const TH=n=>Math.max(2,Math.ceil(n/(ev().pity||1)));
