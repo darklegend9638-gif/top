@@ -264,7 +264,7 @@ const X=8,EXC20=.00005,XR={n:"Exclusive",ru:"Эксклюзивный",v:250,c:"
 const $=id=>document.getElementById(id);
 
 let LANG="ru";try{LANG=localStorage.getItem("gacha-lang")||(/^(ru|uk|be|kk)/i.test(navigator.language||"ru")?"ru":"en")}catch(e){}
-const D={gal:["Из галереи","From gallery"],avbad:["Не удалось загрузить картинку","Could not load the image"],pnone:["Никого не найдено — можно ввести ник вручную","Nobody found — you can type a nickname"],player:["Игрок","Player"],owner:["Владелец","Owner"],admin:["Админ","Admin"],logout:["Выйти","Log out"],guest:["Гость","Guest"],login:["Войти","Sign in"],signin:["Вход","Sign in"],
+const D={gal:["Из галереи","From gallery"],avbad:["Не удалось загрузить картинку","Could not load the image"],avcut:["Сервер обрезает аватарку — нужно обновить SQL. Вернул прежнюю.","The server truncates avatars — the SQL needs updating. Restored the previous one."],pnone:["Никого не найдено — можно ввести ник вручную","Nobody found — you can type a nickname"],player:["Игрок","Player"],owner:["Владелец","Owner"],admin:["Админ","Admin"],logout:["Выйти","Log out"],guest:["Гость","Guest"],login:["Войти","Sign in"],signin:["Вход","Sign in"],
 createProf:["Создай профиль","Create profile"],create:["Создать","Create"],wait:["Подождите…","Please wait…"],
 nickrule:["Ник: 3–16 символов — буквы, цифры, _ и -","Nickname: 3–16 characters — letters, digits, _ and -"],
 pwmin:["Пароль: минимум 4 символа","Password: at least 4 characters"],pwmin2:["Новый пароль: минимум 4 символа","New password: at least 4 characters"],
@@ -415,8 +415,9 @@ function showNotice(title,text,ok=true){$("noticeTitle").textContent=(ok?"✨ ":
 let isOwner=false,granted=false,me=null,pickAv="😀",mode="reg";
 const AV=["😀","😎","🤖","👻","🐱","🦊","🐼","🐸","🦄","🐲","👑","🧙","🥷","🚀","🌟","💀"];
 const isImg=a=>/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+\/=]+$/.test(a||"");
-const avH=a=>isImg(a)?`<img class="avimg" src="${a}" alt="">`:esc(a||"👤");
-const avT=a=>isImg(a)?"🖼":(a||"👤");
+const bad=a=>/^data:/.test(a||"")&&!isImg(a);
+const avH=a=>isImg(a)?`<img class="avimg" src="${a}" alt="">`:esc(!a||bad(a)?"👤":a);
+const avT=a=>isImg(a)?"🖼":(!a||bad(a)?"👤":a);
 let lastCust="",avCb=null;
 function fileToAv(f){return new Promise((res,rej)=>{const u=URL.createObjectURL(f),im=new Image();im.onload=()=>{const N=96,c=document.createElement("canvas");c.width=c.height=N;const x=c.getContext("2d"),m=Math.min(im.width,im.height);x.fillStyle="#120d26";x.fillRect(0,0,N,N);x.drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,N,N);URL.revokeObjectURL(u);res(c.toDataURL("image/jpeg",.82))};im.onerror=()=>{URL.revokeObjectURL(u);rej()};im.src=u})}
 const upl=document.createElement("input");upl.type="file";upl.accept="image/*";upl.style.display="none";document.body.appendChild(upl);
@@ -460,7 +461,10 @@ const nickLeft=()=>me.nickAt?me.nickAt+DAY7-Date.now():0;
 function renderSet(){avGrid("s_avs");
  $("s_nick").value=me.nick;const l=nickLeft();sMsg(l>0?tr("nickwait",Math.ceil(l/864e5)):"",true)}
 $("setb").onclick=()=>{pickAv=me.avatar;if(isImg(me.avatar))lastCust=me.avatar;renderSet();openPanel("setp")};
-$("s_av").onclick=async()=>{const r=await rpc("gacha_set_avatar",{p_token:TOKEN,p_avatar:pickAv});if(r.error)return sMsg(r.error);me.avatar=pickAv;renderProf();sMsg(tr("avok"),1)};
+$("s_av").onclick=async()=>{const old=me.avatar,r=await rpc("gacha_set_avatar",{p_token:TOKEN,p_avatar:pickAv});if(r.error)return sMsg(r.error);
+ if(isImg(pickAv)){const c=await rpc("gacha_me",{p_token:TOKEN}),got=c&&c.data?c.data.avatar:pickAv;
+  if(got!==pickAv){await rpc("gacha_set_avatar",{p_token:TOKEN,p_avatar:bad(old)?"😀":old});me.avatar=bad(old)?"😀":old;pickAv=me.avatar;renderProf();renderSet();return sMsg(tr("avcut"))}}
+ me.avatar=pickAv;renderProf();sMsg(tr("avok"),1)};
 $("s_nb").onclick=async()=>{const n=$("s_nick").value.trim();
  if(!NICKRE.test(n))return sMsg(tr("nickrule"));
  if(n===me.nick)return sMsg(tr("samenick"));
