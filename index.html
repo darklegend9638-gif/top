@@ -94,30 +94,15 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
 .ti .ic{font-size:26px;flex:none;width:34px;text-align:center}.ti .tx{flex:1;min-width:0;font-size:14px}.ti .tx b{display:block;font-size:15px}.ti .tx span{color:var(--mute);font-size:12px}
 .ti .pb{height:5px;border-radius:4px;background:var(--line);margin-top:5px;overflow:hidden}.ti .pb i{display:block;height:100%;border-radius:4px}
 .ti button{flex:0 0 auto;padding:7px 12px;font-size:13px}.ti.eq{box-shadow:0 0 0 2px var(--c4)}
-.ei{display:inline-block;width:1.1em;height:1.1em;vertical-align:-.2em}.ei svg{width:100%;height:100%;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.3))}
-.ico{width:26px;height:26px;display:block;flex:none;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
-.ti .ic .ico{margin:0 auto}.hd{display:flex;align-items:center;gap:8px;font-size:16px;padding-right:40px}.hd .ico{width:24px;height:24px}
-#t_list{max-height:210px;overflow:auto;overscroll-behavior:contain;margin-top:4px;padding:2px}
-.ti.pl{cursor:pointer;padding:8px 12px;margin-top:6px}.ti.pl.sel{box-shadow:0 0 0 2px var(--c1)}.ti.pl .ck{flex:none;color:var(--c1);font-weight:800}
 .confirm-modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(5,3,15,.72);z-index:1000}.confirm-modal.show{display:flex}.confirm-modal .modal-box{width:100%;max-width:390px;padding:22px;background:var(--bg2);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,.45);text-align:center}.confirm-modal .modal-title{font:700 17px var(--fh);margin-bottom:10px}.confirm-modal .modal-text{color:var(--mute);font-size:14px;margin-bottom:18px}.confirm-modal .modal-actions{display:flex;gap:10px}.confirm-modal .modal-actions button{flex:1}
 .stat b{font:800 17px var(--fh)}.tag{font-family:var(--fh);font-size:10px}h2{font-family:var(--fh);font-size:12px}
-.ic{display:inline-block;width:1.15em;height:1.15em;vertical-align:-.2em;line-height:1}
-.ic svg{width:100%;height:100%;display:block;filter:drop-shadow(0 0 3px currentColor)}
 </style>
 </head>
 <body>
 <canvas id="stB" aria-hidden="true"></canvas><canvas id="stF" aria-hidden="true"></canvas>
 <div id="flash"></div>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-<linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0a0"/><stop offset="1" stop-color="#ff9d2e"/></linearGradient>
-<linearGradient id="gSilver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6f8ff"/><stop offset="1" stop-color="#8f9bbd"/></linearGradient>
-<linearGradient id="gBronze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffcf9e"/><stop offset="1" stop-color="#c0622a"/></linearGradient>
-<linearGradient id="gGreen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9dffc4"/><stop offset="1" stop-color="#17b56a"/></linearGradient>
-<symbol id="i-top" viewBox="0 0 24 24"><rect x="2.5" y="13" width="6" height="8.5" rx="1.5" fill="url(#gSilver)"/><rect x="9" y="9.5" width="6" height="12" rx="1.5" fill="url(#gGold)"/><rect x="15.5" y="15.5" width="6" height="6" rx="1.5" fill="url(#gBronze)"/><path d="M4.2 15.4h2.6M10.7 12h2.6M17.2 17.6h2.6" stroke="#fff" stroke-opacity=".55" stroke-width="1.3" stroke-linecap="round"/><path d="M12 1.4l1.15 2.4 2.6.35-1.9 1.8.5 2.6L12 7.2 9.65 8.55l.5-2.6-1.9-1.8 2.6-.35z" fill="url(#gGold)"/></symbol>
-<symbol id="i-shop" viewBox="0 0 24 24"><path d="M9 8.6V7.3a3 3 0 0 1 6 0v1.3" fill="none" stroke="url(#gGreen)" stroke-width="1.9" stroke-linecap="round"/><path d="M4.6 8.6h14.8l-1.1 11a2.2 2.2 0 0 1-2.2 2H7.9a2.2 2.2 0 0 1-2.2-2z" fill="url(#gGreen)"/><path d="M12 11.6l1 2.1 2.3.3-1.7 1.6.4 2.3-2-1.1-2 1.1.4-2.3-1.7-1.6 2.3-.3z" fill="#fff" fill-opacity=".92"/></symbol>
-</defs></svg>
- <button class="alt" id="topBtn" aria-label="Топ" style="display:none"><svg class="ico"><use href="#i-top"/></svg></button>
-<button class="alt" id="shopBtn" aria-label="Магазин" style="display:none"><svg class="ico"><use href="#i-shop"/></svg></button>
+ <button class="alt" id="topBtn" aria-label="Топ" style="display:none">📊</button>
+<button class="alt" id="shopBtn" aria-label="Магазин" style="display:none">🛒</button>
 <button class="alt" id="menuBtn" aria-label="Меню" aria-expanded="false" style="display:none">☰</button>
 <div id="menu">
  <button class="alt" id="lang"></button>
@@ -172,7 +157,7 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
   <div id="s_st" style="font-size:14px;min-height:20px;margin-top:8px"></div>
 </div>
 <div id="topp" class="glass stage pbox" style="display:none;text-align:left"><button class="alt pclose" aria-label="Закрыть">×</button>
-  <b class="hd"><svg class="ico"><use href="#i-top"/></svg>Топ по монетам</b>
+  <b>Топ по монетам</b>
   <div id="topme" style="color:var(--mute);font-size:13px;margin-top:6px;min-height:18px"></div>
   <div id="toplist"></div>
 </div>
@@ -180,15 +165,12 @@ opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-8px) scale
   <b>Переводы</b>
   <div style="color:var(--mute);font-size:13px;margin-top:4px">Отправь монеты другому игроку</div>
   <div id="trbal" style="font:800 17px var(--fh);margin-top:8px"></div>
-  <div style="color:var(--mute);font-size:13px;margin-top:12px">Получатель</div>
-  <div class="row" style="margin-top:6px"><input id="t_find" placeholder="Поиск игрока" autocomplete="off"></div>
-  <div id="t_list"></div>
-  <div id="t_to" style="font-size:14px;min-height:20px;margin-top:8px"></div>
+  <div class="row"><input id="t_nick" maxlength="16" placeholder="Ник получателя" autocomplete="off"></div>
   <div class="row"><input id="t_amt" type="number" min="1" inputmode="numeric" placeholder="Сумма"><button id="t_send" style="flex:none">Отправить</button></div>
   <div id="t_st" style="font-size:14px;min-height:20px;margin-top:8px"></div>
 </div>
 <div id="shp" class="glass stage pbox" style="display:none;text-align:left"><button class="alt pclose" aria-label="Закрыть">×</button>
-  <b class="hd"><svg class="ico"><use href="#i-shop"/></svg>Магазин</b>
+  <b>Магазин</b>
   <div style="color:var(--mute);font-size:13px;margin-top:4px">Покупай титулы за монеты</div>
   <div id="shbal" style="font:800 17px var(--fh);margin-top:8px"></div>
   <div id="shlist"></div>
@@ -258,7 +240,7 @@ incmax:["Доход на максимуме","Income maxed"],incup:["Доход 
 pity:["Гарант: Legendary через {0} бр. · Mythic через {1} бр. · Secret через {2} бр. · доход {3}/с","Pity: Legendary in {0} rolls · Mythic in {1} rolls · Secret in {2} rolls · income {3}/s"],
 maxd:["На максимуме удачи ({0}) шанс Divine: {1}% ({2})","At max luck ({0}) Divine chance: {1}% ({2})"],
 colcnt:["{0}/{1} · бонус монет +{2}%","{0}/{1} · coin bonus +{2}%"],oneIn:["1 из ","1 in "],fusion:["слияние","fusion"],byadm:["Выдано админом","Given by admin"],
-meopt:["Я (себя)","Me (myself)"],edited:["Изменено у {0}","Updated {0}"],ownerdel:["Владелец не может удалить аккаунт","The owner cannot delete the account"],delmis:["Ник не совпадает","Nickname does not match"],error:["Ошибка","Error"],tlogin:["Войдите в аккаунт, чтобы переводить монеты","Sign in to transfer coins"],tnick:["Выберите получателя","Choose a recipient"],tpick:["Выберите игрока из списка","Pick a player from the list"],tto:["Получатель: {0}","Recipient: {0}"],tother:["Отправить по нику","Send by nickname"],tamt:["Введите сумму","Enter an amount"],
+meopt:["Я (себя)","Me (myself)"],edited:["Изменено у {0}","Updated {0}"],ownerdel:["Владелец не может удалить аккаунт","The owner cannot delete the account"],delmis:["Ник не совпадает","Nickname does not match"],error:["Ошибка","Error"],tlogin:["Войдите в аккаунт, чтобы переводить монеты","Sign in to transfer coins"],tnick:["Введите ник получателя","Enter the recipient's nickname"],tamt:["Введите сумму","Enter an amount"],
 tself:["Нельзя переводить самому себе","You can't send coins to yourself"],tmoney:["Недостаточно монет","Not enough coins"],tsent:["Отправлено {0} 🪙 игроку {1}","Sent {0} 🪙 to {1}"],
 tgot:["Вам перевели монеты","You received coins"],tgotx:["Получено {0} 🪙 от: {1}","Received {0} 🪙 from: {1}"],tnot:["Переводы пока не включены на сервере","Transfers are not enabled on the server yet"],evon:["Ивент запущен: {0}","Event started: {0}"],evmax:["Максимум — 30 дней","Maximum is 30 days"],evmin:["Укажите длительность","Enter a duration"],evoff:["Ивент остановлен","Event stopped"],evnext:["Следующий ивент через","Next event in"],evaon:["Автоивенты: включены (нажми, чтобы выключить)","Auto events: on (tap to turn off)"],evaoff:["Автоивенты: выключены (нажми, чтобы включить)","Auto events: off (tap to turn on)"],topnot:["Топ пока не включён на сервере (нужен top.sql)","Leaderboard is not enabled on the server yet (top.sql needed)"],topme:["Твоё место: #{0} · 🪙 {1}","Your rank: #{0} · 🪙 {1}"],topempty:["Пока никого нет","Nobody here yet"],exnone:["Exclusive можно выдать только во время сезонного ивента","Exclusive items can only be given during a seasonal event"],evnot:["Ивенты не включены на сервере (нужен events.sql)","Events are not enabled on the server (events.sql needed)"],done:["Готово","Done"],wiped:["Прогресс всех игроков успешно обнулён.","All players' progress has been wiped."]};
 const tr=(k,...a)=>{let s=D[k][LANG==="en"?1:0];a.forEach((v,i)=>s=s.split("{"+i+"}").join(v));return s};
@@ -278,7 +260,7 @@ const TX={"Кристальный алтарь":"Crystal Altar","Бросай, �
 "Выдать монеты":"Give coins","Забрать монеты":"Take coins","Уровень удачи":"Luck level","Выдать предмет":"Give item","Открыть всю коллекцию":"Unlock the whole collection",
 "⚠️ Обнуление прогресса":"⚠️ Progress wipe","Вы уверены, что хотите обнулить прогресс всех игроков?":"Are you sure you want to wipe all players' progress?","Это действие нельзя отменить.":"This cannot be undone.",
 "Отмена":"Cancel","Обнулить":"Wipe","Понятно":"OK","Регистрация":"Sign up","Вход":"Sign in","Позже":"Later",
-"Новый ник":"New nickname","Текущий пароль":"Current password","Новый пароль (от 4 символов)":"New password (4+ characters)","Никнейм":"Nickname","Пароль (от 4 символов)":"Password (4+ characters)","Меню":"Menu","Закрыть":"Close","Удалить аккаунт":"Delete account","⚠️ Удаление аккаунта":"⚠️ Delete account","Аккаунт и весь ваш прогресс будут удалены навсегда. Для подтверждения введите свой ник.":"Your account and all progress will be permanently deleted. Type your nickname to confirm.","Удалить":"Delete","Кого изменить:":"Whom to edit:","Уровень дохода":"Income level","Титулы":"Titles","Топ по монетам":"Coins leaderboard","Топ":"Top","Ивенты (для всех игроков)":"Events (for all players)","Запустить ивент":"Start event","Остановить ивент":"Stop event","Минут":"Minutes","Кол-во":"Amount","Минуты":"Minutes","Часы":"Hours","Дни":"Days","Максимум 30 дней":"Maximum 30 days","Переводы":"Transfers","💸 Переводы":"💸 Transfers","Отправь монеты другому игроку":"Send coins to another player","Ник получателя":"Recipient nickname","Сумма":"Amount","Отправить":"Send","Получатель":"Recipient","Поиск игрока":"Search player","Магазин":"Shop","🛒 Магазин":"🛒 Shop","Покупай титулы за монеты":"Buy titles with coins","🏆 Титулы":"🏆 Titles"};
+"Новый ник":"New nickname","Текущий пароль":"Current password","Новый пароль (от 4 символов)":"New password (4+ characters)","Никнейм":"Nickname","Пароль (от 4 символов)":"Password (4+ characters)","Меню":"Menu","Закрыть":"Close","Удалить аккаунт":"Delete account","⚠️ Удаление аккаунта":"⚠️ Delete account","Аккаунт и весь ваш прогресс будут удалены навсегда. Для подтверждения введите свой ник.":"Your account and all progress will be permanently deleted. Type your nickname to confirm.","Удалить":"Delete","Кого изменить:":"Whom to edit:","Уровень дохода":"Income level","Титулы":"Titles","Топ по монетам":"Coins leaderboard","Топ":"Top","Ивенты (для всех игроков)":"Events (for all players)","Запустить ивент":"Start event","Остановить ивент":"Stop event","Минут":"Minutes","Кол-во":"Amount","Минуты":"Minutes","Часы":"Hours","Дни":"Days","Максимум 30 дней":"Maximum 30 days","Переводы":"Transfers","💸 Переводы":"💸 Transfers","Отправь монеты другому игроку":"Send coins to another player","Ник получателя":"Recipient nickname","Сумма":"Amount","Отправить":"Send","Магазин":"Shop","🛒 Магазин":"🛒 Shop","Покупай титулы за монеты":"Buy titles with coins","🏆 Титулы":"🏆 Titles"};
 const o0=new WeakMap();
 function applyStatic(){const en=LANG==="en",w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;
  while(n=w.nextNode()){if(n.parentNode.tagName==="SCRIPT")continue;const o=o0.has(n)?o0.get(n):n.nodeValue,k=o.trim();if(TX[k]){o0.set(n,o);n.nodeValue=en?o.replace(k,TX[k]):o}}
@@ -286,7 +268,7 @@ function applyStatic(){const en=LANG==="en",w=document.createTreeWalker(document
  document.title=en?"Crystal Altar — Gacha":"Кристальный алтарь — Гача"}
 function setLang(l){LANG=l;try{localStorage.setItem("gacha-lang",l)}catch(e){}document.documentElement.lang=l;applyStatic();
  $("lang").textContent=$("lang2").textContent=l==="en"?"🌐 Русский":"🌐 English";render();renderProf();evSel();renderEv();updAuto();
- if($("reg").style.display==="flex")openReg();if(me&&$("setp").style.display==="block")renderSet();try{renderTP()}catch(e){}}
+ if($("reg").style.display==="flex")openReg();if(me&&$("setp").style.display==="block")renderSet()}
 const INCOME=1,MAXLUCK=20,MAXINC=15,PL=99,PM=1000,PS=10000;
 const inc=()=>INCOME+S.inc,incCost=()=>Math.floor(50*Math.pow(1.55,S.inc)*(ev().disc||1));
 /* ивенты (глобальные, запускает админ) */
@@ -311,7 +293,7 @@ const EVD={
 };
 let EVN=null;
 const EXALL=[];Object.keys(EVD).forEach(k=>{const d=EVD[k];if(d.ex)d.ex.forEach((t,j)=>{IT[t]=d.exen[j];EXALL.push({k,t})})});
-const exChance=()=>{const w=weights(),t=w.reduce((x,y)=>x+y,0);return w[7]/t/2.5};
+const exChance=()=>{const e=ev(),l=S.luck*(e.lk||1)+(e.la||0);return EXC20*(.2+.8*l/MAXLUCK)};
 function exRoll(){const e=ev();return e.ex&&Math.random()<exChance()?e.ex[Math.floor(Math.random()*e.ex.length)]:null}
 const ev=()=>EVN&&Date.now()<EVN.until&&EVD[EVN.id]?EVD[EVN.id]:{};
 const TH=n=>Math.max(2,Math.ceil(n/(ev().pity||1)));
@@ -559,36 +541,22 @@ $("a_evstop").onclick=()=>evSet("",0);
 $("a_evauto").onclick=async()=>{const r=await rpc("gacha_event_auto",{p_token:TOKEN,p_on:!EVAUTO});
  if(r.error)return evMsg(/Could not find|schema cache/i.test(r.error)?tr("evnot"):r.error);evOff=false;pollEv()};
 /* топ по монетам */
-const medalSvg=i=>`<svg class="ico" viewBox="0 0 24 24"><path d="M6.5 1.5h4l1.6 6.5-3.6.2zM17.5 1.5h-4l-1.6 6.5 3.6.2z" fill="#e5484d"/><circle cx="12" cy="14.6" r="8" fill="url(#${["gGold","gSilver","gBronze"][i]})"/><circle cx="12" cy="14.6" r="6" fill="none" stroke="#fff" stroke-opacity=".55"/><text x="12" y="18.3" text-anchor="middle" font-size="10.5" font-weight="800" font-family="sans-serif" fill="#4a3000">${i+1}</text></svg>`;
 async function loadTop(){
  const r=await rpc("gacha_top",{p_token:TOKEN,p_limit:20});
  if(r.error){$("topme").textContent="";$("toplist").innerHTML=`<div style="color:var(--c5);margin-top:10px">${esc(/Could not find|schema cache/i.test(r.error)?tr("topnot"):r.error)}</div>`;return}
  const d=r.data||{},list=d.top||[],medal=["🥇","🥈","🥉"];
  $("topme").textContent=d.me?tr("topme",d.me.rank,fmt(+d.me.coins)):"";
  $("toplist").innerHTML=list.length?list.map((p,i)=>{const mine=me&&p.nick===me.nick;
-  return `<div class="glass ti${mine?" eq":""}"><div class="ic">${i<3?medalSvg(i):"#"+(i+1)}</div><div class="tx"><b>${esc(p.avatar||"👤")} ${esc(p.nick)}</b></div><b style="flex:none">🪙 ${fmt(+p.coins)}</b></div>`}).join(""):`<div style="color:var(--mute);margin-top:10px">${tr("topempty")}</div>`}
+  return `<div class="glass ti${mine?" eq":""}"><div class="ic">${medal[i]||"#"+(i+1)}</div><div class="tx"><b>${esc(p.avatar||"👤")} ${esc(p.nick)}</b></div><b style="flex:none">🪙 ${fmt(+p.coins)}</b></div>`}).join(""):`<div style="color:var(--mute);margin-top:10px">${tr("topempty")}</div>`}
 $("topBtn").onclick=()=>{openPanel("topp");loadTop()};
 setInterval(()=>{if($("topp").style.display==="block")loadTop()},20000);
 /* переводы монет между игроками */
 const tMsg=(t,ok)=>{const e=$("t_st");e.textContent=t;e.style.color=ok?"var(--c1)":"var(--c5)"};
 let tBusy=false,claimOff=false;
-var TP=[],tTo="";
-function renderTP(){
- const L=TP||[],to=tTo||"",raw=$("t_find").value.trim(),q=raw.toLowerCase(),keep=$("t_list").scrollTop;
- let h=L.filter(p=>!q||p.nick.toLowerCase().includes(q)).map(p=>`<div class="glass ti pl${p.nick===to?" sel":""}" data-pl="${esc(p.nick)}"><div class="ic">${esc(p.avatar||"👤")}</div><div class="tx"><b>${esc(p.nick)}</b></div>${p.nick===to?'<span class="ck">✓</span>':""}</div>`).join("");
- if(q&&!L.some(p=>p.nick.toLowerCase()===q))h+=`<div class="glass ti pl${to.toLowerCase()===q?" sel":""}" data-pl="${esc(raw)}"><div class="ic">➕</div><div class="tx"><b>${esc(raw)}</b><span>${tr("tother")}</span></div></div>`;
- $("t_list").innerHTML=h||`<div style="color:var(--mute);margin-top:8px;font-size:14px">${tr("topempty")}</div>`;$("t_list").scrollTop=keep;
- $("t_to").textContent=to?tr("tto",to):tr("tpick");$("t_to").style.color=to?"var(--c1)":"var(--mute)"}
-async function loadPlayers(){
- const r=await rpc("gacha_top",{p_token:TOKEN,p_limit:100});
- if(r.error){$("t_list").innerHTML=`<div style="color:var(--c5);margin-top:8px;font-size:14px">${esc(/Could not find|schema cache/i.test(r.error)?tr("tnot"):srv(r.error))}</div>`;return}
- TP=((r.data||{}).top||[]).filter(p=>!me||p.nick!==me.nick);renderTP()}
-$("t_find").oninput=renderTP;
-$("t_list").onclick=e=>{const r=e.target.closest("[data-pl]");if(!r)return;tTo=r.dataset.pl;renderTP()};
-$("trb").onclick=()=>{$("trbal").textContent="🪙 "+fmt(S.coins);tMsg(TOKEN?"":tr("tlogin"));tTo="";$("t_find").value="";renderTP();if(TOKEN)loadPlayers();openPanel("trp")};
+$("trb").onclick=()=>{$("trbal").textContent="🪙 "+fmt(S.coins);tMsg(TOKEN?"":tr("tlogin"));openPanel("trp")};
 $("t_send").onclick=async()=>{
  if(!TOKEN||!me)return tMsg(tr("tlogin"));if(tBusy||!ready)return;
- const n=tTo,a=Math.floor(+$("t_amt").value||0);
+ const n=$("t_nick").value.trim(),a=Math.floor(+$("t_amt").value||0);
  if(!n)return tMsg(tr("tnick"));if(a<1)return tMsg(tr("tamt"));
  if(n.toLowerCase()===me.nick.toLowerCase())return tMsg(tr("tself"));
  if(a>S.coins)return tMsg(tr("tmoney"));
@@ -704,72 +672,6 @@ $("titb").onclick=()=>{renderTitles();openPanel("titp")};
 })();
 $("lang").onclick=$("lang2").onclick=()=>setLang(LANG==="en"?"ru":"en");
 setLang(LANG);
-
-/* SVG-иконки вместо эмодзи (незнакомые эмодзи остаются как есть) */
-(function(){
- const G=(i,a,b)=>`<linearGradient id="${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
- document.querySelector("svg defs").insertAdjacentHTML("beforeend",G("gBlue","#a8d4ff","#3a78ff")+G("gPurple","#e6b8ff","#7c3aed")+G("gRed","#ffb0a0","#e5284b")+G("gTeal","#a2f5ea","#10b3a0"));
- const st='<path d="M12 2l2.6 6 6.4.6-4.9 4.3 1.5 6.3L12 15.8 6.4 19.2l1.5-6.3L3 8.6 9.4 8z" fill="url(#gGold)"/>';
- const IC={
- "🪙":'<circle cx="12" cy="12" r="9.5" fill="url(#gGold)"/><circle cx="12" cy="12" r="6.6" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="1.4"/><path d="M12 7.5l1.3 2.8 3 .4-2.2 2.1.6 3L12 14.3 9.3 15.8l.6-3-2.2-2.1 3-.4z" fill="#fff" fill-opacity=".9"/>',
- "🍀":'<g fill="url(#gGreen)"><circle cx="8.5" cy="8.5" r="4"/><circle cx="15.5" cy="8.5" r="4"/><circle cx="8.5" cy="14.5" r="4"/><circle cx="15.5" cy="14.5" r="4"/></g><path d="M12 13c0 4 1 6 3 8" stroke="#0f8a4f" stroke-width="2" fill="none" stroke-linecap="round"/>',
- "🎲":'<rect x="3" y="3" width="18" height="18" rx="4.5" fill="url(#gSilver)"/><g fill="#5b3bd6"><circle cx="8" cy="8" r="1.7"/><circle cx="16" cy="8" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="8" cy="16" r="1.7"/><circle cx="16" cy="16" r="1.7"/></g>',
- "🔮":'<circle cx="12" cy="11" r="8.5" fill="url(#gPurple)"/><ellipse cx="9" cy="7.5" rx="3" ry="1.9" fill="#fff" fill-opacity=".55" transform="rotate(-30 9 7.5)"/><path d="M6 21h12l-1.5-3.2h-9z" fill="url(#gBronze)"/>',
- "🏆":'<path d="M7 3h10v6a5 5 0 0 1-10 0z" fill="url(#gGold)"/><path d="M7 5H3.5c0 3 1.5 4.5 3.7 4.8M17 5h3.5c0 3-1.5 4.5-3.7 4.8" fill="none" stroke="url(#gGold)" stroke-width="1.8"/><path d="M10.5 14h3v3.5h-3z" fill="url(#gGold)"/><rect x="7.5" y="17.5" width="9" height="3.5" rx="1.2" fill="url(#gBronze)"/>',
- "💎":'<path d="M6.5 4h11l4 5.2L12 21 2.5 9.2z" fill="url(#gBlue)"/><path d="M2.5 9.2h19M9 4l-1.7 5.2L12 21l4.7-11.8L15 4M7.3 9.2L12 4l4.7 5.2" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="1"/>',
- "👑":'<path d="M3 8l4.5 4L12 5l4.5 7L21 8l-2 11H5z" fill="url(#gGold)"/><circle cx="3" cy="7.5" r="1.6" fill="#ffe27a"/><circle cx="12" cy="4.5" r="1.6" fill="#ffe27a"/><circle cx="21" cy="7.5" r="1.6" fill="#ffe27a"/>',
- "⚡":'<path d="M13.5 2L5 13.5h5.5L9.5 22 19 9.5h-5.7z" fill="url(#gGold)"/>',
- "🔥":'<path d="M12 2c1 4 6 6 6 12a6 6 0 0 1-12 0c0-3 1.7-4.6 2.7-6 .3 1.4 1 2.2 1.8 2.5C10 8 10.5 5 12 2z" fill="url(#gRed)"/><path d="M12 12c2 2 3 3 3 5a3 3 0 0 1-6 0c0-1.6 1.6-2.6 3-5z" fill="url(#gGold)"/>',
- "✨":'<path d="M10 3l1.9 5.1L17 10l-5.1 1.9L10 17l-1.9-5.1L3 10l5.1-1.9z" fill="url(#gGold)"/><path d="M18 14l.9 2.1L21 17l-2.1.9L18 20l-.9-2.1L15 17l2.1-.9z" fill="url(#gGold)"/>',
- "🌟":st,
- "🛡":'<path d="M12 2.5l8 3v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10v-6z" fill="url(#gBlue)"/><path d="M12 5.5v13c3-1.4 5-4 5-7.5v-4z" fill="#fff" fill-opacity=".3"/>',
- "📜":'<rect x="5" y="4" width="14" height="15" rx="1.5" fill="#f4e4b8"/><path d="M8 8h8M8 11.5h8M8 15h5" stroke="#a9772f" stroke-width="1.4" stroke-linecap="round"/><rect x="3.5" y="2.5" width="17" height="3.2" rx="1.6" fill="url(#gBronze)"/><rect x="3.5" y="17.8" width="17" height="3.2" rx="1.6" fill="url(#gBronze)"/>',
- "🗝":'<circle cx="7.5" cy="8" r="4.7" fill="url(#gGold)"/><circle cx="7.5" cy="8" r="1.8" fill="#7a4a00" fill-opacity=".6"/><path d="M10.5 11.2L20 20.5M16 16.5l2.2-2.2M18.4 18.9l2-2" stroke="url(#gGold)" stroke-width="2.6" stroke-linecap="round" fill="none"/>',
- "🧪":'<path d="M9.5 2.5h5M10.5 2.5v6L4.8 18.5A2.3 2.3 0 0 0 6.8 22h10.4a2.3 2.3 0 0 0 2-3.5L13.5 8.5v-6" fill="#cfeeff" fill-opacity=".35" stroke="#cfeeff" stroke-width="1.5" stroke-linejoin="round"/><path d="M7 15.5h10l2 3.2a1.4 1.4 0 0 1-1.2 2.1H6.2A1.4 1.4 0 0 1 5 18.7z" fill="url(#gTeal)"/>',
- "🕯":'<rect x="8" y="10" width="8" height="11" rx="1.6" fill="url(#gSilver)"/><path d="M12 2.5c2 2.4 2.8 3.6 2.8 5a2.8 2.8 0 0 1-5.6 0c0-1.4.8-2.6 2.8-5z" fill="url(#gGold)"/><path d="M12 10V8.5" stroke="#555" stroke-width="1"/>',
- "☀":'<circle cx="12" cy="12" r="5" fill="url(#gGold)"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9L7 7M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1" stroke="url(#gGold)" stroke-width="2" stroke-linecap="round"/>',
- "👤":'<circle cx="12" cy="8" r="4.2" fill="url(#gSilver)"/><path d="M3.8 21c.5-5 3.8-7.2 8.2-7.2s7.7 2.2 8.2 7.2z" fill="url(#gSilver)"/>',
- "🗑":'<path d="M5.5 7.5h13l-1 13a1.6 1.6 0 0 1-1.6 1.5H8.1a1.6 1.6 0 0 1-1.6-1.5z" fill="url(#gRed)"/><rect x="4" y="4.5" width="16" height="2.6" rx="1.3" fill="url(#gSilver)"/><path d="M9.5 4.5V3h5v1.5M10 10.5v7M14 10.5v7" stroke="#fff" stroke-opacity=".7" stroke-width="1.3" stroke-linecap="round" fill="none"/>',
- "⚠":'<path d="M12 2.8l10 17.4H2z" fill="url(#gGold)" stroke="#ffcf5a" stroke-width="1.2" stroke-linejoin="round"/><path d="M12 9.5v5" stroke="#6b3d00" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.2" r="1.2" fill="#6b3d00"/>',
- "❔":'<circle cx="12" cy="12" r="9.5" fill="#8a8fa8" fill-opacity=".35"/><path d="M9.2 9.4a2.9 2.9 0 1 1 4.2 2.6c-.9.5-1.4 1-1.4 2" fill="none" stroke="#c9cde0" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="17.2" r="1.3" fill="#c9cde0"/>',
- "🎁":'<rect x="3.5" y="9" width="17" height="12" rx="1.8" fill="url(#gRed)"/><rect x="2.5" y="6.5" width="19" height="4" rx="1.5" fill="url(#gGold)"/><path d="M12 6.5V21" stroke="url(#gGold)" stroke-width="2.6"/><path d="M12 6.5C9 6.5 7.5 5.5 7.5 4s2.2-1.6 4.5 2.5C14.300 2.400 16.500 2.500 16.500 4S15 6.500 12 6.500z" fill="url(#gGold)"/>'
- };
- const re=new RegExp(Object.keys(IC).join("|")+"\\uFE0F?","gu"),has=new RegExp(re.source,"u"),skip=new Set(["SCRIPT","STYLE","TEXTAREA","OPTION","TITLE"]);
- function conv(root){const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),L=[];let n;
-  while(n=w.nextNode())if(!skip.has(n.parentNode.nodeName)&&has.test(n.nodeValue))L.push(n);
-  L.forEach(n=>{const v=n.nodeValue,f=document.createDocumentFragment();let last=0;
-   v.replace(re,(m,o)=>{f.append(v.slice(last,o));const sp=document.createElement("span");sp.className="ei";sp.innerHTML='<svg viewBox="0 0 24 24">'+IC[m.replace(/\uFE0F/g,"")]+"</svg>";f.append(sp);last=o+m.length;return m});
-   f.append(v.slice(last));n.replaceWith(f)})}
- let q=0;const mo=new MutationObserver(()=>{if(q)return;q=requestAnimationFrame(()=>{q=0;mo.disconnect();conv(document.body);mo.observe(document.body,{childList:true,subtree:true,characterData:true})})});
- conv(document.body);mo.observe(document.body,{childList:true,subtree:true,characterData:true});
-})();
-
-/* ===== Свои иконки вместо эмодзи ===== */
-const ICR={};R.forEach((r,i)=>r.items.forEach(t=>ICR[t.split(" ")[0]]=i));EXALL.forEach(a=>ICR[a.t.split(" ")[0]]=8);
-const hsh=s=>{let h=2166136261;for(const c of s)h=Math.imul(h^c.codePointAt(0),16777619);return h>>>0};
-function ico(ch){
- const h=hsh(ch),ri=ICR[ch],col=ri==null?`hsl(${h%360} 80% 62%)`:ri===8?"#ff5ce1":`var(--c${ri})`;
- const n=[4,5,6,6,8,7][h%6],rot=((h>>3)%360)*Math.PI/180,C=32,RO=25;
- const pt=(k,r,o=0)=>{const a=rot+o+k*2*Math.PI/n;return[C+r*Math.cos(a),C+r*Math.sin(a)]};
- const f=v=>v.toFixed(1);let tri="";
- for(let k=0;k<n;k++){const[x1,y1]=pt(k,RO),[x2,y2]=pt(k+1,RO),lt=Math.sin(rot+(k+.5)*2*Math.PI/n+Math.PI/4);
-  tri+=`<polygon points="${C},${C} ${f(x1)},${f(y1)} ${f(x2)},${f(y2)}" fill="${lt>0?"#fff":"#000"}" opacity="${f(Math.abs(lt)*.45)}"/>`}
- const outer=Array.from({length:n},(_,k)=>pt(k,RO).map(f).join(",")).join(" ");
- const m=[3,4,5,6][(h>>6)%4],inner=Array.from({length:m},(_,k)=>{const a=(h>>9)%6+k*2*Math.PI/m;return f(C+9*Math.cos(a))+","+f(C+9*Math.sin(a))}).join(" ");
- const sp=ri!=null&&ri>=5?'<path d="M52 6l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="#fff"/>':"";
- const ring=ri!=null&&ri>=4?`<circle cx="32" cy="32" r="29.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="3 4" opacity=".8"/>`:"";
- return `<span class="ic" style="color:${col}"><svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="currentColor" opacity=".15"/>${ring}<polygon points="${outer}" fill="currentColor"/>${tri}<polygon points="${inner}" fill="#fff" fill-opacity=".25" stroke="#fff" stroke-opacity=".75" stroke-width="1.2"/>${sp}</svg></span>`}
-const EMO=/\p{Extended_Pictographic}(?:\uFE0F|\u200D\p{Extended_Pictographic}\uFE0F?|[\u{1F3FB}-\u{1F3FF}])*/gu;
-function emojify(root){if(!root||root.nodeType!==1)return;const bad=/^(SCRIPT|STYLE|OPTION|TEXTAREA|TITLE|SELECT|SVG)$/i;
- const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>{const p=n.parentNode;if(!p||bad.test(p.nodeName)||(p.closest&&p.closest(".ic")))return NodeFilter.FILTER_REJECT;
-  EMO.lastIndex=0;return EMO.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT}}),list=[];let x;while(x=w.nextNode())list.push(x);
- list.forEach(t=>{const v=t.nodeValue,fr=document.createDocumentFragment();let last=0;
-  for(const m of v.matchAll(EMO)){if(m.index>last)fr.append(v.slice(last,m.index));const tp=document.createElement("template");tp.innerHTML=ico(m[0]);fr.append(tp.content);last=m.index+m[0].length}
-  if(last<v.length)fr.append(v.slice(last));t.replaceWith(fr)})}
-const EMOBS=new MutationObserver(ms=>{const roots=new Set();
- ms.forEach(m=>{if(m.type==="characterData"){if(m.target.parentNode)roots.add(m.target.parentNode)}else m.addedNodes.forEach(n=>roots.add(n.nodeType===1?n:n.parentNode))});
- EMOBS.disconnect();roots.forEach(emojify);EMOBS.observe(document.body,{childList:true,subtree:true,characterData:true})});
-emojify(document.body);EMOBS.observe(document.body,{childList:true,subtree:true,characterData:true});
 </script>
 </body>
 </html>
