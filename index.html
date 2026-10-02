@@ -319,6 +319,13 @@ const EVD={
  pity:{e:"🎯",c:"var(--c5)",pity:1.5,ru:["Час гаранта","Гаранты срабатывают в 1.5× чаще"],en:["Pity Hour","Pity triggers 1.5× as often"]},
  gain:{e:"🎲",c:"var(--c6)",gain:1.5,ru:["Щедрые броски","Награда за броски ×1.5"],en:["Generous Rolls","Roll rewards ×1.5"]},
  rare:{e:"🔥",c:"var(--c5)",rare:1.5,ru:["Час легенд","Шанс Legendary и выше ×1.5"],en:["Legend Hour","Legendary+ chance ×1.5"]},
+ winter:{e:"❄️",c:"#7fd8ff",lk:1.25,ex:["❄️ Вечная снежинка","⛄ Снеговик-страж","🧊 Сердце льда"],exen:["Eternal Snowflake","Snowman Guardian","Heart of Ice"],tt:["Хранитель Зимы","Winter Keeper"],ru:["Зимняя сказка","Удача ×1.25 · эксклюзивные предметы"],en:["Winter Tale","Luck ×1.25 · exclusive items"]},
+ newyear:{e:"🎄",c:"#4ade80",coin:1.5,ex:["🎄 Волшебная ёлка","🎁 Подарок судьбы","🥂 Полночный бокал"],exen:["Magic Fir Tree","Gift of Fate","Midnight Toast"],tt:["Новогодний чародей","New Year Wizard"],ru:["Новый год","Монеты ×1.5 · эксклюзивные предметы"],en:["New Year","Coins ×1.5 · exclusive items"]},
+ valentine:{e:"💘",c:"#ff6b9d",inc:2,ex:["💘 Стрела Амура","💌 Тайное письмо","🌹 Вечная роза"],exen:["Cupid's Arrow","Secret Letter","Eternal Rose"],tt:["Покровитель сердец","Patron of Hearts"],ru:["День влюблённых","Доход ×2 · эксклюзивные предметы"],en:["Valentine's Day","Income ×2 · exclusive items"]},
+ spring:{e:"🌸",c:"#ffb7d5",disc:.85,ex:["🌸 Сакура грёз","🐣 Золотой птенец","🦋 Бабочка рассвета"],exen:["Dream Sakura","Golden Chick","Dawn Butterfly"],tt:["Дитя весны","Child of Spring"],ru:["Весеннее цветение","Прокачка −15% · эксклюзивные предметы"],en:["Spring Bloom","Upgrades −15% · exclusive items"]},
+ summer:{e:"☀️",c:"#ffd23f",gain:1.5,ex:["🏖️ Остров мечты","🍉 Арбуз-чемпион","🌊 Хрустальная волна"],exen:["Dream Island","Champion Watermelon","Crystal Wave"],tt:["Король лета","Summer King"],ru:["Летний фестиваль","Награда за броски ×1.5 · эксклюзивные предметы"],en:["Summer Festival","Roll rewards ×1.5 · exclusive items"]},
+ autumn:{e:"🍂",c:"#ff9f43",pity:1.3,ex:["🍁 Кленовый дух","🌾 Золотой сноп","🍄 Лесной волшебник"],exen:["Maple Spirit","Golden Sheaf","Forest Wizard"],tt:["Жнец осени","Autumn Reaper"],ru:["Золотая осень","Гаранты чаще в 1.3× · эксклюзивные предметы"],en:["Golden Autumn","Pity 1.3× faster · exclusive items"]},
+ halloween:{e:"🎃",c:"#ff7a18",rare:1.5,ex:["🎃 Тыква-фонарь","🦇 Лунная летучая мышь","💀 Проклятый череп"],exen:["Jack-o'-Lantern","Moon Bat","Cursed Skull"],tt:["Повелитель тыкв","Pumpkin Lord"],ru:["Хэллоуин","Legendary+ ×1.5 · эксклюзивные предметы"],en:["Halloween","Legendary+ ×1.5 · exclusive items"]},
  mega:{e:"🌈",c:"var(--c7)",lk:1.5,coin:1.5,ru:["Мега-событие","Удача ×1.5 и монеты ×1.5"],en:["Mega Event","Luck ×1.5 and coins ×1.5"]}
 };
 let EVN=null;
@@ -393,7 +400,7 @@ function render(){
   return `<div class="od"><span style="color:${r.c};font-weight:700">${r.n}</span><span class="bar"><i style="width:${bw}%;background:${r.c}"></i></span><span>${fmtP(p)}</span></div>`}).join("")+(ev().ex?`<div class="od"><span style="color:${XR.c};font-weight:700">Exclusive</span><span class="bar"><i style="width:${Math.max(2,Math.min(100,Math.log10(exChance()*100*1e4+1)/6*100))}%;background:${XR.c}"></i></span><span>${fmtP(exChance()*100)}</span></div>`:"");
  const wm=weights(MAXLUCK),pm=wm[7]/wm.reduce((a,b)=>a+b,0)*100;$("maxd").textContent=tr("maxd",MAXLUCK,pm.toFixed(3),fmtP(pm));
  if(typeof TT!=="undefined"&&$("pwrap").classList.contains("open")){updTitles();updShop();if($("trp").style.display==="block")$("trbal").textContent="🪙 "+fmt(S.coins)}
- const got=ALL.filter(a=>S.found[a.t]).length;$("colcount").textContent=tr("colcnt",got,ALL.length,setsDone()*10);
+ const got=ALL.filter(a=>S.found[a.t]).length;$("colcount").textContent=tr("colcnt",got,ALL.length,setsDone()*10)+" · ✨ "+EXALL.filter(a=>S.found[a.t]).length+"/"+EXALL.length;
  $("col").innerHTML=ALL.map(a=>{const n=S.found[a.t]||0,e=a.t.split(" ")[0];
   return `<div class="glass it ${n?"":"off"}" style="${n?"border-color:"+R[a.i].c:""}"><div class="e">${n?e:"❔"}</div>${n?iname(a.t):"???"}<div style="color:${R[a.i].c};font-size:12px">${rname(a.i)}${n?" ×"+n:""}</div></div>`}).join("")+EXALL.map(a=>{const n=S.found[a.t]||0,e=a.t.split(" ")[0];
   return `<div class="glass it ${n?"":"off"}" style="${n?"border-color:"+XR.c+";box-shadow:0 0 14px "+XR.c+"55":""}"><div class="e">${n?e:"❔"}</div>${n?iname(a.t):"???"}<div style="color:${XR.c};font-size:12px">${rname(X)} ${EVD[a.k].e}${n?" ×"+n:""}</div></div>`}).join("");
@@ -418,7 +425,7 @@ function avGrid(id){const el=$(id);avCb=()=>avGrid(id);
  el.querySelectorAll(".avb").forEach(b=>b.onclick=()=>{pickAv=b.dataset.c?lastCust:b.dataset.a;avGrid(id)});
  el.querySelector(".avup").onclick=()=>upl.click()}
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-$("a_rar").innerHTML=R.map((r,i)=>`<option value="${i}">${r.n}</option>`).join("");
+$("a_rar").innerHTML=R.map((r,i)=>`<option value="${i}">${r.n}</option>`).join("")+`<option value="x">Exclusive</option>`;
 $("adm").onclick=()=>{openPanel("admp");renderGrants()};
 function renderProf(){$("menuBtn").style.display="";$("shopBtn").style.display="";$("topBtn").style.display="";$("prof").innerHTML=me?`<span class="av">${avH(me.avatar)}</span><div class="pm"><b class="pn">${esc(me.nick)}</b><div class="pt">${isOwner?'<span class="ttl owner"><svg class="ico"><use href="#i-crown"/></svg>'+tr("owner")+'</span>':granted?'<span class="ttl admin"><svg class="ico"><use href="#i-shield"/></svg>'+tr("admin")+'</span>':'<span class="ttl player"><svg class="ico"><use href="#i-pad"/></svg>'+tr("player")+'</span>'}${titleTag()}</div></div><button class="alt" id="out" style="flex:none;padding:6px 12px;font-size:13px">${tr("logout")}</button>`:`<span class="av">👤</span><b>${tr("guest")}</b><button id="inb" style="flex:none;margin-left:auto;padding:6px 12px;font-size:13px">${tr("login")}</button>`;
  if($("out"))$("out").onclick=()=>{try{localStorage.removeItem("gacha-token")}catch(e){}location.reload()};
@@ -648,6 +655,7 @@ const SH=[
 ];
 Object.keys(EVD).forEach(k=>{const d=EVD[k];if(!d.ex)return;
  TT.push({id:"ex_"+k,e:d.e,c:d.c,ru:[d.tt[0],"Собрать все эксклюзивные предметы ивента «"+d.ru[0]+"»"],en:[d.tt[1],"Collect all exclusive items of the "+d.en[0]+" event"],cur:()=>d.ex.filter(t=>S.found[t]).length,goal:d.ex.length})});
+TT.push({id:"ex_all",e:"👑",c:XR.c,ru:["Хранитель сезонов","Собрать все эксклюзивные предметы"],en:["Keeper of Seasons","Collect all exclusive items"],cur:()=>EXALL.filter(a=>S.found[a.t]).length,goal:EXALL.length});
 TT.push(...SH.map(a=>({id:a[0],e:a[1],c:a[2],price:a[3],shop:1,ru:[a[4],a[5]],en:[a[6],a[7]],cur:()=>S.tb.includes(a[0])?1:0,goal:1})));
 let shLang="";
 function renderShop(){
